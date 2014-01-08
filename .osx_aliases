@@ -1,0 +1,3 @@
+#turn airport on/off
+alias wifi='/usr/libexec/airportd'
+alias vnc='open vnc://billyjack.silvertailsystems.com:5901'
