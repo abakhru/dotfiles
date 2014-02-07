@@ -5,8 +5,8 @@
         autosetuprebase=always
 [push]
         default = current
-#[remote "origin"]
-#       fetch = +refs/heads/*:refs/remotes/origin/*
+[remote "origin"]
+       fetch = +refs/heads/*:refs/remotes/origin/*
 #       url = git@github.silvertailsystems.com:qa/sandbox.git
 
 [alias]
@@ -17,8 +17,10 @@
         co = checkout
         ci = commit
         br = branch
+        cherry = cherry-pick
         # View abbreviated SHA, description, and history graph of the latest 20 commits
         l = log --pretty=oneline -n 20 --graph --abbrev-commit
+        t = log --oneline --graph --decorate --all
         # Show the diff between the latest commit and the current state
         d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
         # `git di $number` shows the diff between the state `$number` revisions ago and the current state
@@ -49,6 +51,8 @@
         fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
         # Remove branches that have already been merged with master
         dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+        ls = ls-files
+
 [mergetool]
         keepBackup = true
 [difftool "sourcetree"]

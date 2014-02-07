@@ -1,17 +1,3 @@
-set nocompatible
-filetype off
-
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
-" let Vundle manage Vundle
-" " required!
-Bundle 'gmarik/vundle'
-
-" " The bundles you install will be listed here
-
-filetype plugin indent on
-
 if v:lang =~ "utf8$" || v:lang =~ "UTF-8$"
    set fileencodings=ucs-bom,utf-8,latin1
 endif
@@ -22,7 +8,6 @@ set bs=indent,eol,start		" allow backspacing over everything in insert mode
 "set backup		" keep a backup file
 set viminfo='20,\"50	" read/write a .viminfo file, don't store more
 			" than 50 lines of registers
-set history=10000	" keep 50 lines of command line history
 set ruler		" show the cursor position all the time
 
 " Only do this part when compiled with support for autocommands
@@ -43,8 +28,8 @@ if has("autocmd")
   augroup END
 endif
 
-if has("cscope") && filereadable("/usr/bin/cscope")
-   set csprg=/usr/bin/cscope
+if has("cscope") && filereadable("/usr/local/bin/cscope")
+   set csprg=/usr/local/bin/cscope
    set csto=0
    set cst
    set nocsverb
@@ -65,8 +50,7 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
-"filetype plugin on
-filetype indent plugin on
+filetype plugin indent on
 
 if &term=="xterm"
      set t_Co=8
@@ -77,22 +61,25 @@ endif
 " Don't wake up system with blinking cursor:
 " http://www.linuxpowertop.org/known.php
 let &guicursor = &guicursor . ",a:blinkon0"
+execute pathogen#infect()
+set tabstop=4
+"set number
+set showmatch
+set incsearch
+set hlsearch
+set history=1000
+set undolevels=1000
+set title
+set expandtab
+set autoread
+set autoindent smartindent
+set hidden
 
-" for python
-"filetype off
-"call pathogen#infect()
-"call pathogen#helptags()
-
-"filetype plugin indent on
-"syntax on
-augroup vimrc_autocmds
-    autocmd!
-    " highlight characters past column 120
-    autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
-    autocmd FileType python match Excess /\%120v.*/
-    autocmd FileType python set nowrap
-augroup END
-
-Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-autocmd vimenter * if !argc() | NERDTree | endif
+nnoremap ; :
+map <silent> <C-t> :NERDTreeToggle<CR>
+"colorscheme Tomorrow-Night
+colorscheme Tomorrow-Night-Bright
+"colorscheme 256-jungle
+"colorscheme vividchalk
+"colorscheme badwolf
 "colorscheme molokai

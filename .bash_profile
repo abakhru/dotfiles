@@ -31,7 +31,8 @@ else
 	MAGENTA="\033[1;31m"
 	ORANGE="\033[1;33m"
 	GREEN="\033[1;32m"
-	PURPLE="\033[1;35m"
+	#PURPLE="\033[1;35m"
+	PURPLE="\033[1;63m"
 	WHITE="\033[1;37m"
 	BOLD=""
 	RESET="\033[m"
@@ -62,8 +63,7 @@ symbol="⚡ "
 source ~/.bash/git-prompt
 source ~/.bash/git-completion
 
-#export PS1="\[${BOLD}${MAGENTA}\]\u@\[$PURPLE\]\h \[$ORANGE\]in \[$GREEN\]\w\[$ORANGE\]\$([[ -n \$(git branch 4> /dev/null) ]] && echo \" on\")\[$PURPLE\]\$(parse_git_branch)\[$ORANGE\] $symbol\[$RESET\]"
-export PS1="\[${BOLD}${MAGENTA}\]\u@\[$PURPLE\]\h \[$ORANGE\]in \[$GREEN\]\w\[$ORANGE\] $symbol\[$RESET\]"
+export PS1="\[${BOLD}${MAGENTA}\]\u\[$WHITE\]@\[$PURPLE\]\h \[$ORANGE\]in \[$GREEN\]\w\[$ORANGE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on\")\[$PURPLE\]\$(parse_git_branch)\[$ORANGE\] $symbol\[$RESET\]"
 #export PS2="\[$ORANGE\]→ \[$RESET\]"
 #export PS1='[\[\e[36;1m\]\u@\[\e[32;1m\]\h \[\e[31;1m\]\w $(parse_git_branch_or_tag)]# \[\e[0m\]'
 #blue=36
@@ -84,7 +84,7 @@ export PYTHONPATH=../..:../../../../python
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
-for file in ~/dotfiles/.{path,bash_prompt,vimrc,exports,aliases,osx_aliases,functions,extra}; do
+for file in ~/dotfiles/.{path,bash_prompt,vimrc,exports,aliases,functions,extra}; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file"
 done
 unset file
@@ -104,3 +104,12 @@ done
 #alias sshfs='sshfs bakhra@billyjack.silvertailsystems.com:/home/bakhra/source/ /Users/bakhra/sshfs/'
 #git lsmod |xargs tar cvf ~/tmp/t.tar
 #nosetests -svm "^test_" test/basic_test.py
+
+#time/date on top-right corner of terminal for full screen mode
+#while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-29));date;tput rc;done &
+
+#Show numerical values for each of the 256 colors in bash
+#for i in {0..255}; do echo -e "\e[38;05;${i}m${i}"; done | column -c 80 -s '  '; echo -e "\e[m"
+
+#Send command to all terminals in a screen session
+#<ctrl+a>:at "#" stuff "echo hello world^M"

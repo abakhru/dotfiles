@@ -315,3 +315,90 @@ function tre() {
 function vnc() {
 	open "vnc://$1.silvertailsystems.com:5901"
 }
+display() {
+    export DISPLAY=`vncserver -list |tail -n +5 | sed -e 's/^\(:[0-9]\+\).*$/\1/'`;
+}
+ 
+startvnc() {
+    servers=`/usr/bin/vncserver -list | tail -n+5 | wc -l`
+    if [[ "$servers" -eq 0 ]]; then
+        /usr/bin/vncserver -geometry 1440x900
+    fi
+    
+    servers=`/usr/bin/vncserver -list | tail -n+5 | wc -l`
+    if [[ "$servers" -ne 0 ]]; then
+        vnc_display=`vncserver -list | tail -n +5 | sed -e 's/^\(\S\+\).*$/localhost\1.0/'`
+        export OLDDISPLAY=${DISPLAY}
+        export DISPLAY=$vnc_display
+        vnc_port=$(ps ww $(vncserver -list |tail -n +5 | sed -e s/^\\S\\+\\s\\+//) | tail -n +2 | sed -e s/^.*-rfbport\ // -e s/\\s.*$//)
+        echo "Set display to $DISPLAY"
+        echo "Connect your vnc session to: ${HOSTNAME}:${vnc_port}"
+    else
+        echo "The vncserver failed to start"
+    fi
+}
+  
+stopvnc() {
+    echo "Stopping vnc server on current display..."
+    servers=`/usr/bin/vncserver -list | tail -n+5 | wc -l`
+    echo "Found $servers active servers"
+    if [[ "$servers" -ne 0 ]]; then
+        echo "Want to kill ${DISPLAY#localhost}"
+        vncserver -kill ${DISPLAY#localhost}
+        export DISPLAY=${OLDDISPLAY}
+        echo "Now display is ${DISPLAY}"
+        rm -vf ~/.vnc/*.{log,pid}
+    fi
+}
+   
+# Toggle WUI_HEADLESS between true, and unset
+# -l argument just prints the current value
+headless() {
+    if [ ! "$1" = "-l" ]; then
+        if [ -z "$WUI_HEADLESS" ]; then
+            export WUI_HEADLESS=true
+       else
+            unset WUI_HEADLESS
+       fi
+    fi
+    msg="WUI_HEADLESS = $WUI_HEADLESS"
+    if [ -z "$WUI_HEADLESS" ]; then
+        msg="$msg<unset>"
+    fi
+    echo "$msg"
+}
+    
+# remote allows you to unset (-d), show (-l), set to current host (no arg), or
+# set to a remote host (any qualified or unqualified host name) WUI_VM_NAME
+remote() {
+    if [ "$1" = "-d" ]; then
+        unset WUI_VM_NAME
+    else
+        if [ ! "$1" = "-l" ]; then
+            if [ -z "$1" ]; then
+                vm=$(uname -n)
+            else
+                vm=$1
+            fi
+            # keep the hostname entered only to the first "."
+            export WUI_VM_NAME=${vm%%.*}
+        fi
+     fi
+     echo WUI_VM_NAME=${WUI_VM_NAME}
+}
+
+function search {
+    find . \( -name "*.cpp" -o -name "*.h" \) | xargs grep -n "$1"
+}
+
+function searchpy {
+    find . \( -name "*.py" \) | xargs grep -n "$1"
+}
+
+function de {
+    (cd ./o && less +F `find .|grep "$@"|xargs ls -arth|tail -1`)
+}
+
+function gbackout {
+        git reset HEAD $1 ; git co -- $1
+}

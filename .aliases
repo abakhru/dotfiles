@@ -5,11 +5,14 @@
 alias s='open -a "Sublime Text"'
 
 # Color LS
+#for osx
 colorflag="-G"
+#for linux
+#colorflag="--color=tty"
 alias ls="command ls -larth ${colorflag}"
 alias l="ls -lF ${colorflag}" # all files, in long format
 alias la="ls -laF ${colorflag}" # all files inc dotfiles, in long format
-alias lsd='ls -lF ${colorflag} | grep "^d"' # only directories
+alias lsd="ls -lF ${colorflag} | grep '^d'" # only directories
 
 # Quicker navigation
 alias ..="cd .."
@@ -24,6 +27,7 @@ alias sites="cd ~/Code/sites"
 # Colored up cat!
 # You must install Pygments first - "sudo easy_install Pygments"
 alias c='pygmentize -O style=monokai -f console256 -g'
+alias cs='/usr/local/bin/cscope'
 
 # Git 
 # You must install Git first - ""
@@ -31,19 +35,25 @@ alias gs='git status'
 alias ga='git add .'
 alias gc='git commit -m' # requires you to type a commit message
 alias gp='git push'
-alias gitbackout='git lsmod |xargs git co HEAD'
+alias gitbackout='git ls -m|xargs git co HEAD'
+alias cloneana='git clone git@github.silvertailsystems.com:ana/main3.git'
+alias gtar="git st|awk '{print $2}'|xargs tar cvf ~/tmp/t.tar"
 
 alias vi='vim'
 alias pp='/bin/ps -eo "user s pri pid ppid pcpu pmem vsz rss stime time nlwp psr args" |grep bakhra|grep -v grep|grep -v ps'
-alias le='less +F'
-alias de='(cd /; cd /space/src/results/ && less +F `find .|grep detaillog|grep -v SUPPORT| tail -1`)'
+alias le='less -rXF'
+#alias de='(cd ./o && less +F `find .|grep $1|xargs ls -arth|tail -1`)'
 alias tcpdump='tcpdump -qns 0 -X -r'
 alias ngrep='ngrep -q -I'
 alias findpy='cd 5-qa/python/stqa && find . -maxdepth 4 -type f|grep "\.py"|xargs grep'
 alias fdgrep='find . |xargs grep'
+alias pygrep="find . -type f -name '*.py'|xargs grep"
 alias top='top -c d'
 alias knose='pkill -9 -u bakhra nosetests'
 alias ksilver='pkill -9 -u bakhra -f silver'
 alias sshs1='ssh -AXYp 2772 mecha.silvertailsystems.com'
 alias sshs2='ssh -AXYp 2772 billyjack.silvertailsystems.com'
 alias ssh='ssh -AXYp 2772 -l bakhra'
+alias s='screen -X screen'
+alias vncport='ps ww $(vncserver -list |tail -n +5 | sed -e s/^\\S\\+\\s\\+//) | tail -n +2 | sed -e s/^.*-rfbport\ // -e s/\\s.*$//'
+alias nosetests="nosetests -e '^Modify' -svm"
