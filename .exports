@@ -30,6 +30,6 @@ export GREP_OPTIONS="--color=auto"
 # Link Homebrew casks in `/Applications` rather than `~/Applications`
 #export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 export DISPLAY=:1
-export PATH=$PATH:~/source/sts/tools
+export PATH=/usr/local/homebrew/bin:/sbin:/bin:$PATH:~/source/sts/tools
 export PYTHONPATH=$PYTHONPATH:/home/bakhra/source/us3238/5-qa/python/rpmtest/wui
 export WUI_DEV_DIR='build/us3252-risk-indicator-response-code-v6/apps'

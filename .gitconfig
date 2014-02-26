@@ -1,6 +1,6 @@
 [user]
-        name = Amit Bakhru
-        email = abakhru@silvertailsystems.com
+	name = Amit Bakhru
+	email = abakhru@silvertailsystems.com
 [branch]
         autosetuprebase=always
 [push]

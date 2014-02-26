@@ -78,8 +78,8 @@ set hidden
 nnoremap ; :
 map <silent> <C-t> :NERDTreeToggle<CR>
 "colorscheme Tomorrow-Night
-colorscheme Tomorrow-Night-Bright
+"colorscheme Tomorrow-Night-Bright
 "colorscheme 256-jungle
 "colorscheme vividchalk
 "colorscheme badwolf
-"colorscheme molokai
+colorscheme molokai
