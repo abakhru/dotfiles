@@ -52,6 +52,8 @@
         # Remove branches that have already been merged with master
         dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
         ls = ls-files
+        fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
+        squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' –
 
 [mergetool]
         keepBackup = true
