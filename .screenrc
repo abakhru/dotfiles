@@ -62,7 +62,7 @@ crlf off				# default: off
 multiuser off
 
 # Change default scrollback value for new windows
-defscrollback 1000			# default: 100
+defscrollback 10000			# default: 100
 
 # Define the time that all windows monitored for silence should 
 # wait before displaying a message. Default 30 seconds.
@@ -81,7 +81,7 @@ bufferfile            $HOME/.screen_exchange
 # than is set as the default login shell.
 # If begins with a '-' character, the shell will be started as a login shell.
 # shell                 zsh
-shell                 -bash
+# shell                   bash
 # shell                 ksh
 # shell -$SHELL
 
@@ -89,7 +89,7 @@ shell                 -bash
 # shelltitle '$ |bash'
 
 # emulate .logout message
-pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
+# pow_detach_msg "Screen session of \$LOGNAME \$:cr:\$:nl:ended."
 
 # caption always " %w --- %c:%s"
 # caption always "%3n %t%? @%u%?%? [%h]%?%=%c"
@@ -352,15 +352,15 @@ bind  (   select 18
 # Uncomment one/some following lines to automatically let
 # SCREEN start some programs in the given window numbers:
 screen -t boot		#0
-screen -t bld_qa	#1
+screen -t commit	#1
 screen -t etc		 #2 cd /etc/init.d/
 screen -t scripts	 #3 cd /etc/init.d/
 screen -t run	 #4 le /var/log/messages
 screen -t Source	 #5 cd /var/opt/silvertail/data/logs
 screen -t knowngood	 #6 cd /var/opt/silvertail/data/reports
 screen -t output	 #7 cd /var/opt/silvertail/data/tasks
-screen -t commit	 #8 msgmiti
-screen -t surflog	 #9 msgsurf
+screen -t run	 #8 msgmiti
+screen -t extra	 #9 msgsurf
 #screen 1
 #screen 2
 #screen -t IRSSI		3 ssh lasse@gentoo
@@ -369,7 +369,7 @@ screen -t surflog	 #9 msgsurf
 #screen -t GUNVALD        6 ssh root@gunvald
 # screen -t GOOGLE      2 links http://www.google.com
 # screen -t NEWS        3 slrn
-# screen -t WWW         4 links http://www.math.fu-berlin.de/~guckes/
+# screen -t WW         4 links http://www.math.fu-berlin.de/~guckes/
 # screen 5
 # screen 6
 

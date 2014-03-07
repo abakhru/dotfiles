@@ -1,0 +1,90 @@
+- list branches & check which branch we are working on
+git branch 
+git branch -r
+
+- create branch
+git branch <amit-foo>
+git co -b <amit-foo>
+Eg: git branch amit-test
+
+- to change branch
+git checkout amit-foo
+
+- to update the master branch to latest version
+git checkout master
+git pull
+
+- branches nomenclature
+de* named branches are defect related
+us* named branches are user stories related
+others are peoples named rellated
+
+- commit changes
+-- add a new file or change any existing file
+git add <new_file_name>
+
+-- commit changes to an existing file
+git commit -m "message" <filename>
+git commit -a -m "adding a file and editing another file" -v
+
+- push a new branch onto master repo
+git push -u origin de1625-autotune-consume-stqa-disable-v1
+
+- to check the actual status of changes
+git status/ git st
+
+- diff the changes compared to master
+git diff --color --oneline
+
+- save uncommit changes
+git stash
+git pull
+git stash pop
+
+git stash list
+git stash clear
+
+- you can created command aliased in ~/snr/.git/config file
+
+[alias]
+	checkout = co
+	status = st
+	diff = di --color-words
+	pull = up
+
+- to check if ssh auth key is being used through ssh session
+ssh-add -l
+(this should list the auth key if its working fine, if it doesn't display the ssh-key then checkins will FAIL
+
+- to revert particular file to master version
+git checkout/co -- 5-qa/python/stqa/silvertap/testdata/basic_test.py/universal_conf.py
+
+- get the changelog in onelines
+git log
+git log --one-line
+git log --oneline
+git log --color --oneline
+ 
+- always use git url for push/pull, http is read-only url and ALWAYS work on snr branch NEVER on master  
+git clone git@github.silvertailsystems.com:ana/main3 ana
+
+- check the local changes compared to the remote origin
+git status
+
+- list the changed files in your repo
+git ls-files -m (modified files)
+git ls-files -d (deleted files)
+git ls -o (non-added files)
+
+- add the changed/modified files in your repo
+git ls -m|xargs git add
+git ls -d|xargs git rm
+
+- tar all the modified files in your repo (doesn't include new files)
+git ls -m|xargs tar cvf ~/tmp/t.tar
+
+- always rebase your brach onto master before push
+git rebase --onto master master
+
+- autosquash the fixups
+git rebase -i --autosquash
