@@ -58,12 +58,12 @@ function parse_git_branch() {
 # Change this symbol to something sweet. 
 # (http://en.wikipedia.org/wiki/Unicode_symbols)
 #symbol="⚡ "
-symbol="⚡ "
+symbol=" #"
 
 source ~/.bash/git-prompt
 source ~/.bash/git-completion
 
-export PS1="\[${BOLD}${MAGENTA}\]\u\[$WHITE\]@\[$PURPLE\]\h \[$ORANGE\]in \[$GREEN\]\w\[$ORANGE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on\")\[$PURPLE\]\$(parse_git_branch)\[$ORANGE\] $symbol\[$RESET\]"
+export PS1="\[${BOLD}${MAGENTA}\]\u\[$WHITE\]@\[$PURPLE\]\h \[$ORANGE\]in \[$GREEN\]\w\[$ORANGE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on\")\[$PURPLE\]\$(parse_git_branch)\[$ORANGE\]$symbol\[$RESET\]"
 #export PS2="\[$ORANGE\]→ \[$RESET\]"
 #export PS1='[\[\e[36;1m\]\u@\[\e[32;1m\]\h \[\e[31;1m\]\w $(parse_git_branch_or_tag)]# \[\e[0m\]'
 #blue=36
@@ -75,7 +75,8 @@ export PS1="\[${BOLD}${MAGENTA}\]\u\[$WHITE\]@\[$PURPLE\]\h \[$ORANGE\]in \[$GRE
 ### Misc
 
 # Only show the current directory's name in the tab 
-export PROMPT_COMMAND='echo -ne "\033]0;${PWD##*/}\007"'
+#export PROMPT_COMMAND='echo -ne "\033]0;${PWD##*/}\007"'
+export PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME%%.*}: ${STY}\007"'
 export PYTHONPATH=../..:../../../../python
 
 # init z! (https://github.com/rupa/z)
