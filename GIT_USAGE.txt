@@ -88,3 +88,6 @@ git rebase --onto master master
 
 - autosquash the fixups
 git rebase -i --autosquash
+
+- delete remote branch
+git push origin :<branch_name>

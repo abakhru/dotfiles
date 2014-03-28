@@ -14,3 +14,5 @@ https://miles.silvertailsystems.com/js/selectors.json
 * get the certificates and request status/varz grapher for mitigator
 https://miles.silvertailsystems.com/cui/index.html
 
+select blobAsBigInt(timestampAsBlob(session_start)) from user_profile_profile_sessions;
+
