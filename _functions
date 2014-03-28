@@ -402,3 +402,6 @@ function de {
 function gbackout {
         git reset HEAD $1 ; git co -- $1
 }
+
+function noseloop() { while true; do touch test/*.py ; nosetests "$@" ; if [ $? != 0 ]; then break; fi;  done }
+function bldloop() { while true; do touch test/*.py ; bld "$@" ; if [ $? != 0 ]; then break; fi;  done }

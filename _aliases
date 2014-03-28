@@ -57,7 +57,4 @@ alias ssh='ssh -AXYp 2772 -l bakhra'
 alias s='screen -X screen'
 alias vncport='ps ww $(vncserver -list |tail -n +5 | sed -e s/^\\S\\+\\s\\+//) | tail -n +2 | sed -e s/^.*-rfbport\ // -e s/\\s.*$//'
 alias nosetests="nosetests -e '^Modify' -svm"
-noseloop() { while true; do touch test/*.py ; nosetests "$@" ; if [ $? != 0 ]; then break; fi;  done }
-#alias noseloop='while true; do touch test/*.py ; nosetests \'test\' test/session_start_scorelet_insertion_test.py ; if [ $? != 0 ]; then break; fi;  done'
-#
 alias clean_pycs='find . -name "*.pyc" -exec rm {} \;'
