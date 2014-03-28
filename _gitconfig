@@ -21,6 +21,8 @@
         # View abbreviated SHA, description, and history graph of the latest 20 commits
         l = log --pretty=oneline -n 20 --graph --abbrev-commit
         t = log --oneline --graph --decorate --all
+        lol = log --graph --decorate --pretty=oneline --abbrev-commit
+        lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
         # Show the diff between the latest commit and the current state
         d = !"git diff-index --quiet HEAD -- || clear; git --no-pager diff --patch-with-stat"
         # `git di $number` shows the diff between the state `$number` revisions ago and the current state

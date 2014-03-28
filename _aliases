@@ -21,7 +21,7 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 
 # Shortcuts to my Code folder in my home directory
-alias code="cd ~/Code"
+alias code="cd ~/source"
 alias sites="cd ~/Code/sites"
 
 # Colored up cat!
@@ -59,3 +59,5 @@ alias vncport='ps ww $(vncserver -list |tail -n +5 | sed -e s/^\\S\\+\\s\\+//) |
 alias nosetests="nosetests -e '^Modify' -svm"
 noseloop() { while true; do touch test/*.py ; nosetests "$@" ; if [ $? != 0 ]; then break; fi;  done }
 #alias noseloop='while true; do touch test/*.py ; nosetests \'test\' test/session_start_scorelet_insertion_test.py ; if [ $? != 0 ]; then break; fi;  done'
+#
+alias clean_pycs='find . -name "*.pyc" -exec rm {} \;'

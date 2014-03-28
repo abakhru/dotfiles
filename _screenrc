@@ -380,10 +380,10 @@ screen -t extra	 #9 msgsurf
 # setenv PROMPT_COMMAND 'echo -n -e "\033k\033\134"'
 
 # Don't you want to start programs which need a DISPLAY ?
-# setenv DISPLAY ''
+setenv DISPLAY ':0'
 
 # A better caption string.
-caption always
+#caption always
 #caption splitonly
 #caption string "%{-b bc}%c|%D|%M %d|%H%{+u wb} %L=%-Lw%45>%{+b by}%n%f*%t%{-}%+Lw%-0<"
 #caption string "%{-b bc}%L=%-Lw%49>%{+b by}%n%f*%t%{-}%+Lw%-1<"
@@ -397,3 +397,38 @@ windowlist string "%f%04= %3n %t"
 termcapinfo xterm|xterms|xs|rxvt ti@:te@
 termcapinfo xterm 'hs:ts=\E]2;:fs=\007:ds=\E]2;screen\007'
 altscreen on
+
+##    Explanation of hardstatus line    ##
+
+# Note the embeded space after the colon, I feel
+#  it just looks nicer with a blank between the
+#  text and console edge:
+#   '%{=b}%{G} Screens: '
+
+# This prints the window listing in blue:
+#   '%{b}%w'
+
+# This right-aligns what follows:
+#   '%='
+
+# This displays the time (hours and minutes) in 12hr format
+# and adds an AM/PM flag, in bold green:
+#   '%{G}%C%A'
+
+# This displays the day of the week:
+#   '%D'
+
+#This displays the date in Mon/day/year format:
+# and again I embeded a space to give me one space
+# between the text and console edge:
+#  '%M/%d/%Y '
+
+# The resultsing command give you a status line that
+#  looks like this:
+#   | Screens: 0* bash  <blanks zapped>         5:30PM  Fri, Jun/25/2004 |
+#  (The pipes indicate the edges of the xterm/console).
+
+# Green text, time, and date; windows in blue:
+hardstatus on
+hardstatus alwayslastline
+hardstatus string "%{=b}%{G} Screen(s): %{b}%w %=%{kG}%C%A  %D, %M/%d/%Y "

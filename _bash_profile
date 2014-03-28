@@ -102,9 +102,6 @@ shopt -s cdspell
 for option in autocd globstar; do
     shopt -s "$option" 2> /dev/null
 done
-#alias sshfs='sshfs bakhra@billyjack.silvertailsystems.com:/home/bakhra/source/ /Users/bakhra/sshfs/'
-#git lsmod |xargs tar cvf ~/tmp/t.tar
-#nosetests -svm "^test_" test/basic_test.py
 
 #time/date on top-right corner of terminal for full screen mode
 #while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-29));date;tput rc;done &
