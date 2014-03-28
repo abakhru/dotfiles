@@ -174,7 +174,7 @@ export LESS="-X"
 complete -F _complete_hosts ssh
 complete -F _complete_hosts host
 
-for file in ~/dotfiles/.{path,bash_prompt,vimrc,exports,aliases,functions,extra}; do
+for file in ~/dotfiles/_{path,bash_prompt,vimrc,exports,aliases,functions,extra}; do
     [ -r "$file" ] && [ -f "$file" ] && source "$file"
 done
 unset file
