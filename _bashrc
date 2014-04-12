@@ -45,6 +45,14 @@ export WHITE
 export BOLD
 export RESET
 
+VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+
+# don't put duplicate lines in the history. See bash(1) for more options
+# don't overwrite GNU Midnight Commander's setting of `ignorespace'.
+HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
+# ... or force ignoredups and ignorespace
+HISTCONTROL=ignoreboth
+
 # Git branch details
 function parse_git_dirty() {
     [[ $(git status 2> /dev/null | tail -n1) != *"working directory clean"* ]] && echo "*"
@@ -108,6 +116,10 @@ export PS1="$PS1\[$PURPLE\]\$(parse_git_branch)\[$RESET\]$symbol "
 for option in autocd globstar; do
     shopt -s "$option" 2> /dev/null
 done
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
 
 #time/date on top-right corner of terminal for full screen mode
 #while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-29));date;tput rc;done &
