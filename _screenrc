@@ -359,7 +359,7 @@ screen -t run	 #4 le /var/log/messages
 screen -t Source	 #5 cd /var/opt/silvertail/data/logs
 screen -t knowngood	 #6 cd /var/opt/silvertail/data/reports
 screen -t output	 #7 cd /var/opt/silvertail/data/tasks
-screen -t run	 #8 msgmiti
+screen -t utils	 #8 msgmiti
 screen -t extra	 #9 msgsurf
 #screen 1
 #screen 2

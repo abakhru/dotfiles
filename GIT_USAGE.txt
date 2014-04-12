@@ -27,6 +27,9 @@ git add <new_file_name>
 git commit -m "message" <filename>
 git commit -a -m "adding a file and editing another file" -v
 
+- uncommit a local commit
+git reset --soft HEAD^
+
 - push a new branch onto master repo
 git push -u origin de1625-autotune-consume-stqa-disable-v1
 
