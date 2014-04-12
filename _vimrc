@@ -142,14 +142,13 @@ au BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\]%\\
 let g:pyflakes_use_quickfix = 0
 
 "
-"colorscheme Tomorrow-Night
 "colorscheme Tomorrow-Night-Bright
 "colorscheme 256-jungle
-colorscheme vividchalk
+"colorscheme vividchalk
 "colorscheme badwolf
 "colorscheme molokai
 "colorscheme railscat
-"colorscheme ron
+colorscheme blackboard
 "
 set laststatus=1
-set statusline=%f\ \ %y\ \ %3.3m%4.4r%=%l\ /\ %L,\ %c\ \.
+set statusline=%f\ \ %y\ \ %9.3m%4.4r%=%l\ /\ %L,\ %c\ \.
