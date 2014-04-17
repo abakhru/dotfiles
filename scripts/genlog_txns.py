@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+#NOTE: make sure the shard file you are modifying has same name after modification.
+
 from random import randint
 
 r = open('/Users/bakhra/tmp/us3240/unique_pages.log', 'r')
