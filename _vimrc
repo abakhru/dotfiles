@@ -30,21 +30,6 @@ if has("autocmd")
   augroup END
 endif
 
-if has("cscope") && filereadable("/usr/local/bin/cscope")
-   set csprg=/usr/local/bin/cscope
-   set csto=0
-   set cst
-   set nocsverb
-   " add any database in current directory
-   if filereadable("cscope.out")
-      cs add cscope.out
-   " else add database pointed to by environment
-   elseif $CSCOPE_DB != ""
-      cs add $CSCOPE_DB
-   endif
-   set csverb
-endif
-
 nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR>
 nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
 nmap <C-_>c :cs find c <C-R>=expand("<cword>")<CR><CR>
@@ -105,7 +90,7 @@ set listchars=tab:>.,trail:.,extends:#,nbsp:.
 nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
 set showmode
-"
+
 " " Set working directory
 nnoremap <leader>. :lcd %:p:h<CR>
 
@@ -141,14 +126,13 @@ au BufRead *.py set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\]%\\
 "" Don't let pyflakes use the quickfix window
 let g:pyflakes_use_quickfix = 0
 
-"
 "colorscheme Tomorrow-Night-Bright
 "colorscheme 256-jungle
-"colorscheme vividchalk
+colorscheme vividchalk
 "colorscheme badwolf
 "colorscheme molokai
 "colorscheme railscat
-colorscheme blackboard
-"
+"colorscheme blackboard
+
 set laststatus=1
 set statusline=%f\ \ %y\ \ %9.3m%4.4r%=%l\ /\ %L,\ %c\ \.
