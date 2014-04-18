@@ -100,6 +100,7 @@ set nobackup
 set noswapfile
 set list
 set listchars=tab:>.,trail:.,extends:#,nbsp:.
+set paste
 
 " Toggle indentation during paste.
 nnoremap <F2> :set invpaste paste?<CR>
@@ -151,5 +152,37 @@ colorscheme vividchalk
 "colorscheme railscat
 "colorscheme ron
 "
+
+" Centralize backups, swapfiles and undo history
+"set backupdir=~/.vim/backups
+set directory=~/.vim/swaps
+" Allow backspace in insert mode
+set backspace=indent,eol,start
+" Optimize for fast terminal connections
+set ttyfast
+" Show “invisible” characters
+set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
+set list
+
 set laststatus=1
 set statusline=%f\ \ %y\ \ %3.3m%4.4r%=%l\ /\ %L,\ %c\ \.
+
+" Strip trailing whitespace (,ss)
+function! StripWhitespace()
+    let save_cursor = getpos(".")
+    let old_query = getreg('/')
+    :%s/\s\+$//e
+    call setpos('.', save_cursor)
+    call setreg('/', old_query)
+endfunction
+noremap <leader>ss :call StripWhitespace()<CR>
+" Save a file as root (,W)
+noremap <leader>W :w !sudo tee % > /dev/null<CR>
+
+" Automatic commands
+if has("autocmd")
+    " Enable file type detection
+    filetype on
+    " Treat .json files as .js
+    autocmd BufNewFile,BufRead *.json setfiletype json syntax=javascript
+endif
