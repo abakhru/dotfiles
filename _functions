@@ -405,3 +405,41 @@ function gbackout {
 
 function noseloop() { while true; do touch test/*.py ; nosetests "$@" ; if [ $? != 0 ]; then break; fi;  done }
 function bldloop() { while true; do touch test/*.py ; bld "$@" ; if [ $? != 0 ]; then break; fi;  done }
+
+netinfo ()
+{
+echo "--------------- Network Information ---------------"
+/sbin/ifconfig | awk /'inet addr/ {print $2}'
+echo ""
+/sbin/ifconfig | awk /'Bcast/ {print $3}'
+echo ""
+/sbin/ifconfig | awk /'inet addr/ {print $4}'
+
+# /sbin/ifconfig | awk /'HWaddr/ {print $4,$5}'
+echo "---------------------------------------------------"
+}
+
+spin ()
+{
+echo -ne "${RED}-"
+echo -ne "${WHITE}\b|"    
+echo -ne "${BLUE}\bx"
+sleep .02
+echo -ne "${RED}\b+${NC}"
+}
+
+# WELCOME SCREEN
+#######################################################
+
+clear
+#for i in `seq 1 15` ; do spin; done ;echo -ne "${WHITE} USA Linux Users Group ${NC}"; for i in `seq 1 15` ; do spin; done ;echo "";
+#echo -e ${LIGHTBLUE}`cat /etc/SuSE-release` ;
+#echo -e "Kernel Information: " `uname -smr`;
+#echo -e ${LIGHTBLUE}`bash --version`;echo ""
+#echo -ne "Hello $USER today is "; date
+#echo -e "${WHITE}"; cal ; echo ""; 
+#echo -ne "${CYAN}";netinfo;
+#mountedinfo ; echo ""
+#echo -ne "${LIGHTBLUE}Uptime for this computer is ";uptime | awk /'up/ {print $3,$4}'
+#for i in `seq 1 15` ; do spin; done ;echo -ne "${WHITE} http://usalug.org ${NC}"; for i in `seq 1 15` ; do spin; done ;echo "";
+#echo ""; echo ""

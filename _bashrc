@@ -1,50 +1,3 @@
-### Prompt Colors 
-if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
-    export TERM=gnome-256color
-elif infocmp xterm-256color >/dev/null 2>&1; then
-    export TERM=xterm-256color
-fi
-
-if tput setaf 1 &> /dev/null; then
-    tput sgr0
-    if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
-        BLACK=$(tput setaf 190)
-        MAGENTA=$(tput setaf 9)
-        ORANGE=$(tput setaf 172)
-        GREEN=$(tput setaf 190)
-        PURPLE=$(tput setaf 141)
-        WHITE=$(tput setaf 0)
-    else
-        BLACK=$(tput setaf 190)
-        MAGENTA=$(tput setaf 5)
-        ORANGE=$(tput setaf 4)
-        GREEN=$(tput setaf 2)
-        PURPLE=$(tput setaf 1)
-        WHITE=$(tput setaf 7)
-    fi
-    BOLD=$(tput bold)
-    RESET=$(tput sgr0)
-else
-    BLACK="\033[01;30m"
-    MAGENTA="\033[01;31m"
-    ORANGE="\033[01;33m"
-    GREEN="\[\e[32;1m\]"
-    #PURPLE="\033[01;35m"
-    PURPLE="\033[01;63m"
-    WHITE="\033[01;37m"
-    BOLD=""
-    RESET="\033[m"
-fi
-
-export BLACK
-export MAGENTA
-export ORANGE
-export GREEN
-export PURPLE
-export WHITE
-export BOLD
-export RESET
-
 VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 
 # don't put duplicate lines in the history. See bash(1) for more options
@@ -53,21 +6,6 @@ HISTCONTROL=$HISTCONTROL${HISTCONTROL+,}ignoredups
 # ... or force ignoredups and ignorespace
 HISTCONTROL=ignoreboth
 
-# Git branch details
-function parse_git_dirty() {
-    [[ $(git status 2> /dev/null | tail -n1) != *"working directory clean"* ]] && echo "*"
-}
-function parse_git_branch() {
-    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
-}
-
-# Change this symbol to something sweet. 
-# (http://en.wikipedia.org/wiki/Unicode_symbols)
-symbol="⚡ "
-
-source ~/.bash/git-prompt
-source ~/.bash/git-completion
-
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -75,21 +13,6 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-export PS1="\[${BOLD}${MAGENTA}\]\u\[$WHITE\]@\[\e[32;1m\]\h:\[$GREEN\]\w\[$RESET\]"
-#export PS1="\[${BOLD}${MAGENTA}\]\u\[$WHITE\]@\[$PURPLE\]\h \[$ORANGE\]in \[$GREEN\]\w\[$ORANGE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on\")\[$PURPLE\]\$(parse_git_branch)\[$ORANGE\]$symbol\[$RESET\]"
-#export PS2="\[$ORANGE\]→ \[$RESET\]"
-#export PS1='[\[\e[36;1m\]\u@\[\e[32;1m\]\h \[\e[31;1m\]\w $(parse_git_branch_or_tag)]# \[\e[0m\]'
-#blue=36
-#green=32
-#red=31
-#export PS1='\[\e[31;1m\]\u \[\e[32;1m\]\w \[\e[36;1m\]$(parse_git_branch_or_tag)]# \[\e[0m\]'
-
-
-### Misc
-
-# Only show the current directory's name in the tab 
-#export PROMPT_COMMAND='echo -ne "\033]0;${PWD##*/}\007"'
-export PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME%%.*}: ${STY}\007"'
 export PYTHONPATH=../..:../../../../python
 
 # Load the shell dotfiles, and then some:
@@ -106,20 +29,12 @@ shopt -s histappend
 # Autocorrect typos in path names when using `cd`
 shopt -s cdspell
 
-# Add git and svn branch names
-#export PS1='\[\033[01;31m\]\w\[\033[00m\]\n${debian_chroot:+($debian_chroot)}\[\033[01;34m\]\u\[\033[01;32m\]@\[\033[01;34m\]\h\[\033[00m\]\$ '
-export PS1="$PS1\[$PURPLE\]\$(parse_git_branch)\[$RESET\]$symbol "
-
 # Enable some Bash 4 features when possible:
 # * `autocd`, e.g. `**/qux` will enter `./foo/bar/baz/qux`
 # * Recursive globbing, e.g. `echo **/*.txt`
 for option in autocd globstar; do
     shopt -s "$option" 2> /dev/null
 done
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
 
 #time/date on top-right corner of terminal for full screen mode
 #while sleep 1;do tput sc;tput cup 0 $(($(tput cols)-29));date;tput rc;done &
@@ -129,4 +44,3 @@ shopt -s checkwinsize
 
 #Send command to all terminals in a screen session
 #<ctrl+a>:at "#" stuff "echo hello world^M"
-
