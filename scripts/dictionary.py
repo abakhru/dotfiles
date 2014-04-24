@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 phonebook = {
     "John" : 938477566,
     "Jack" : 938377264,

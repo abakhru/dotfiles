@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import json   
+import json
 
 json_txt = """
 {
