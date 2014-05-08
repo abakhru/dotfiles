@@ -8,8 +8,10 @@ export ZSH=$HOME/.oh-my-zsh
 #ZSH_THEME='terminalparty'
 #ZSH_THEME='jonathan'
 #ZSH_THEME='apple'
-ZSH_THEME='tjkirch_mod'
-#ZSH_THEME='random'
+#ZSH_THEME='tjkirch_mod'
+#ZSH_THEME='wezm+'
+#ZSH_THEME='amit'
+ZSH_THEME='random'
 
 # Example aliases
 alias zshconf='vim ~/.zshrc'
@@ -53,7 +55,7 @@ alias reload='. ~/.zshrc'
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git)
+plugins=(git ssh-agent)
 
 source $ZSH/oh-my-zsh.sh
 
