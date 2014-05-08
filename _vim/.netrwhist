@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =4
+let g:netrw_dirhist_1='/Users/bakhra/ana/5-qa/python/stqa/silversleuthrt/testdata/schema_test.py/SchemaTest/test_whitelist_user'
+let g:netrw_dirhist_2='/Users/bakhra/.vim/bundle/python-mode/autoload'
+let g:netrw_dirhist_3='/Users/bakhra/.vim/bundle/python-mode/autoload/pymode'
+let g:netrw_dirhist_4='/Users/bakhra/source/dotfiles/.oh-my-zsh'

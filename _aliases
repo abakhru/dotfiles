@@ -6,9 +6,9 @@ alias s='open -a "Sublime Text"'
 
 # Color LS
 #for osx
-#colorflag="-G"
+colorflag="-G"
 #for linux
-colorflag="--color=tty"
+#colorflag="--color=tty"
 alias ls="command ls -larth ${colorflag}"
 alias l="ls -lF ${colorflag}" # all files, in long format
 alias la="ls -laF ${colorflag}" # all files inc dotfiles, in long format

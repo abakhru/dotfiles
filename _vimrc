@@ -78,8 +78,8 @@ let &guicursor = &guicursor . ",a:blinkon0"
 " " Load pathogen with docs for all plugins
 filetype off
 "call pathogen#runtime_append_all_bundles()
-call pathogen#incubate()
-call pathogen#helptags()
+"call pathogen#incubate()
+"call pathogen#helptags()
 
 filetype on
 set tabstop=4
@@ -146,7 +146,7 @@ let g:pyflakes_use_quickfix = 0
 "colorscheme Tomorrow-Night
 "colorscheme Tomorrow-Night-Bright
 "colorscheme 256-jungle
-colorscheme vividchalk
+"colorscheme vividchalk
 "colorscheme badwolf
 "colorscheme molokai
 "colorscheme railscat
