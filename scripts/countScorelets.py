@@ -20,14 +20,19 @@ class myGzipFile(gzip.GzipFile):
 #file = '/var/opt/sears_with_scorelets/2012/03-Mar/08/00:00/sb08/shard_sorted.log.gz'
 file = sys.argv[1]
 
-count = 0
 # calculating the execution time
 start_time = time.time()
+
+#S00:29:59.347   IP Session Start Time   {"val":1311208139631}
+#S00:29:59.347   IP Changed      {"prev":"101.123.165.27","disterritoriality":{"detail":"unknown","val":-1},"divergence":1}
+
 with myGzipFile(file, 'rb') as f:
     for lines in f:
-        if lines.startswith('t'):
-            count += 1
-            #print lines
+        if (lines.startswith('S')) & ('IP' in lines):
+            a = lines.split('\t')
+            print lines
+            print 'scorelet_name: ', a[1]
+            print 'scorelet_value: ', a[2]
 
 print time.time() - start_time, "seconds"
 f.close()
