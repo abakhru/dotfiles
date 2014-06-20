@@ -72,7 +72,7 @@ alias gc='git commit -m' # requires you to type a commit message
 alias gp='git push'
 alias gitbackout='git ls -m|xargs git co HEAD'
 alias cloneana='git clone git@github.silvertailsystems.com:ana/main3.git'
-alias gtar='git st|awk '{print $2}'|xargs tar cvf ~/tmp/t.tar'
+alias gtar="git st|awk '{print $2}'|xargs tar cvf ~/tmp/t.tar"
 
 alias vi='vim'
 alias pp='/bin/ps -eo 'user s pri pid ppid pcpu pmem vsz rss stime time nlwp psr args' |grep bakhra|grep -v grep|grep -v ps'

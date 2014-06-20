@@ -428,6 +428,7 @@ sleep .02
 echo -ne "${RED}\b+${NC}"
 }
 
+function google () { st="$@"; open "http://www.google.com/search?q=${st}"; }
 # WELCOME SCREEN
 #######################################################
 
