@@ -9,7 +9,7 @@ export ZSH=$HOME/.oh-my-zsh
 #ZSH_THEME='jonathan'
 #ZSH_THEME='apple'
 #ZSH_THEME='tjkirch_mod'
-#ZSH_THEME='wezm+'
+ZSH_THEME='wezm'
 #ZSH_THEME='amit'
 ZSH_THEME='jaischeema'
 #ZSH_THEME='random'
@@ -80,6 +80,7 @@ export PATH='/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/loca
 
 # ssh
 export SSH_KEY_PATH='~/.ssh/id_rsa'
-export PATH=/usr/local/homebrew/bin:/sbin:/bin:$PATH:~/source/sts/tools
-export PYTHONPATH=$PYTHONPATH:/home/bakhra/source/us3238/5-qa/python/rpmtest/wui
-export WUI_DEV_DIR='build/us3252-risk-indicator-response-code-v6/apps'
+#export PATH=/usr/local/homebrew/bin:/sbin:/bin:$PATH:~/source/sts/tools
+#export PYTHONPATH=$PYTHONPATH:/home/bakhra/source/us3238/5-qa/python/rpmtest/wui
+#export WUI_DEV_DIR='build/us3252-risk-indicator-response-code-v6/apps'
+export SSH_AUTH_SOCK=$(find /tmp/ssh-* -user `whoami` -name agent\* -printf '%T@ %p\n' 2>/dev/null | sort -k 1nr | sed 's/^[^ ]* //' | head -n 1)
