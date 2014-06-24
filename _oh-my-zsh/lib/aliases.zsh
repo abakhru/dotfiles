@@ -32,21 +32,21 @@ alias afind='ack-grep -il'
 
 # Open specified files in Sublime Text
 # 's .' will open the current directory in Sublime
-alias s='open -a 'Sublime Text''
+alias s='open -a "Sublime Text"'
 
 # Color LS
 #for osx
-#colorflag='-G'
+colorflag='-G'
 #for linux
 #colorflag='--color=tty'
 
 # List direcory contents
-alias lsa='ls -lah'
-alias l='ls -larth'
-alias ll='ls -lh'
-alias la='ls -lAh'
+alias lsa='ls -lah ${colorflag}'
+alias l='ls -larth ${colorflag}'
+alias ll='ls -lh ${colorflag}'
+alias la='ls -lAh ${colorflag}'
 alias lsd='ls -lF | grep '^d'' # only directories
-alias ls='ls -larth'
+alias ls='ls -larth ${colorflag}'
 
 # Quicker navigation
 alias ..='cd ..'
@@ -71,25 +71,27 @@ alias ga='git add .'
 alias gc='git commit -m' # requires you to type a commit message
 alias gp='git push'
 alias gitbackout='git ls -m|xargs git co HEAD'
-alias cloneana='git clone git@github.silvertailsystems.com:ana/main3.git'
-alias gtar="git st|awk '{print $2}'|xargs tar cvf ~/tmp/t.tar"
+alias clonests='git clone git@github.silvertailsystems.com:sts/main3.git'
+alias gtar='git st|awk "{print $2}"|xargs tar cvf ~/tmp/t.tar'
 
 alias vi='vim'
-alias pp='/bin/ps -eo 'user s pri pid ppid pcpu pmem vsz rss stime time nlwp psr args' |grep bakhra|grep -v grep|grep -v ps'
+alias pp='/bin/ps -eo "user s pri pid ppid pcpu pmem vsz rss stime time nlwp psr args" |grep bakhra|grep -v grep|grep -v ps'
 alias le='less -rXF'
-#alias de='(cd ./o && less +F `find .|grep $1|xargs ls -arth|tail -1`)'
+alias de='(cd ./o && less +F `find .|grep $1|xargs ls -arth|tail -1`)'
 alias tcpdump='tcpdump -qns 0 -X -r'
 alias ngrep='ngrep -q -I'
-alias findpy='cd 5-qa/python/stqa && find . -maxdepth 4 -type f|grep '\.py'|xargs grep'
+alias findpy='cd 5-qa/python/stqa && find . -maxdepth 4 -type f|grep "\.py"|xargs grep'
 alias fdgrep='find . |xargs grep'
 alias pygrep="find . -type f -name '*.py'|xargs grep"
 alias top='top -c d'
 alias knose='pkill -9 -u bakhra nosetests'
 alias ksilver='pkill -9 -u bakhra -f silver'
+alias sshskynet='ssh -AXYp 22 10.101.47.21'
+alias sshorion='ssh -AXYp 22 10.101.50.166'
 alias sshs1='ssh -AXYp 2772 mecha.silvertailsystems.com'
 alias sshs2='ssh -AXYp 2772 billyjack.silvertailsystems.com'
-alias ssh='ssh -AXYp 2772 -l bakhra'
+alias ssh='ssh -AXYp 22 -l bakhra'
 alias s='screen -X screen'
 alias vncport='ps ww $(vncserver -list |tail -n +5 | sed -e s/^\\S\\+\\s\\+//) | tail -n +2 | sed -e s/^.*-rfbport\ // -e s/\\s.*$//'
-alias nosetests="nosetests -e '^Modify' -svm"
-alias clean_pycs="find . -name '*.pyc' -exec rm {} \;"
+alias nosetests='nosetests -e "^Modify" -svm'
+alias clean_pycs='find . -name "*.pyc" -exec rm {} \;'
