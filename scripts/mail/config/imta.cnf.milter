@@ -1,0 +1,172 @@
+!
+! IMTA configuration file 
+! 
+! part I : rewrite rules 
+! 
+! Domain Rewrite Rules. 
+! Uncomment this line to use domain rewrite rules 
+! from the configuration file instead of the domain database. 
+! Please refer to the iMS documentation for details. 
+!<IMTA_TABLE:domains.rules
+! 
+! Rules to select local users
+$* $A$E$F$U%$H$V$H@algy.sfbay.sun.com
+algy.sfbay.sun.com $U%$D@algy.sfbay.sun.com
+sfbay.sun.com $U%$D@algy.sfbay.sun.com
+! 
+! ims-ms
+.ims-ms-daemon $U%$H.ims-ms-daemon@ims-ms-daemon
+!
+! lmtp
+.lmtp $E$F$U%$H.lmtp@lmtpcs-daemon
+.lmtp $B$F$U%$H@$H@lmtpcs-daemon
+!
+! native
+.native-daemon $U%$H.native-daemon@native-daemon
+! 
+! pipe
+.pipe-daemon $U%$H.pipe-daemon@pipe-daemon
+! 
+! tcp_local 
+! Rules for top level internet domains
+<IMTA_TABLE:internet.rules
+! 
+! tcp_intranet 
+! Do mapping lookup for internal IP addresses
+[] $E$R${INTERNAL_IP,$L}$U%[$L]@tcp_intranet-daemon
+.sfbay.sun.com $U%$H.sfbay.sun.com@tcp_intranet-daemon
+* $U%$&0.sfbay.sun.com
+! 
+! reprocess
+reprocess $U%reprocess.algy.sfbay.sun.com@reprocess-daemon
+reprocess.algy.sfbay.sun.com $U%reprocess.algy.sfbay.sun.com@reprocess-daemon
+! 
+! process
+process $U%process.algy.sfbay.sun.com@process-daemon
+process.algy.sfbay.sun.com $U%process.algy.sfbay.sun.com@process-daemon
+! 
+! defragment
+defragment $U%defragment.algy.sfbay.sun.com@defragment-daemon
+defragment.algy.sfbay.sun.com $U%defragment.algy.sfbay.sun.com@defragment-daemon
+! 
+! conversion
+conversion $U%conversion.algy.sfbay.sun.com@conversion-daemon
+conversion.algy.sfbay.sun.com $U%conversion.algy.sfbay.sun.com@conversion-daemon
+! 
+! bitbucket
+bitbucket $U%bitbucket.algy.sfbay.sun.com@bitbucket-daemon
+bitbucket.algy.sfbay.sun.com $U%bitbucket.algy.sfbay.sun.com@bitbucket-daemon
+! 
+! deleted
+deleted-daemon $U%$H@deleted-daemon
+.deleted-daemon $U%$H@deleted-daemon
+! 
+! inactive
+inactive-daemon $U%$H@inactive-daemon
+.inactive-daemon $U%$H@inactive-daemon
+! 
+! hold
+hold-daemon $U%$H@hold-daemon
+.hold-daemon $U%$H@hold-daemon
+
+! 
+! part II : channel blocks 
+! 
+defaults logging notices 1 2 4 7 copywarnpost copysendpost postheadonly noswitchchannel immnonurgent maxjobs 7 defaulthost sfbay.sun.com sfbay.sun.com
+
+! 
+! delivery channel to local /var/mail store
+l subdirs 20 viaaliasrequired maxjobs 7
+algy.sfbay.sun.com
+
+! 
+! ims-ms
+ims-ms defragment subdirs 20 notices 1 7 14 21 28 backoff "pt5m" "pt10m" "pt30m" "pt1h" "pt2h" "pt4h" maxjobs 2 pool IMS_POOL fileinto $U+$S@$D master_debug slave_debug sourcespamfilter1 destinationspamfilter1 sourcefilter file:IMTA_TABLE:execblock.filter
+ims-ms-daemon
+
+! 
+! native
+native defragment subdirs 20 maxjobs 1
+native-daemon
+
+! 
+! pipe
+pipe single defragment subdirs 20
+pipe-daemon
+
+! 
+! tcp_local
+tcp_local smtp mx single_sys remotehost inner switchchannel identnonenumeric subdirs 20 maxjobs 7 pool SMTP_POOL maytlsserver maysaslserver saslswitchchannel tcp_auth missingrecipientpolicy 0 loopcheck master_debug slave_debug deliveryflags 2 sourcespamfilter1 destinationspamfilter1 sourcefilter file:IMTA_TABLE:execblock.filter
+tcp-daemon
+
+! 
+! tcp_intranet
+tcp_intranet smtp mx single_sys subdirs 20 dequeue_removeroute maxjobs 7 pool SMTP_POOL maytlsserver allowswitchchannel maysaslserver saslswitchchannel tcp_auth missingrecipientpolicy 4 master_debug slave_debug deliveryflags 2 sourcespamfilter1 destinationspamfilter1 sourcefilter file:IMTA_TABLE:execblock.filter
+tcp_intranet-daemon
+
+! 
+! tcp_submit
+tcp_submit submit smtp mx single_sys maysaslserver saslswitchchannel tcp_submit maytlsserver missingrecipientpolicy 4 master_debug slave_debug
+tcp_submit-daemon
+
+! 
+! tcp_auth
+!tcp_auth smtp mx single_sys maysaslserver missingrecipientpolicy 4 master_debug slave_debug deliveryflags 2 sourcespamfilter1 destinationspamfilter1
+tcp_auth smtp mx single_sys maysaslserver missingrecipientpolicy 4 master_debug slave_debug sourcespamfilter1 destinationspamfilter1
+tcp_auth-daemon
+
+! 
+! tcp_tas
+tcp_tas smtp mx single_sys allowswitchchannel mustsaslserver maytlsserver deliveryflags 2 master_debug slave_debug
+tcp_tas-daemon
+
+!
+! tcp_lmtpss (LMTP server - store)
+tcp_lmtpss lmtp flagtransfer identnonenumeric master_debug slave_debug sourcespamfilter1 destinationspamfilter1
+tcp_lmtpss-daemon
+
+!
+! tcp_lmtpcs (LMTP client - store)
+tcp_lmtpcs defragment lmtp multigate connectcanonical fileinto @$4O:$U+$S@$D port 225 nomx single_sys subdirs 20 maxjobs 7 pool SMTP_POOL dequeue_removeroute master_debug slave_debug sourcespamfilter1 destinationspamfilter1 sourcefilter file:IMTA_TABLE:execblock.filter
+lmtpcs-daemon
+
+! 
+! reprocess
+reprocess master_debug slave_debug 
+reprocess-daemon
+
+! 
+! process
+process master_debug slave_debug 
+process-daemon
+
+! 
+! defragment
+defragment 
+defragment-daemon
+
+! 
+! conversion
+conversion 
+conversion-daemon
+
+! 
+! bitbucket
+bitbucket 
+bitbucket-daemon
+
+! 
+! deleted
+deleted 
+deleted-daemon
+
+! 
+! inactive
+inactive 
+inactive-daemon
+
+! 
+! hold
+hold
+hold-daemon
+

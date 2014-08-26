@@ -1,0 +1,20 @@
+if [ $# -lt 1 ]
+then
+	echo USAGE: findJar searchString
+	exit
+fi
+#jar -tf ./messenger.jar | grep com >/dev/null
+#echo $?
+#jar -tf ./messenger.jar | grep rubbish >/dev/null
+#echo $? 
+
+#echo $1
+for VAR in `find ./ -type f | grep jar`
+do
+	jar -tf ${VAR} | grep $1 >/dev/null
+#	echo value for ${VAR} is $?
+	if [ $? -eq 0 ]
+	then		
+		echo ${VAR}
+	fi 
+done 

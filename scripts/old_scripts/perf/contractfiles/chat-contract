@@ -1,0 +1,1 @@
+im-niag1.india.sun.com:5222 1504000 1000 -rooms 30 -people 40 -pub-rooms 20 -pub-people 1000 -notification 300 -receipent 400 -pul 50 -updates 1000 -log ./logs/load-out-pres -stats:period 5

@@ -1,0 +1,8 @@
+dn: o=usergroup
+changetype: modify
+replace: aci
+aci: (target = ldap:///o=usergroup)(targetattr=\"*\") (version 3.0; acl \"allow all Admin group\"; allow (all) (groupdn = \"ldap:///cn=Directory Administrators,ou=Groups,o=usergroup\") ;)
+aci: (target = ldap:///o=usergroup)(targetattr != \"userPassword\") (version 3.0; acl \"allow self read search compare\"; allow (read,search,compare) (userdn = \"ldap:///self\") ;)
+aci: (targetattr = \"cn||uid||uidNumber||gidNumber||homeDirectory||shadowLastChange||shadowMin||shadowMax||shadowWarning||shadowInactive||shadowExpire||shadowFlag||memberUid\")(version 3.0; acl \"LDAP_Naming_Services_deny_write_access\"; deny(write) (userdn = \"ldap:///self\") ;)
+aci: (targetattr = \"loginShell\") (version 3.0;acl \"LDAP_Naming_Services_allow_certain_changes\"; allow (write) (userdn = \"ldap:///self\") ;)
+aci: (target=\"ldap:///o=usergroup\") (targetattr !=\"userPassword\") (version 3.0; acl \"LDAP_Naming_Services_proxy_read\";allow(read,search,compare) (userdn =\"ldap:///cn=proxyagent,ou=people,o=usergroup\") ;)

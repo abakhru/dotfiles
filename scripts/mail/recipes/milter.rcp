@@ -1,0 +1,24 @@
+# milter.rcp - Simple recipe to configure MTA to use milter
+
+description("Basic milter Configuration Generator");
+scan = 8;
+empty = 0;
+plugin = "milter";
+slot = 1;
+host = "loc-1102.us.oracle.com";
+
+write ("Configuring Milter as the spam filter in slot " . slot . "\n");
+# Configure the spam filter now
+set_option("transitplugin:" . plugin . ".tpslot", "1");
+set_option("transitplugin:" . plugin . ".tplibrary", make_path("IMTA_LIB:libmilter.so"));
+set_option("transitplugin:" . plugin . ".tpconfig", make_path("milter.opt"));
+set_option("transitplugin:" . plugin . ".tpoptional", "1");
+#set_option("transitplugin:" . plugin . ".tpfinal", "0");
+#set_option("transitplugin:" . plugin . ".tpreceived", "1");
+#set_option("transitplugin:" . plugin . ".tpreturnpath", "1");
+set_option("transitplugin:" . plugin . ".tpstring_action", "data:,$M");
+
+set_option("channel:" . "ims-ms" . ".sourcetransitplugin", plugin);
+set_option("channel:" . "ims-ms" . ".destinationtransitplugin", plugin);
+set_option("channel:" . "tcp_intranet" . ".sourcetransitplugin", plugin);
+set_option("channel:" . "tcp_intranet" . ".destinationtransitplugin", plugin);

@@ -1,0 +1,56 @@
+SMIME Setup for UWC
+
+cd /opt/SUNWmsgsr/config
+cp smime.conf smime.conf.bk
+Edit the smime.conf with the following diff:
+root@belugie:/opt/SUNWmsgsr/config# diff smime.conf smime.conf.bk
+18c18
+< userCertFilter==(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))
+---
+> # userCertFilter==(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))
+28c28
+< trustedurl==ldap://belugie.red.iplanet.com:389/cn=SMIME Admin, ou=people, o=red.iplanet.com, dc=red,dc=iplanet,dc=com?cacertificate;binary?sub?(objectclass=certificationauthority)
+---
+> # trustedurl==ldap://mail.siroe.com:389/cn=SMIME Admin, ou=people, o=mail.siroe.com, o=mailUsers?cacertificate;binary?sub?(objectclass=certificationauthority)
+39c39
+< certurl==ldap://belugie.red.iplanet.com:389/ou=people, o=red.iplanet.com, dc=red,dc=iplanet,dc=com?userCertificate;binary?sub?
+---
+> # certurl==ldap://mail.siroe.com:389/ou=people, o=mail.siroe.com, o=mailUsers?userCertificate;binary?sub?
+49c49
+< # sslRootCACertsURL==ldap://belugie.red.iplanet.com:389/cn=SSL Root CA Certs, ou=people, o=belugie.red.iplanet.com, o=mailQA?cacertificate;binary?base?(objectclass=certificationauthority)
+---
+> # sslRootCACertsURL==ldap://mail.siroe.com:389/cn=SSL Root CA Certs, ou=people, o=mail.siroe.com, o=mailQA?cacertificate;binary?base?(objectclass=certificationauthority)
+57c57
+< logindn==cn=Directory Manager
+---
+> # logindn==cn=Directory Manager
+65c65
+< loginpw==netscape
+---
+> # loginpw==
+73c73
+< platformWin==CAPI:library=capibridge.dll;CAC:library=acpkcs211.dll;
+---
+> # platformWin==CAPI:library=capibridge.dll;
+137c137
+< crlenable==1
+---
+> # crlenable==1
+143c143
+< crldir==/opt/SUNWmsgsr/data/store/mboxlist
+---
+> # crldir==/data/store/mboxlist
+169c169
+< crlmappingurl==ldap://belugie.red.iplanet.com:389/cn=SMIME Admin, ou=people, o=red.iplanet.com, dc=red,dc=iplanet,dc=com?msgCRLMappingRecord?sub?(objectclass=msgCRLMappingTable)
+---
+> # crlmappingurl==ldap://mail.siroe.com:389/cn=SMIME Admin, ou=people, o=mail.siroe.com, o=mailQA?msgCRLMappingRecord?sub?(objectclass=msgCRLMappingTable)
+195c195
+< checkoverssl==0
+---
+> # checkoverssl==1
+
+Now run the following commands:
+cd /opt/SUNWmsgsr/sbin/
+./configutil -o local.webmail.smime.enable -v yes
+./configutil -o local.webmail.cert.enable -v 1
+./stop-msg;./start-msg

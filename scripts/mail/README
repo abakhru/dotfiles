@@ -1,0 +1,87 @@
+#To enable forward link access in appserver do the following:
+
+vi /var/opt/sun/appserver/domains/domain1/config/domain.xml
+#add the following line as shown below for http-listener:
+property name="allowLinking" value="true"
+virtual-server>
+#restart the appserver.
+#now you can create any soft link in docroot directory to any other directory , and access it through the browser.
+#For eg: ln -s /space/src /var/opt/sun/appserver/domains/domain1/docroot/src
+#Now you can access all the contents of src directory throught http://bakhru.red.iplanet.com:8080/src
+
+#Cross-domain communication between two mail-servers
+#To achieve the same, you need to setup a local-dns server with proper MX record indicating which mail-server corresponds to which particular domain. On how to do DNS Setup & more details about MX (Mail Exchange) record see here :
+#Wikipedia , http://rscott.org/dns/mx.html, http://rscott.org/dns/
+
+To disable recipient address check while sending mail through SMTP server, 
+add the keyword 'daemon' in tcp_local channel.
+
+Solaris 10 install location: /net/mcm-install/export/s10u5
+
+#add the package pkg-get from this location: http://www.bolthole.com/solaris/pkg-get.html
+pkgadd -d http://get.opencsw.org/now
+RH4 x86_64:
+rpm -Uhv http://apt.sw.be/redhat/el4/en/x86_64/rpmforge/RPMS/rpmforge-release-0.3.6-1.el4.rf.x86_64.rpm
+
+RH5 x86_64: 
+rpm -Uhv http://apt.sw.be/redhat/el5/en/x86_64/rpmforge/RPMS//rpmforge-release-0.3.6-1.el5.rf.x86_64.rpm
+
+More: http://dag.wieers.com/rpm/FAQ.php#B3
+
+- comms-installer location: /share/builds/sca-re4/comms-installer/tip/ships/latest/
+- JES5u1 installer location: /net/ginger.sfbay.sun.com/export/products/jes5u1/
+			   /net/varad/export/home/downloads/comms-subdistro/jes5
+
+#Create a filter_discard channel
+#Add the following lines in imta.cnf file:
+! In rewrite rules section
+! filter_discard
+.filter_discard-daemon $U%$H.filter_discard@filter_discard-daemon
+! In channel defination section
+! Filter_discard
+filter_discard notices 7 master_debug slave_debug
+filter_discard-daemon
+
+########To enable return_job debugging####################
+#Edit option.dat file & add the following :
+FILTER_DISCARD=2
+filter_debug=1
+return_debug=1
+/opt/sun/comms/messaging64/sbin/configutil |grep schedule
+local.schedule.return_job = "30 0 * * * lib/return_job"
+local.schedule.return_job.enable = 1
+
+
+#To change the timezone of a solaris 10 machine, do the following:
+edit the /etc/default/init file & change the TZ variable to US/Pacific or any other timezone. ( other timezone examples are availbale at /usr/share/lib/zoneinfo/*) now reboot the machine to have the new timezone.
+
+################# SMTP RELAY SETUP ############################
+Installing MS in 2tier mode, front end with MMP & MTA & backend with store,MTA, webmail etc
+
+- Am using two machines here, belugie.red.iplanet.com(backend) & greenmeadow.red.iplanet.com (frontend)
+- Install & configure DS, MS,CS,UWC, App/Web server, DA on belugie (backend)
+- While configuring MS on belugie, select ALL except MMP.
+- Install only MS on greenmeadow.(frontend)
+- While configuring MS on greenmeadow, select MTA & MMP (multiplexor)only.
+- On backend machine, open the file mappings & edit the following section:
+INTERNAL_IP:
+- before last line * $N add this , the IP address of greenmeadow.red.iplanet for setting up SMTP relay.
+192.18.75.9 $Y
+- Check whether you have proper /etc/nsswitch.conf, /etc/hosts, /etc/resolv.conf files. & address resolution (nslookup between frontend & backend is happening properly.
+- To verify if everything is working fine, between frontend & backend, run the below command without any failure:
+  /opt/SUNWmsgsr/bin/imsimta test -rewrite trin15000@red.iplanet.com
+
+- Done
+##################################################################
+
+################# DELETE all mails for a specific user ##############
+/opt/sun/comms/messaging64/sbin/mboxutil -d user/$user/INBOX
+/opt/sun/comms/messaging64/sbin/mboxutil -d -P '\S*'
+##################################################################
+
+### TO SET TIME using TIME SERVER ####
+/usr/sbin/ntpdate -s -b -p 8 -u whq4op3u33-rtr-1.us.oracle.com
+##############################################################
+
+## TO get msconfig HELP ### equivalent of configutil -H
+msconfig help option sslv3enable

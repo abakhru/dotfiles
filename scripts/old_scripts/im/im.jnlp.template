@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<!-- Copyright 2004 Sun Microsystems, Inc.  All rights reserved. --> 
+<!-- Instant Messenger --> 
+<jnlp 
+  spec="1.0+" 
+  codebase="http://nicp119.india.sun.com:9090/im"
+  href="en/im.jnlp"> 
+  <information> 
+    <title>IM</title> 
+    <vendor>Sun Microsystems, Inc.</vendor> 
+    <homepage href="http://www.sun.com"/> 
+    <description>Sun Java System Instant Messenger</description> 
+    <description kind="short">Instant Messenger</description> 
+    <icon href="sunIM_64.gif"/> 
+    <offline-allowed/> 
+  </information> 
+  <security> 
+    <all-permissions/> 
+  </security> 
+  <resources> 
+    <j2se version="1.4+" /> 
+    <jar href="messenger.jar"/> 
+    <jar href="imdesktop.jar"/> 
+    <jar href="imnet.jar"/> 
+    <jar href="icalendar.jar"/> 
+    <nativelib href="imjni.jar"/>
+    <extension href="http://nicp119.india.sun.com:9090/im/en/unsigned.jnlp" name="unsigned resources"/>
+    <property name="javax.net.debug" value="all"/>
+    <property name="com.sun.im.service.CollaborationSessionFactory" value="com.sun.im.service.xmpp.httpbind.HTTPBindSessionProvider"/>
+    <property name="org.netbeans.lib.collab.xmpp.JIDUtil.Provider" value="org.netbeans.lib.collab.xmpp.util.XEP106JIDUtil"/>
+    <property name="com.sun.im.service.xmpp.session.keepaliveinterval" value="5"/>
+    <property name="com.iplanet.im.client.allowarobase" value="true" />
+  </resources> 
+  <application-desc main-class="com.iplanet.im.client.iIM"> 
+    <argument>locale=en</argument>
+    <argument>usessl=no</argument>
+    <argument>debug=true</argument>
+    <argument>allow_attachments=false</argument>
+    <argument>register=true</argument>
+    <argument>enable_media=true</argument>
+    <argument>archive_control=false</argument>
+    <argument>server=nicp119.india.sun.com:5222</argument> 
+    <argument>help_codebase=http://nicp119.india.sun.com:9090/im/en</argument> 
+  </application-desc> 
+</jnlp> 

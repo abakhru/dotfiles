@@ -1,0 +1,10 @@
+to Patchadd:
+============
+patchadd 122793-32
+/opt/SUNWuwc/sbin/patch-config -d  /var/opt/SUNWuwc -m /opt/SUNWmsgsr/sbin /opt/SUNWuwc/install/patch/122793-32/
+/opt/SUNWuwc/sbin/install-newconfig -d /var/opt/SUNWuwc /opt/SUNWuwc/install/patch/122793-32/
+
+to backout the applied patch:
+=============================
+patchrm 122793-32
+/opt/SUNWuwc/sbin/backout-newconfig /opt/SUNWuwc/install/patch/122794-30/

@@ -1,0 +1,12 @@
+ehlo
+mail from: neo1
+rcpt to: neo2
+data
+To: neo2
+From: neo1
+Subject: ABCDEF
+How are you doing?
+1
+2
+3
+.

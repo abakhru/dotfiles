@@ -1,0 +1,4 @@
+set_option("delivery_options","*^!autoreply=$M+$D@bitbucket");
+set_option("channel:" . "bitbucket" . ".master_debug");
+set_option("channel:" . "bitbucket" . ".slave_debug");
+set_option("channel:" . "bitbucket" . ".destinationfilter","file:/space/src/msg_next/msg/test/tle/sieve/filters/bitbucket001.filter");

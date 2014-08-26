@@ -1,0 +1,86 @@
+! MTA configuration options
+!
+! This sets the alias resolution order
+!   8 = Use ALIAS_URL0
+!   7 = Use ALIAS_URL1
+!   6 = Use ALIAS_URL2
+!   4 = Use the alias file
+ALIAS_MAGIC=8764
+ALIAS_URL0=ldap:///$V?*?sub?$R
+USE_REVERSE_DATABASE=4
+REVERSE_URL=ldap:///$V?$N?sub?$R
+USE_DOMAIN_DATABASE=0
+! MISSING_RECIPIENT_POLICY controls how illegal headers that don't
+! contain any To:, Cc:, or Bcc: fields are handled for channels that 
+! do not have their own explicit missingrecipientpolicy keyword set.
+! The default of 0 means that the envelope addresses are used to 
+! construct a valid To: header field. This default behavior tends 
+! to be especially appropriate for the tcp_local channel.
+MISSING_RECIPIENT_POLICY=0
+MISSING_RECIPIENT_GROUP_TEXT=Undisclosed recipients
+ALIAS_DOMAINS=6
+!
+LDAP_SCHEMALEVEL=1
+!
+VACATION_TEMPLATE=file:///opt/sun/comms/messaging64/data/vacation/$3I/$1U/$2U/$U.vac
+LOG_FILTER=1
+DEQUEUE_DEBUG=1
+! Configurations for JMQ notification testing
+!
+!LDAP_SPARE_1=mailEventNotificationDestination
+!SPARE_1_SEPARATOR=259
+!
+MM_DEBUG=10
+OS_DEBUG=1
+MAX_NOTIFYS = 2
+! Log to syslog
+LOG_MESSAGES_SYSLOG=20
+!LOG_MESSAGES_SYSLOG=27
+SEPARATE_CONNECTION_LOG=1
+!
+! Sites likely want additional bits of LOG_CONNECTION set; this example
+! requires that bit 1/value 2 plus bit 7/value 128 be set.
+! 1) You need to add 512 to your LOG_CONNECTION=642
+! in order to get the transport-info (which you want, for the source IP field!)
+! to get included in the connection probes (which include "U" action probes).
+!
+LOG_CONNECTION=642
+LOG_MESSAGE_ID=3
+LOG_REASON=3
+LOG_USERNAME=3
+LOG_DIAGNOSTICS=3
+LOG_QUEUE_TIME=3
+LOG_FILENAME=3
+!
+! Set SNDOPR_PRIORITY to a syslog facility+severity value that will
+! coordinate with your syslog.conf configuration, e.g.
+! SNDOPR_PRIORITY=20 corresponds to mail.warning, whereas mail.debug would be SNDOPR_PRIORITY=27
+!
+SNDOPR_PRIORITY=20
+!SNDOPR_PRIORITY=27
+!------------------------------------------
+! Modified DELIVERY_OPTIONS to activate LMTP 
+! delivery from a frontend to the backend store
+!--------------------------------------------
+!
+DELIVERY_OPTIONS=\
+    #*mailbox=@$X.LMTP:$M%$\$2I$_+$2S@lmtpcs-daemon,\
+    #&members=*,\
+    #&@members_offline=*,\
+    #/hold=@hold-daemon:$A,\
+    #program=$M%$P@pipe-daemon,\
+    #forward=**,\
+    #*^!autoreply=$M+$D@bitbucket
+!
+ENABLE_SIEVE_BODY=1
+!SPAMFILTER1_CONFIG_FILE=/opt/sun/comms/messaging64/config/milter.config
+!SPAMFILTER1_LIBRARY=/opt/sun/comms/messaging64/lib/libmilter.so
+!SPAMFILTER1_OPTIONAL=4
+!SPAMFILTER1_STRING_ACTION=data:,$M
+!SPAMFILTER1_STRING_ACTION=data:,require ["addheader", "editheader", "reject"];if header :contains "subject" ["Test Mail", "spam"] { discard; }
+
+!External LDAP support
+LDAP_HOST=bakhru.red.iplanet.com
+LDAP_USERNAME="cn=Directory Manager"
+LDAP_PASSWORD=netscape
+LDAP_PORT=389

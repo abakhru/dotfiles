@@ -1,0 +1,128 @@
+#################################################
+#DO NOT MODIFY THIS SCRIPT WITHOUT PRIOR APPROVAL 
+#FROM GOPI NAMANI
+#Email : gopi.namani@sun.com
+#Ext : 87167
+#################################################
+
+
+
+echo "Stopping Appserver"
+
+/opt/SUNWappserver/appserver/bin/asadmin stop-domain domain1
+
+echo "Appserver Stopped"
+
+echo "Stopping Admin server for Web Server"
+
+/opt/SUNWwbsvr/https-admserv/stop
+
+echo "Stopped Admin server for Web Server"
+
+echo "Stopping Web Server"
+
+/opt/SUNWwbsvr/https-or002.india.sun.com/stop
+
+echo "Stopped Web Server"
+
+echo "Do u want to unconfigure the servers"
+
+echo "Removing the configuration for Administration Server."
+
+/usr/sbin/mpsadmserver unconfigure -nodisplay
+/usr/sbin/mpsadmserver uninstall
+
+echo "Uconfiguration is done for Directory server."
+
+echo "Removing the configuration for Directory Server."
+
+/usr/sbin/directoryserver -u 5.2 unconfigure -nodisplay
+/usr/sbin/directoryserver uninstall
+
+echo "Unconfiguration is done for Admin Server"
+
+echo "Do u want to remove the packages"
+
+cd /Helpers_Sparc/Complete_Clean
+
+echo " Started removing the Packages related to Java Enterprise System"
+
+sh rmpackage 
+
+echo "Started Removing Directories"
+
+echo "Removing Orion related files from /opt directories"
+
+rm -rf /opt/*
+
+echo "Removing Orion related files from/etc/opt directories"
+
+rm -rf /etc/opt/*
+
+
+echo "Removing Orion related files from/var/opt directories"
+
+rm -rf  /var/opt/*
+
+rm   /etc/imq
+
+
+echo "Removing .lock and .pkg files and Logs and Productregistry"
+
+rm -rf  /var/sadm/install/.pkg.lock
+rm -rf  /var/sadm/install/.lockfile
+rm -rf  /var/sadm/install/productregistry
+
+
+rm -rf  /var/sadm/install/logs/*
+
+echo "Removing files from /var/sadm/prod"
+
+rm -rf  /var/sadm/prod/*
+
+echo "Removing files from /var/tmp"
+
+rm -rf  /var/tmp/*
+
+echo "Removing files from /tmp"
+
+rm -rf  /tmp/*
+
+echo "Removing productregistry.xml file"
+
+rm  /productregistry.xml
+
+echo "Removing contents from /etc/ds"
+
+rm -rf  /etc/ds/*
+
+echo "Killing the processes-- imq, appservd, httpd, ldap, webservd"
+
+echo "SUNWam, entsys, jdk, SUNWps, Multiplexor, SUNWcs"
+
+for i in `ps -eaf |grep -i SUNWps |awk '{ print $2 }'`; do kill -9 $i; done
+
+for i in `ps -eaf |grep -i SUNWam |awk '{ print $2 }'`; do kill -9 $i; done
+
+for i in `ps -eaf |grep -i imq |awk '{ print $2 }'`; do kill -9 $i; done
+
+for i in `ps -eaf |grep -i appservd |awk '{ print $2 }'`; do kill -9 $i; done
+
+for i in `ps -eaf |grep -i webservd |awk '{ print $2 }'`; do kill -9 $i; done
+
+for i in `ps -eaf |grep -i entsys |awk '{ print $2 }'`; do kill -9 $i; done
+
+for i in `ps -eaf |grep -i jdk |awk '{ print $2 }'`; do kill -9 $i; done
+
+for i in `ps -eaf |grep -i Mulitplexor |awk '{ print $2 }'`; do kill -9 $i; done
+
+for i in `ps -eaf |grep -i ldap |awk '{ print $2 }'`; do kill -9 $i; done
+
+for i in `ps -eaf |grep -i slapd |awk '{ print $2 }'`; do kill -9 $i; done
+
+for i in `ps -eaf |grep -i icsuser |awk '{ print $2 }'`; do kill -9 $i; done
+
+for i in `ps -eaf |grep -i httpd |awk '{ print $2 }'`; do kill -9 $i; done
+
+
+echo "Clenup has completed..."

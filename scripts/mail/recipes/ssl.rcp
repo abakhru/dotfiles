@@ -1,0 +1,45 @@
+#ssl.rcp
+
+write("==== Enabling MS SSL Ports ====\n");
+
+#SSL Configuration
+
+#http
+set_option("http.sslusessl","1");
+set_option("http.enablesslport","1");
+set_option("http.sslport","8991");
+
+#imap
+set_option("imap.sslusessl","1");
+set_option("imap.enablesslport","1");
+set_option("imap.sslport","993");
+
+#pop
+set_option("pop.sslusessl","1");
+set_option("pop.enablesslport","1");
+set_option("pop.sslport","995");
+
+#smtp
+set_option("dispatcher.service:SMTP_SUBMIT.tcp_ports","587");
+set_option("dispatcher.service:SMTP_SUBMIT.ssl_ports","465");
+
+#others
+set_option("ugldapusessl","1");
+set_option("ugldapport","636");
+set_option("base.debugkeys","connect ldap lpool tls certmap");
+set_option("ldapcheckcert","0");
+set_option("certmap:default.dncomps","");
+set_option("certmap:default.filtercomps","e=mail");
+set_option("certmap:default.verifycert","0");
+set_option("auth.has_plain_passwords","1");
+
+# sslnicknames
+set_option("imapproxy.sslnicknames","SSLCERTNAME");
+set_option("submitproxy.sslnicknames","SSLCERTNAME");
+set_option("popproxy.sslnicknames","SSLCERTNAME");
+set_option("imap.sslnicknames","SSLCERTNAME");
+set_option("pop.sslnicknames","SSLCERTNAME");
+set_option("mta.sslnicknames","SSLCERTNAME");
+set_option("http.sslnicknames","SSLCERTNAME");
+
+write("==== DONE : Enabling MS SSL Ports ==== \n");

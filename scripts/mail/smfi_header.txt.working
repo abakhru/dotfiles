@@ -1,0 +1,6 @@
+
+test smfi_chgheader
+X-Milter-QA1 shall be deleted
+X-Milter-QA2 shall be deleted
+X-Milter-QA3 shall be deleted
+an addition X-Milter-QA shall be added

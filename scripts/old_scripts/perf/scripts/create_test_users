@@ -1,0 +1,125 @@
+#!/bin/sh
+#
+# create_test_users 
+# create test user for IM functional tests
+#
+# usage: create_test_users <test_env>
+
+. $1
+
+
+# create ldif file
+ldif="/tmp/stressusers.ldif" 
+rm -f $ldif
+touch $ldif
+
+echo "dn: ${BASE_DN}" >> $ldif
+echo "changetype: add" >> $ldif
+echo "objectClass: top" >> $ldif
+echo "objectClass: organization" >> $ldif
+echo >> $ldif
+
+echo "dn: ou=people,${BASE_DN}" >> $ldif
+echo "changetype: add" >> $ldif
+echo "objectClass: top" >> $ldif
+echo "objectClass: organizationalUnit" >> $ldif
+echo "ou: People" >> $ldif
+echo  >> $ldif
+
+cur=0
+uid=1800000
+while [ "$cur" -lt 7500 ]
+do
+  echo "dn: uid=${uid},ou=people,${BASE_DN}" >> $ldif
+  echo "changetype: add" >> $ldif
+  echo "objectClass: top" >> $ldif
+  echo "objectClass: inetOrgPerson" >> $ldif
+  echo "objectClass: organizationalPerson" >> $ldif
+  echo "objectClass: person" >> $ldif
+  echo "cn: IMUser${uid}" >> $ldif
+  echo "sn: ${uid}_sn" >> $ldif
+  echo "initials: IMU${uid}" >> $ldif
+  echo "givenName: ${uid}_gn" >> $ldif
+  echo "userPassword: iplanet" >> $ldif
+  echo "uid: ${uid}" >> $ldif
+  echo "mail: ${uid}@${DOMAIN}" >> $ldif
+  echo >> $ldif
+
+  cur=`expr $cur + 1`
+  uid=`expr $uid + 1`
+
+done
+
+#cur=0
+#uid=1600000
+#while [ "$cur" -lt 5000 ]
+#do
+  #echo "dn: uid=${uid},ou=people,${BASE_DN}" >> $ldif
+  #echo "changetype: add" >> $ldif
+  #echo "objectClass: top" >> $ldif
+  #echo "objectClass: inetOrgPerson" >> $ldif
+  #echo "objectClass: organizationalPerson" >> $ldif
+  #echo "objectClass: person" >> $ldif
+  #echo "cn: IMUser${uid}" >> $ldif
+  #echo "sn: ${uid}_sn" >> $ldif
+  #echo "initials: IMU${uid}" >> $ldif
+  #echo "givenName: ${uid}_gn" >> $ldif
+  #echo "userPassword: iplanet" >> $ldif
+  #echo "uid: ${uid}" >> $ldif
+  #echo "mail: ${uid}@${DOMAIN}" >> $ldif
+  #echo >> $ldif
+
+  #cur=`expr $cur + 1`
+  #uid=`expr $uid + 1`
+
+#done
+
+echo "dn: ou=Groups,${BASE_DN}" >> $ldif
+echo "changetype: add" >> $ldif
+echo "objectClass: top" >> $ldif
+echo "objectClass: organizationalUnit" >> $ldif
+echo "ou: Groups" >> $ldif
+echo  >> $ldif
+
+echo "dn: cn=ServiceAdministrators,ou=Groups,${BASE_DN}" >> $ldif
+echo "changetype: add" >> $ldif
+echo "objectClass: top" >> $ldif
+echo "objectClass: groupofuniquenames" >> $ldif
+echo "objectClass: groupofurls" >> $ldif
+echo "objectClass: inetAdmin" >> $ldif
+echo "adminRole: ServiceAdministrators" >> $ldif
+echo "memberURL: ldap:///${BASE_DN}??sub?(memberof=cn=ServiceAdministrators,ou=Groups,${BASE_DN})" >> $ldif
+echo "cn: ServiceAdministrators" >> $ldif
+echo  >> $ldif
+
+echo "dn: cn=ServiceHelpDeskAdministrators,ou=Groups,${BASE_DN}" >> $ldif
+echo "changetype: add" >> $ldif
+echo "objectClass: top" >> $ldif
+echo "objectClass: groupofuniquenames" >> $ldif
+echo "objectClass: groupofurls" >> $ldif
+echo "objectClass: inetAdmin" >> $ldif
+echo "adminRole: ServiceHelpDeskAdministrators" >> $ldif
+echo "memberURL: ldap:///${BASE_DN}??sub?(memberof=cn=ServiceHelpDeskAdministrators,ou=Groups,${BASE_DN})" >> $ldif
+echo "cn: ServiceHelpDeskAdministrators" >> $ldif
+echo  >> $ldif
+
+echo "dn: ou=groups,${BASE_DN}" >> $ldif
+echo "changetype: add" >> $ldif
+echo "objectClass: top" >> $ldif
+echo "objectClass: organizationalUnit" >> $ldif
+echo "ou: groups" >> $ldif
+echo  >> $ldif
+
+echo "dn: cn=Accounting Managers,ou=groups,${BASE_DN}" >> $ldif
+echo "changetype: add" >> $ldif
+echo "objectClass: top" >> $ldif
+echo "objectClass: groupofUniquenames" >> $ldif
+echo "cn: Accounting Managers" >> $ldif
+echo  >> $ldif
+
+# load the LDIF file
+/usr/bin/ldapmodify -c -p ${LDAP_PORT} -h ${LDAP_HOST} -D "${LDAP_BINDDN}" -w "${LDAP_BINDPW}" -f ${ldif}
+
+
+exit $?
+

@@ -1,0 +1,5 @@
+user immonitoruser1
+pass immonitoruser1
+list
+retr 10
+quit

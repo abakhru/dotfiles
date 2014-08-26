@@ -1,0 +1,115 @@
+# iSchedule.rcp - Set up iSchedule intermediate channel to process calendar events
+
+description("Set up iSchedule channel to process text/calendar parts");
+
+# Some checking to see if any of this conflicts with existing configuration
+
+if exists_channel("ischedule") {
+  warn "iSchedule channel already defined in configuration; existing definition will be used";
+}
+
+ic = integer("0" . get_option("include_conversiontag"));
+
+if exists_mapping("CONVERSION") {
+  if (ic & 2) != 0 {
+    warn "Conversion mapping already configured; existing entries will have TAG=* clauses added";
+  }
+  else {
+    warn "Conversion mapping already configured";
+  }
+}
+
+if (filter2 = get_option("systemfilter")) != "" {
+  warn "System filter already exists; iSchedule routing test and actions will be prepended";
+}
+
+# Obtain iSchedule URL
+#url = read("HTTP URL for iSchedule server: ");
+url = "http://lickitung.us.oracle.com:8080/davserver/dav/ischedule/";
+if lcase(left(url, 7)) != "http://" {
+  warn "A non-HTTP URL was specified; this is unlikely to work";
+}
+
+# Now get channel information
+channels = [];
+channels = ["ims-ms"];
+#loop {
+#  channel = read("Destination channel for messages to check (<RET> if no more): ");
+#  exitif (channel == "");
+#  if (exists_channel(channel)) {
+#    push(channels, channel);
+#  }
+#  else {
+#    warn(channel . " ignored; not in configuration");
+#  }
+#}
+if (length(channels) <= 0) {
+  warn("No channels specified; iSchedule processing will be set up but not used");
+}
+
+# Do we really want to do this?
+continue;
+
+write("Configuring iSchedule channel, filter, and conversion mapping\n");
+
+# First set up the channel
+if !exists_channel("ischedule") {
+  add_channel("ischedule",
+	     ["master_debug", "",
+	      "slave_debug", "",
+              "official_host_name", "ischedule-daemon",
+              "options.handle-imip", "1",
+              "options.ischedule-url", url]);
+  set_option("job_controller.channel_class:ischedule.master_command",
+	     "IMTA_BIN:ischedule");
+}
+
+# Include conversion tags in conversion mapping probes
+set_option("include_conversiontag", string(ic | 2));
+
+# Set up conversion mapping
+if exists_mapping("CONVERSION") {
+  m = get_mapping("CONVERSION");
+  if (ic & 2) == 0 {
+    j = 1;
+    loop {
+      exitif length(m) < j;
+      if ucase(right(m[j], 8)) == ";CONVERT" {
+        m[j] = left(m[j], length(m[j]) - 8) . ";TAG=*;CONVERT";
+      }
+      j += 2;
+    }
+  }
+}
+else {
+  m = [];
+}
+replace_mapping("CONVERSION",
+                ["IN-CHAN=ischedule;OUT-CHAN=*;TAG=*;CONVERT", "NO",
+                 "IN-CHAN=*;OUT-CHAN=*;TAG=ISCHEDULE;CONVERT",
+                     "YES,CHANNEL=ischedule"] . m);
+if length(m) > 0 {
+  write "Please review combined CONVERSION mapping (EDIT MAPPING CONVERSION)\n";
+}
+
+# Finally the system filter
+
+filter1 = "require [\"mime\", \"environment\"];
+if allof(environment :is \"vnd.sun.destination-channel\"
+                     [";
+j = 0;
+loop {
+  exitif length(channels) <= 0;
+  if j++ > 0 { filter1 .= "\n                      ";}
+  filter1 .= "\"" . pop(channels) . "\"";
+}
+filter1 .= "],
+         header :mime :anychild :contenttype :is \"content-type\" \"text/calendar\",
+         NOT header :contains \"X-Oracle-CS-iSchedule-Ignore\" \"Yes\") {
+  addconversiontag \"ISCHEDULE\";
+}
+";
+set_option("systemfilter", filter1 . filter2);
+if filter2 != "" {
+  write "Please review combined system filter (EDIT FILTER)\n";
+}

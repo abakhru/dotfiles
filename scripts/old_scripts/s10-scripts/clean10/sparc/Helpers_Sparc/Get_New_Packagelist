@@ -1,0 +1,18 @@
+
+#cd  /net/tornedo/orion_builds/orion2/m2/b6/sparc/Solaris_sparc/Product
+
+
+find . -name IPL* -exec basename {} \; >> /Helpers_Sparc/packagelist1.txt
+
+find . -name SUNW* -exec basename {} \; >> /Helpers_Sparc/packagelist2.txt
+
+sort -u /Helpers_Sparc/packagelist1.txt >> /Helpers_Sparc/Packagelist1.txt
+sort -u /Helpers_Sparc/packagelist2.txt >> /Helpers_Sparc/Packagelist2.txt
+
+rm /Helpers_Sparc/Complete_Clean/packagelist
+
+sort /Helpers_Sparc/Packagelist1.txt /Helpers_Sparc/Packagelist2.txt >> /Helpers_Sparc/Complete_Clean/packagelist
+
+ 
+rm -rf /Helpers_Sparc/Pack*
+rm -rf /Helpers_Sparc/pack*

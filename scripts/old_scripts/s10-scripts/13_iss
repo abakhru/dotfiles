@@ -1,0 +1,64 @@
+imqusermgr delete -u misoadmin -p password
+imqusermgr add -u misoadmin -p password
+imqusermgr list
+
+/etc/init.d/imq stop
+sleep 10
+/etc/init.d/imq start
+
+msg_dir="/opt/sun/comms/messaging64"
+$msg_dir/sbin/configutil -o local.store.notifyplugin -v "lib/libibiff\$idle\$lib/libjmqnotify\$index"
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.annotatemsg.enable -v 0
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.changeflag.enable -v 1
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.copymsg.enable -v 1
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.debuglevel -v 0
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.deletemsg.enable -v 0
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.destinationtype -v topic
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.expungemsg.enable -v 1
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.jmqhost -v 127.0.0.1
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.jmqport -v 7676
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.jmqpwd -v password
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.jmqtopic -v INDEXMS
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.jmquser -v misoadmin
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.loguser.enable -v 0
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.maxbodysize -v 262144
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.maxheadersize -v 16384
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.msgflags.enable -v 0
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.msgtypes.enable -v 0
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.newmsg.enable -v 1
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.noneinbox.enable -v 1
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.persistent -v 0
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.priority -v 4
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.purgemsg.enable -v 0
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.readmsg.enable -v 0
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.ttl -v 3600000
+$msg_dir/sbin/configutil -o local.store.notifyplugin.index.updatemsg.enable -v 1
+$msg_dir/sbin/configutil -o service.imap.indexer.enable -v 1
+$msg_dir/sbin/configutil -o service.imap.indexer.hostname -v sc11d2009.us.oracle.com
+$msg_dir/sbin/configutil -o service.imap.indexer.port -v 8080
+$msg_dir/sbin/configutil -o store.indexeradmins -v misoadmin
+
+#Install SUNWappserver 2.1 only no other version
+mkdir /etc/jiss
+cp ./jiss.conf /opt/sun/comms/jiss/etc/
+ln -s /opt/sun/comms/jiss/etc/jiss.conf /etc/jiss/
+ln -s /opt/sun/comms/jiss/etc/jiss_passwd.conf /etc/jiss/
+/opt/sun/comms/jiss/bin/setup.sh -v -f /etc/jiss/jiss.conf -t all
+
+#stop-all
+/opt/sun/comms/messaging64/bin/stop-msg
+/opt/sun/comms/jiss/bin/svc_control.sh stop
+/opt/SUNWappserver/bin/asadmin stop-domain domain1
+/etc/init.d/imq stop
+sleep 3;
+/opt/sun/dsee7/bin/dsadm stop /var/opt/sun/dsins1
+
+#start-all
+/opt/sun/dsee7/bin/dsadm start /var/opt/sun/dsins1
+/opt/sun/comms/messaging64/bin/start-msg
+/opt/SUNWappserver/bin/asadmin start-domain domain1
+/etc/init.d/imq start
+/opt/sun/comms/jiss/bin/svc_control.sh start
+
+#copy admin user in ldap to misoadmin
+#change thread count from (default)128 to 8 if any error in jmsconsumer

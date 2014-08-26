@@ -1,0 +1,220 @@
+#
+###########################################################################
+# ATH WorkLoad file
+# -------------------
+#   Version 1.1
+#
+# Comment lines start with '#'.  Workload keywords are delimited by brackets: []
+# The workload keywords are:
+#   [LOCATIONS]
+#   [OPTIONS]
+#   [SETUP]
+#   [TEST_DIRECTORIES]
+#   [KEYWORDS]
+#
+#############################################################################
+
+[LOCATIONS]
+# The test harness uses the following locations to perform a test run.  
+# All locations are required (there are no defaults) and should be specified  
+# with full path names.
+#
+# test harness location, e.g. /ath/tle
+TLE_Root = /space/src/msg_next/msg/test/athtle
+#
+# test suite location, e.g. /ath/testsuite
+Test_Root = /space/src/msg_next/msg/test/tle
+#
+# test results location, use ! to overwrite previous run's results, 
+# e.g. /home/results! 
+Results_Root =/space/src/results!
+#
+#global parameter file location, e.g. /ath/runinfo
+Param_File = /space/src/msg_next/msg/test/athtle/param
+
+[OPTIONS]
+# The test harness uses the following options during the course of a test run.
+# If any of the options are not included in the workload file, default settings
+# are used, as specified below.  
+#
+#
+# Determine the level of detail placed in log files:
+Verbose = Yes
+# Default value is no, the variable TLE_Verbose is defined with a value
+# of 0.  If this is yes, then the variable, TLE_Verbose, is defined
+# with a value of 1.  This will also cause the harness to output
+# tracing information to the screen.  It will also cause all Test  
+# Detailed Log files to be kept even when the run is successful. 
+# 
+# Amount of time to wait before starting the test run:
+Start_Delay =
+Use_Local_Parameters = yes
+# Default value is 0.
+# This could be the absolute time to start the run but must be within the
+# next 24 hours. The default unit of measurement is "Minutes".  Other
+# possible units of time are "Seconds" and "Hours". When absolute time is used,
+# it must be entered as hh:mm [AM or PM]  with hh equaling the 2 digit hour and
+# mm equaling the 2 digit minute to start the run. If AM or PM is not used, the
+# hours and minutes will be considered to be military time.
+#
+# Length of time to wait to determine if work execution process has timed out:
+ Timeout = 1200
+# If the Work execution process times out, the run will be aborted.  The value 
+# 0 indicates that no timeout length is requested.  The default unit of time is
+# "Minutes". Other possible units of time include "Seconds" and "Hours".  This
+# is an optionalentry in the Workload File.  If it is not used, the default
+# will be 0 (no timeout for the total run).
+#
+# Specify the name of the test run:
+#Report_Title =Tip SolSparc Messaging Smoke System and Functional tests running Set 3, Schema 2 on JES 4
+Report_Title = Testing @ algy.sfbay.sun.com
+# Default value is "Untitled Test Run". 
+# The report title is used in both the test run's summary log and in the
+# test run's summary log.
+# 
+# Specify the email address of the sender and recipient of the test run results:
+#Mail_Results_To = ims_tle_results@sun.com
+Mail_Results_To = amit.bakhru@sun.com
+Mail_Results_From = svbld@sun.com
+# There are no default values for these options, when Mail_Results_To is not specified,
+# the report is generated and placed in the Results_Root/RESULTS_HTML directory.  When
+# a Mail_Results_To value is specified, and Mail_Results_From is not.  Mail_Results_From
+# will be assigned the value of Mail_Results_To.
+# Example value: runowner@sun.com
+#
+# Fully qualified name of the host where web server used for publishing test run 
+# results is installed:
+ResultStore_Host = algy.sfbay.sun.com
+# The default value of this option is taken from the TLEConfig.cnf file.
+# Example value: sama.sfbay.sun.com
+#
+# Specify test run results document root on the web server:
+ResultStore_Link =http:/algy.sfbay.sun.com:8080/tle/
+# The default value of this option is taken from the TLEConfig.cnf file.
+# Example value: http:/sama.sfbay.sun.com:8080/tle/
+# 
+# Test run results location:
+#ResultStore_Path =/h/sama/tle-results/ES6.0/docs/tle/deepak
+#ResultStore_Path =/opt/glassfishv3/glassfish/domains/domain1/docroot/tle
+ResultStore_Path =/usr/local/apache2/htdocs/tle
+# The default value of this option is taken from the TLEConfig.cnf file.
+# Example value: /h/sama/ath/ES3.0/docs/results/habanero
+#
+# User name and password used to publish result files to web server: 
+ResultStore_User,Passwd =root, iplanet
+# The default value of this option is taken from the TLEConfig.cnf file.
+# Example value: root, iplanet
+# 
+# Specify whether a composite style test run report is generated:
+Composite_Report = no
+# Default value is no.
+# This report appends the current run report with previous runs made
+# on the same system.  A composite report contains run reports from a 
+# collection of systems, such as the collection of systems that are
+# used for nightly regression testing.
+# 
+
+[SETUP]
+# Specify the list of setup modules to execute at the start of the
+# test run in the order they should be run.  Currently this type of
+# module is provided by a testsuite to install a product.  If no
+# SETUP modules are specified, none are run.
+# Note: either FLEX or OLD setup modules must be selected (see autoinstall.sh)
+# LDAPSSL can be used with either.
+#MSGPKGRM
+#MSGPKGADD
+MSGCONFIGURE
+#MMPCONFIGURE
+#REMOVEDS7
+#DS7_INSTALL
+#COMDSCONFIGURE
+#REMOVEDS7
+#LDAPSSL
+
+
+[TEST_DIRECTORIES]
+# A list of the test directory names (relative to the TEST ROOT) (one per line) 
+# that are to have their tests executed this run.  The list may be empty
+# if the test run uses keywords to select test cases.
+# Note: all test modules should be in some SET (3 currently defined).
+# The SETs are designed to be disjoint, and together cover all currently run
+# tests EXCEPT the autostress tests which are separate. (Those should be run alone.)
+# See autoinstall.sh for details.
+#mta_channel
+#mta_cmdln
+#remote_cli
+#sys_listmodification
+#mta_futurerelease
+#Vacation
+#MTA_Logging
+#imap_urlauth
+#sys_siteadm_ssr
+#sys_ssl_msgrouting
+#sys_ssl_msgaccess
+#snmp
+#mta_ssr
+#LMTP
+#spamfilterx
+#logsize
+#sys_mmpimap
+#dispatcher
+#MTA_Logging
+#sieve
+#sys_vanitydomain
+#domain_verify
+#imcheck
+#mta_ssr
+#mta_mappings
+#sys_vanitydomain
+#sys_ssl_msgaccess
+#mta_sdk
+#mta_channel
+#spamfilterx
+#imsexport
+#sys_userquota
+#imap_condstore
+#wmap
+#sys_sharedfolder
+#check_segments
+#wmap
+#mailGroup
+#milter
+#msGroup
+#mta_mappings
+#brightmail
+#certauth
+hula
+#jmqNotification
+#immonitor
+#smtp_ssl
+#sys_enabledisableservices
+#sys_mmpimap
+#sys_mmppop
+#connThrottle
+#mmpLog
+#meterMaid
+
+[KEYWORDS]
+# A list of keywords to use to select test cases for the test run.
+# Keywords will only be used by tle if the TEST_DIRECTORIES section is left 
+# blank.
+# This may be either a simple list of keywords, or a logical expression using
+# valid keywords and any of the following operators:
+# select only the tests which match both k1 and k2 
+#                            keywords'
+#     +	 :  'k1 + k2' means 'select all tests for keyword k1 plus all tests for 
+#                            keyword k2'
+#     -	 :  'k1 - k2' means 'select only the tests for keyword k1 that do not 
+#       				     match keyword k2'
+#    ( ) :  parentheses may be used to make a complex logical expression,
+#                            such as ( k1 - negative ) + k2
+# The words 'and', 'plus', and 'minus' may be substituted for the symbols.
+# The word 'all' may be used as a keyword, meaning "all tests".
+# All keywords and operators must be separated by whitespace.
+# The keyword list or expression may be placed on one line, or extend over 
+# several lines.
+# If a simple list of keywords is used, the operator '+' will be assumed 
+# between keywords.
+#
+#
+# ------------------------------  end of file  ------------------------------

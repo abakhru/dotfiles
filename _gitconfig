@@ -1,6 +1,6 @@
 [user]
-	name = Amit Bakhru
-	email = abakhru@silvertailsystems.com
+	name = bakhra
+	email = amit.bakhru@rsa.com
 [branch]
         autosetuprebase=always
 [push]
@@ -60,14 +60,14 @@
 [mergetool]
         keepBackup = true
 [difftool "sourcetree"]
-        cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-        path =
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
 [mergetool "sourcetree"]
-        cmd = /Applications/SourceTree 2.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-        trustExitCode = true
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
 [core]
 	# Use custom `.gitignore`
-	excludesfile = ~/dotfiles/.gitignore
+	excludesfile = /Users/bakhra/.gitignore_global
 	# Treat spaces before tabs, lines that are indented with 8 or more spaces, and all kinds of trailing whitespace as an error
 	whitespace = space-before-tab,indent-with-non-tab,trailing-space
 [color]
@@ -87,5 +87,8 @@
 	changed = green
 	untracked = cyan
 [filter "media"]
-	clean = git-media-clean %f
-	smudge = git-media-smudge %f
+	required = true
+	clean = git media clean %f
+	smudge = git media smudge %f
+[http]
+    sslverify = false

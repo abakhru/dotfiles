@@ -1,0 +1,62 @@
+#!/bin/sh
+#
+# create_test_users 
+# create test user for IM functional tests
+#
+# usage: create_test_users
+
+# ldap server configuration
+LDAP_HOST=babar.red.iplanet.com
+LDAP_PORT=389
+BASE_DN="dc=red,dc=iplanet,dc=com"
+LDAP_BINDDN="cn=Directory Manager"
+LDAP_BINDPW="password"
+DOMAIN=red.iplanet.com
+
+UID_RANGES="1500000 1600000 1700000 1800000"
+
+RANGE_LIM=7500
+
+
+for urange in $UID_RANGES ;
+do
+   # create ldif file
+   ldif="/tmp/users-$urange.ldif" 
+   rm -f $ldif
+   touch $ldif
+   cur=0
+   uid=$urange
+
+   while [ "$cur" -lt $RANGE_LIM ]
+   do
+     echo "dn: uid=${uid},ou=people,${BASE_DN}" >> $ldif
+     echo "changetype: add" >> $ldif
+     echo "objectClass: top" >> $ldif
+     echo "objectClass: person" >> $ldif
+     echo "objectClass: inetorgperson" >> $ldif
+     echo "objectClass: organizationalPerson" >> $ldif
+     echo "objectClass: sunimuser" >> $ldif
+     echo "objectClass: sunpresenceuser" >> $ldif
+     echo "cn: IMUser${uid}" >> $ldif
+     echo "sn: ${uid}_sn" >> $ldif
+     echo "initials: IMU${uid}" >> $ldif
+     echo "givenName: ${uid}_gn" >> $ldif
+     echo "userPassword: iplanet" >> $ldif
+     echo "uid: ${uid}" >> $ldif
+     echo "mail: ${uid}@${DOMAIN}" >> $ldif
+     echo "sunIMUserProperties: <sunmsgr xmlns='sun:xmpp:properties'/>" >> $ldif
+     echo "sunIMUserPrivateSettings: [private_sunldapgrp]<sunldapgrp xmlns='sun:xmpp:ldapgroups'/>" >> $ldif
+     echo >> $ldif
+   
+     cur=`expr $cur + 1`
+     uid=`expr $uid + 1`
+
+   done
+   # load the LDIF file
+   /usr/bin/ldapmodify -c -p ${LDAP_PORT} -h ${LDAP_HOST} -D "${LDAP_BINDDN}" -w "${LDAP_BINDPW}" -f ${ldif}
+
+   echo "done with $urange"
+
+done
+
+exit $?

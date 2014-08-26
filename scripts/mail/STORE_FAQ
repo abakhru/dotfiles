@@ -1,0 +1,16 @@
+Q: How to move message from one partition to another?
+A: mboxutil -r user/test1/INBOX user/test1/INBOX second
+
+Q: How to create another partition/s?
+A: mkdir /var/opt/sun/comms/messaging64/store/partition/second
+   configutil -o store.partition.second.path -v /var/opt/sun/comms/messaging64/store/partition/second/
+   chown <mailuser>:<mailgrp> /var/opt/sun/comms/messaging64/store/partition/second
+
+Q: How to create and use store expire rules?
+A: Create a file /opt/sun/comms/messaging64/config/store.expirerules, refresh and run sbin/imexpire -d
+
+Q: to run imexpire for a particular user?
+A: ./imexpire -du <username>
+
+Q: To know a user's quota?
+A: /opt/sun/comms/messaging/sbin/imcheck -m user/green14/INBOX|grep Quota

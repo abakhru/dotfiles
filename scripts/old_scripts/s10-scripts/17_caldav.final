@@ -1,0 +1,357 @@
+commsdemo# su - root
+# cd /opt/sun/comms
+# ls
+CommsInstaller  da              dssetup         iwc             messaging64
+calendar        davserver       im              jiss
+# cd davserver
+# ls
+Legal_Folder  data          lib           sbin
+config        install       logs          web-src
+# cd sbin
+# ls
+config-appsvr       config-servicetags  init-config
+config-rewar        davadmin            locatejdk
+# ./init-config
+Java runtime at /usr/jdk/entsys-j2se is below minimum requirement of 1.6.0
+Please make sure the Java runtime at standard location meets the
+minimum requirement, or set JAVA_HOME to point to an installation that does.
+# csh
+commsdemo# setenv JAVA_HOME /usr/jdk/latest
+commsdemo# ./init-config
+/usr/jdk/latest/bin/java -Djava.library.path=/opt/sun/comms/davserver/lib -class
+path /opt/sun/comms/davserver/lib/jars/mysql-connector-java-5.1.6-bin.jar:/opt/s
+un/comms/davserver/lib:/usr/jdk/latest/lib/classes.zip config-davserver -saveSta
+te /opt/sun/comms/davserver/install/saveState20090925163131
+Finished Loading Default Properties...
+
+
+You are running the configuration program for Sun Java System Calendar Server.
+This program asks you to supply configuration preference settings that it uses
+to configure the server.
+
+The configuration program consists of one or more selections that provide you
+with information and let you enter preferences that determine how Sun Java
+System Calendar Server is configured.
+
+When you are presented with the following question, the configuration process
+pauses to allow you to read the information that has been presented. When you
+are ready, press Enter to continue.
+
+ <Press ENTER to Continue>
+
+Some questions require more detailed information that you are required to type.
+The question may have a default value that is displayed inside of brackets [].
+For example, the following question has a default answer of yes:
+
+   Are you sure? [yes]
+If you want to accept the default answer, press only the Enter key (which on
+some keyboards is labeled Return).
+
+If you want to provide a different answer, type it at the command prompt and
+then press Enter.
+
+If yes is your answer, type yes or y at the command prompt and press Enter. If
+your answer is no, type no or n and press Enter.
+
+At any point in the configuration program, if you wish to exit the
+configuration program midway, press the ! key and you will be given the option
+to exit or continue.
+
+    <Press ENTER to Continue>
+
+Welcome to the Sun Java System Calendar Server Configuration Program.
+
+    <Press ENTER to Continue>
+
+Please specify the directory in which the configuration and data files should
+be installed. It is recommended that you configure the Sun Java System Calendar
+Server in the directory suggested by this configurator program.
+
+   Specify the directory in which the configuration and data files should be
+   installed [/var/opt/sun/comms/davserver] {"<" goes back, "!" exits}:
+
+
+
+The directory /var/opt/sun/comms/davserver is not empty, any previous
+configuration data will be overwritten.
+
+1. Choose New
+2. Accept Anyway
+
+   Enter the number corresponding to your choice  [1] {"<" goes back, "!"
+   exits} 2
+
+Please wait for the components to be loaded...
+
+
+Loading components...
+
+
+Select the components to be configured.
+
+
+ [X]  1  Sun Java System Calendar Server 7    0 bytes
+
+   To select a component, enter its number, or 0 when you are done [0] {"<"
+   goes back, "!" exits}:
+Checking Disk Space
+
+Please verify that the host name and DNS domain name mentioned in the fields
+below are correct for this system, then click Next. The configuration program
+will again attempt to establish a network connection to this system using these
+values.
+
+The host name or DNS domain name field will be blank if the configuration
+program is unable to detect its value.
+   Host Name [commsdemo] {"<" goes back, "!" exits}:
+   DNS Domain Name [demo.sun.com] {"<" goes back, "!" exits}:
+
+MySQL Server Configuration Details
+
+Enter the MySQL Server host name, port number, database user ID, password and
+the default calendar database.
+
+   Enter the Server Host Name [localhost] {"<" goes back, "!" exits}:
+   Enter the Server Port Number [3306] {"<" goes back, "!" exits}:
+   Enter the Database User ID [caldav] {"<" goes back, "!" exits}: mysql
+   Enter the Database User Password [] {"<" goes back, "!" exits}:
+   Enter the Calendar Database Name [caldav] {"<" goes back, "!" exits}:
+Please Wait: Verifying whether the MySQL Server connection is alive
+
+
+Application Server Configuration Details
+
+Specify the local Application Server instance details used by the configurator
+to configure Sun Java System Calendar Server 7 on Application Server. Enter the
+following application server instance details to configure Sun Java System
+Calendar Server 7:
+
+Install Directory: Enter the local directory in which the Application Server is
+installed.
+
+Domain Directory: Enter the Application Server domain directory.
+
+Document Root Directory: Enter the Application Server document root directory.
+
+Server Target Name: Enter the Application Server Name for which the Sun Java
+System Calendar Server 7 is to be configured.
+
+Virtual Server Identifier: Enter the Virtual Server Identifier for which the
+Sun Java System Calendar Server 7 is to be configured.
+
+Server Instance HTTP Port: Enter the Application Server port number where HTTP
+service is available.
+
+   Enter Application Server Install Directory [/opt/SUNWappserver] {"<" goes
+   back, "!" exits}: /opt/SUNWappserverCS7
+   Enter Application Server Domain Directory
+   [/opt/SUNWappserverCS7/domains/domain1] {"<" goes back, "!" exits}:
+   Enter Application Server Document Root Directory
+   [/opt/SUNWappserverCS7/domains/domain1/docroot] {"<" goes back, "!" exits}:
+   Enter Application Server Instance Name [server] {"<" goes back, "!" exits}:
+   Enter Virtual Server Identifier [server] {"<" goes back, "!" exits}:
+   Enter Application Server Instance HTTP Port [8080] {"<" goes back, "!"
+   exits}: 5080
+Please Wait: Verifying whether the Application Server Instance connection is
+alive
+
+
+Application Server: Administration Instance Details
+
+Specify Application Server's Administration instance details used by the
+configurator to configure Sun Java System Calendar Server 7 on Application
+Server.
+
+   Enter the Administration Server Port [4848] {"<" goes back, "!" exits}: 6080
+   Enter the Administrator User ID [admin] {"<" goes back, "!" exits}:
+   Enter the Administrator Password [] {"<" goes back, "!" exits}:
+   Is the Administration Server instance running in the secure mode  [yes] {"<"
+   goes back, "!" exits}?
+Please Wait: Verifying whether the Administration Server instance connection is
+alive
+
+Information
+
+You have specified that the Application Server's Administration Server instance
+is running in the secure mode.
+
+
+
+URI Path
+
+Enter the URI Path for Sun Java System Calendar Server 7.
+
+URI Path: Enter the URI Path where the Sun Java System Calendar Server 7 is to
+be deployed.
+
+Note: Ensure you have specified a new URI Path. If there exists a web
+application already configured at the specified URI, it will be deleted before
+Sun Java System Calendar Server 7 is deployed.
+
+   Enter URI Path for Sun Java System Calendar Server 7 [/] {"<" goes back, "!"
+   exits}: /davserver
+
+Enter the User/Group LDAP Server details. The User/Group LDAP Server URL
+should  be in the format ldap://<hostname>:<port>. For example, ldap:
+//ldapserver.siroe.com:389
+
+   Ldap URL [ldap://commsdemo.demo.sun.com:389] {"<" goes back, "!" exits}:
+   Bind DN [cn=Directory Manager] {"<" goes back, "!" exits}:
+   Bind Password {"<" goes back, "!" exits}:
+
+
+
+DC Tree Suffix
+
+Specify the base distinguished name for the DC Tree Suffix. This suffix is used
+by Sun Java System Calendar Server 7 to search for configured hosted domains.
+
+   Enter DC Tree Suffix [o=isp] {"<" goes back, "!" exits}:
+
+Please enter the Default Domain Name
+
+
+Enter the Default Domain Name. This is the default domain that will be used
+when a user logs in without specifying a domain name.
+
+   Enter the Default Domain Name [demo.sun.com] {"<" goes back, "!" exits}
+
+
+Notification Mail Server Configuration Details
+
+Enter the SMTP mail server host name and port number.
+
+   Enter the SMTP Server Host Name [commsdemo.demo.sun.com] {"<" goes back, "!"
+   exits}:
+   Enter the SMTP Server Port Number [25] {"<" goes back, "!" exits}:
+Please Wait: Verifying whether the SMTP mail server connection is alive
+
+
+Please enter the Sun Java System Calendar Server 7 Administrator User ID and
+Password.
+
+   Username [calmaster]: calmaster7
+   Password:
+   Password Again:
+
+Checking disk space...
+
+
+The following items for the product Sun Java System Calendar Server will be
+configured:
+
+Product: Sun Java System Calendar Server
+Location: /var/opt/sun/comms/davserver
+Space Required: 0 bytes
+----------------------------------------
+Sun Java System Calendar Server 7
+
+
+Ready to Configure
+
+1. Configure Now
+2. Start Over
+3. Exit Configure Program
+
+   What would you like to do [1]?
+Starting Task Sequence
+===== Sat Sep 26 23:25:01 PDT 2009 =====
+Running /bin/rm -rf /opt/sun/comms/davserver/config
+/opt/sun/comms/davserver/data /opt/sun/comms/davserver/log
+
+===== Sat Sep 26 23:25:02 PDT 2009 =====
+Running /opt/sun/comms/davserver/lib/devinstall -l schema2native:pkgcfg:config:
+davserver -v -m -i /opt/sun/comms/davserver/lib/config-templates/config.ins
+/opt/sun/comms/davserver/lib/config-templates /opt/sun/comms/davserver/lib/jars
+/opt/sun/comms/davserver/lib /opt/sun/comms/davserver/web-src/config
+/opt/sun/comms/davserver/web-src/config/templates
+
+===== Sat Sep 26 23:25:02 PDT 2009 =====
+Running /bin/sh -c echo Q/TmGRArK9Up/Ox0ABCNNA== >
+/var/opt/sun/comms/davserver/config/davserverkey.txt
+
+===== Sat Sep 26 23:25:02 PDT 2009 =====
+Running /opt/sun/comms/davserver/lib/ldapmodify -h commsdemo.demo.sun.com -p
+389 -D cn=Directory Manager -j /opt/sun/comms/davserver/lib/config-
+templates/ugdir5331286658556547847 -c -e
+/opt/sun/comms/davserver/data/install/schema2usergroup.ldif.rej -f
+/opt/sun/comms/davserver/data/install/schema2usergroup.ldif
+
+===== Sat Sep 26 23:25:03 PDT 2009 =====
+Running /bin/sh -c /opt/sun/comms/davserver/sbin/config-appsvr deploy ********
+
+===== Sat Sep 26 23:27:44 PDT 2009 =====
+Running /bin/sh -c /bin/mkdir -p /opt/sun/comms/davserver/install/davserver-
+config_20090926232220
+
+===== Sat Sep 26 23:27:45 PDT 2009 =====
+Running /bin/sh -c /bin/cp -p /opt/sun/comms/davserver/lib/config-
+templates/DavserverCfg.properties /opt/sun/comms/davserver/install/davserver-
+config_20090926232220/DavserverCfg.properties
+
+Sequence Completed
+
+PASSED: /bin/rm -rf /opt/sun/comms/davserver/config
+/opt/sun/comms/davserver/data /opt/sun/comms/davserver/log : status = 0
+
+PASSED: /opt/sun/comms/davserver/lib/devinstall -l schema2native:pkgcfg:config:
+davserver -v -m -i /opt/sun/comms/davserver/lib/config-templates/config.ins
+/opt/sun/comms/davserver/lib/config-templates /opt/sun/comms/davserver/lib/jars
+/opt/sun/comms/davserver/lib /opt/sun/comms/davserver/web-src/config
+/opt/sun/comms/davserver/web-src/config/templates : status = 0
+
+PASSED: /bin/sh -c echo Q/TmGRArK9Up/Ox0ABCNNA== >
+/var/opt/sun/comms/davserver/config/davserverkey.txt : status = 0
+
+PASSED: /opt/sun/comms/davserver/lib/ldapmodify -h commsdemo.demo.sun.com -p
+389 -D cn=Directory Manager -j /opt/sun/comms/davserver/lib/config-
+templates/ugdir5331286658556547847 -c -e
+/opt/sun/comms/davserver/data/install/schema2usergroup.ldif.rej -f
+/opt/sun/comms/davserver/data/install/schema2usergroup.ldif : status = 20
+
+PASSED: /bin/sh -c /opt/sun/comms/davserver/sbin/config-appsvr deploy ********
+: status = 0
+
+PASSED: /bin/sh -c /bin/mkdir -p /opt/sun/comms/davserver/install/davserver-
+config_20090926232220 : status = 0
+
+PASSED: /bin/sh -c /bin/cp -p /opt/sun/comms/davserver/lib/config-
+templates/DavserverCfg.properties /opt/sun/comms/davserver/install/davserver-
+config_20090926232220/DavserverCfg.properties : status = 0
+
+
+All Tasks Completed. Please check configuration log
+/opt/sun/comms/davserver/install/davserver-config_20090926232220.log for
+further details.
+
+The web container instance configuration was modified successfully.
+
+
+Configuration Details:
+
+     Product                          Result      More Information
+ 1.  Sun Java System Calendar Server  Configured  Available
+
+2. Done
+
+   Enter a number corresponding to the desired selection for more information,
+   or enter 2 to continue [2]:
+
+
+You have successfully configured Sun Java System Calendar Server 7. Please
+refer to the Sun Java System Calendar Server 7 Administration Guide for
+instructions on using the command line tool (davadmin) for the ongoing
+administration of your deployment.
+
+mv /opt/sun/comms/davserver/install/saveState20090926232215 /opt/sun/comms/davserver/install/davserver-config_20090926232220/saveState
+Copying factory settings to /opt/sun/comms/davserver/data/setup
+
+-- Configuring Service Tag for Calendar Server
+commsdemo#
+
+#To enable max logging for caldavserver
+/opt/sun/comms/davserver/sbin/davadmin config modify -o log.dav.scheduling.loglevel -v ALL
+/opt/sun/comms/davserver/sbin/davadmin config modify -o log.dav.commands.loglevel -v ALL
+/opt/sun/comms/davserver/sbin/davadmin config modify -o log.dav.errors.loglevel -v ALL
+/opt/sun/comms/davserver/sbin/davadmin config modify -o log.dav.scan.loglevel -v ALL
+/opt/sun/comms/davserver/sbin/davadmin config modify -o log.dav.telemetry.loglevel -v ALL

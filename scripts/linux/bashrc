@@ -1,0 +1,124 @@
+# /etc/bashrc
+
+# System wide functions and aliases
+# Environment stuff goes in /etc/profile
+
+# By default, we want this to get set.
+# Even for non-interactive, non-login shells.
+if [ $UID -gt 99 ] && [ "`id -gn`" = "`id -un`" ]; then
+	umask 002
+else
+	umask 022
+fi
+
+# are we an interactive shell?
+if [ "$PS1" ]; then
+    case $TERM in
+	xterm*)
+		if [ -e /etc/sysconfig/bash-prompt-xterm ]; then
+			PROMPT_COMMAND=/etc/sysconfig/bash-prompt-xterm
+		else
+	    	PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}"; echo -ne "\007"'
+		fi
+		;;
+	screen)
+		if [ -e /etc/sysconfig/bash-prompt-screen ]; then
+			PROMPT_COMMAND=/etc/sysconfig/bash-prompt-screen
+		else
+		PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}"; echo -ne "\033\\"'
+		fi
+		;;
+	*)
+		[ -e /etc/sysconfig/bash-prompt-default ] && PROMPT_COMMAND=/etc/sysconfig/bash-prompt-default
+	    ;;
+    esac
+    # Turn on checkwinsize
+    shopt -s checkwinsize
+    [ "$PS1" = "\\s-\\v\\\$ " ] && PS1="[\u@\h \w]\\$ "
+fi
+
+if ! shopt -q login_shell ; then # We're not a login shell
+	# Need to redefine pathmunge, it get's undefined at the end of /etc/profile
+    pathmunge () {
+		if ! echo $PATH | /bin/egrep -q "(^|:)$1($|:)" ; then
+			if [ "$2" = "after" ] ; then
+				PATH=$PATH:$1
+			else
+				PATH=$1:$PATH
+			fi
+		fi
+	}
+
+	for i in /etc/profile.d/*.sh; do
+		if [ -r "$i" ]; then
+			. $i
+	fi
+	done
+	unset i
+	unset pathmunge
+fi
+# vim:ts=4:sw=4
+export PATH=$PATH:/tools/ns-arch/ns/bin:/usr/dist/pkgs/devpro/5.x-sparc/bin:/usr/dist/exe/:/opt/csw/bin:/space/ath/tle/bin:/opt/perl5.10/bin:.
+#Without colors
+#export PS1="[\u@\h \w]# "
+#With colors
+#export PS1='\[\e[36;1m\]\u@\[\e[32;1m\]\h \[\e[31;1m\]\w# \[\e[0m\]'
+export PS1='[\[\e[36;1m\]\u@\[\e[32;1m\]\h \[\e[31;1m\]\w]# \[\e[0m\]'
+#export PS1="\e[0;32m[\u@\h \w]# \e[m\]"
+export CVSROOT=:pserver:abakhru@jescvs.sfbay.sun.com:/m/src
+#export CLASSPATH=/export/workspace/junit3.8.1/junit.jar:.
+export JDK_HOME=/usr/jdk/latest
+#export TERM=vt100
+export TERM=xterm
+export JAVA_HOME=$JDK_HOME
+export PATH=$PATH:/export/tle/bin:.
+export LD_LIBRARY_PATH=/usr/lib:/usr/share/lib:/lib:/usr/dist/share/socks/lib:/opt/symantec/sbas/Scanner/lib:/opt/perl5.10/lib:.
+alias l.='ls -d .* --color=tty'
+alias ll='ls -l --color=tty'
+alias ls='ls -lhart --color=tty'
+alias vi='vim'
+alias which='alias | /usr/bin/which --tty-only --read-alias --show-dot --show-tilde'
+alias webstart='/var/opt/SUNWwbsvr7/https-`hostname`.sfbay.sun.com/bin/startserv;/var/opt/SUNWwbsvr7/admin-server/bin/startserv'
+alias webstop='/var/opt/SUNWwbsvr7/https-`hostname`.sfbay.sun.com/bin/stopserv;/var/opt/SUNWwbsvr7/admin-server/bin/stopserv'
+alias appstart='/opt/SUNWappserver/bin/asadmin start-domain'
+alias appstop='/opt/SUNWappserver/bin/asadmin stop-domain; rm -rf /opt/SUNWappserver/domains/domain1/logs/* /var/opt/sun/comms/iwc/logs/*'
+alias cdlogs='cd /var/opt/sun/comms/im/default/log'
+alias rm='rm -rf'
+alias ssh='ssh -YX -l uadmin'
+alias calstop='/opt/sun/comms/calendar/calendar/sbin/stop-cal'
+alias calstart='/opt/sun/comms/calendar/calendar/sbin/start-cal'
+alias dsstop='/opt/sun/dsee7/bin/dsadm stop /var/opt/SUNWdsee/dsins1'
+alias dsstart='/opt/sun/dsee7/bin/dsadm start /var/opt/SUNWdsee/dsins1'
+alias imstop='/opt/sun/comms/im/sbin/imadmin stop; rm -rf /var/opt/sun/comms/im/default/log/*'
+alias imstatus='/opt/sun/comms/im/sbin/imadmin status'
+alias imstart='/opt/sun/comms/im/sbin/imadmin start'
+alias imrefresh='/opt/sun/comms/im/sbin/imadmin refresh'
+alias log='tail -f /var/opt/sun/comms/im/default/log/xmppd.log'
+alias wlog='tail -f /var/opt/sun/comms/im/default/log/httpbind.log'
+alias mlog='tail -f /var/opt/sun/comms/im/default/log/mux.log'
+alias fdgrep='find . |xargs grep'
+#Mail server aliases
+#####################
+msg_dir=/opt/sun/comms/messaging64
+alias imsimta='$msg_dir/sbin/imsimta'
+alias configutil='$msg_dir/sbin/configutil'
+alias stop='$msg_dir/sbin/stop-msg; rm -rf /var/$msg_dir/log/*'
+alias start='$msg_dir/sbin/start-msg'
+alias mslog='cd $msg_dir/log'
+alias hgup='hg pull -u'
+alias cvsup='cvs up -d -P 2>/dev/null'
+alias cnbuild='$msg_dir/sbin/imsimta cnbuild'
+alias version='$msg_dir/sbin/imsimta version'
+alias lslave='less `find $msg_dir/log/ -size +40k -name "tcp_local_slave*"`'
+alias refresh='stop; cnbuild; start'
+alias pp='/usr/bin/ps -eo "user s pri pid ppid pcpu pmem vsz rss stime time nlwp psr args"'
+export ATHROOT='/space/src/msg74/msg/test/athtle'
+alias runtle='/usr/bin/perl /space/src/msg_next/msg/test/athtle/bin/tle -f /space/src/msg75/msg/test/athtle/workload -vt'
+alias run75='/usr/bin/perl /space/src/msg75/msg/test/athtle/bin/tle -f /space/src/msg75/msg/test/athtle/workload -vt'
+alias run74='/usr/bin/perl /space/src/msg74/msg/test/athtle/bin/tle -f /space/src/msg75/msg/test/athtle/workload -vt'
+alias debugtle='/usr/bin/perl -d $ATHROOT/bin/tle -f $ATHROOT/workload -vt'
+alias le='less +F'
+alias hgst='hg st .'
+export http_proxy="http://www-proxy.us.oracle.com:80"
+export ftp_proxy="http://www-proxy.us.oracle.com:80"
+alias de='(cd /; cd /space/src/results/ && less +F `find .|grep detaillog|grep -v SUPPORT| tail -1`)'

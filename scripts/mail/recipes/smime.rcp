@@ -1,0 +1,23 @@
+#smime configuration rcp
+set_option("http.cert_enable", "1");
+set_option("smime.enable", "1");
+set_option("smime.certurl", "ldap://GENV_MSHOST1.GENV_DOMAIN:389/ou=people,o=GENV_DOMAIN,GENV_OSIROOT?userCertificate;binary?sub?");
+set_option("smime.usercertfilter", "(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))");
+set_option("smime.trustedurl", "ldap://GENV_MSHOST1.GENV_DOMAIN:389/cn=SMIME,ou=people,o=GENV_DOMAIN,GENV_OSIROOT?cacertificate;binary?sub?(objectclass=certificationauthority)");
+set_option("smime.sslrootcacertsurl", "ldap://GENV_MSHOST1.GENV_DOMAIN:389/cn=SMIME,ou=people,o=GENV_DOMAIN,GENV_OSIROOT?cacertificate;binary?sub?(objectclass=certificationauthority)");
+set_option("smime.logindn", "cn=Directory Manager");
+set_option("smime.loginpw", "GENV_MSADMINPSWD");
+set_option("smime.platformWin", "CAPI:library=capibridge.dll;CAC:library=acpkcs211.dll;");
+set_option("smime.crlenable", "0");
+set_option("smime.crldir", "GENV_MSHOME1/data/store/mboxlist/");
+set_option("smime.crlurllogindn", "cn=Directory Manager");
+set_option("smime.crlurlloginpw", "GENV_DMPASSWORD");
+set_option("smime.checkoverssl", "0");
+set_option("smime.revocationunknown", "ok");
+set_option("smime.sendencryptcert", "1");
+set_option("smime.sendencryptcertrevoked", "allow");
+set_option("smime.sendsigncert", "1");
+set_option("smime.sendsigncertrevoked", "allow");
+set_option("smime.crlusepastnextupdate", "1");
+#set_option("smime.appletlogging","1");
+#set_option("sectoken:Internal (Software) Token.tokenpass", "password");

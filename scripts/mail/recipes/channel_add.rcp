@@ -1,0 +1,12 @@
+#channel_add.rcp
+if exists_channel("CHANNEL") {
+  m = get_channel("CHANNEL");
+  write "existing channel definition" . m;
+  warn "CHANNEL channel already defined in configuration; existing definition will be used";
+}
+
+# First set up the channel
+if !exists_channel("CHANNEL") 
+{
+  add_channel("CHANNEL", ["official_host_name", "CHANNEL_BLOCK"]);
+}
