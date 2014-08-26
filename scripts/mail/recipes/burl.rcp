@@ -1,0 +1,26 @@
+if exists_mapping("BURL_ACCESS") {
+  m = get_mapping("BURL_ACCESS");
+}
+else {
+  m = [];
+}
+
+replace_mapping("BURL_ACCESS",[
+"*|tcp_*|%*|", "imap$Y",
+"*|*@*|imap://*;URLAUTH=submit+$1*:*", "$:A$M$Y",
+"*|*@*|imaps://*;URLAUTH=submit+$1*:*", "$:A$B$M$Y",
+#"*|*@*|imaps://*;URLAUTH=submit+$1*:*", "$:A$M$Y",
+"*|*@*|imaps://*@*.us.oracle.com/*;URLAUTH=submit+$1*:*", "$Y"]);
+#"*|*@*|imaps://*@*.us.oracle.com/*;URLAUTH=submit+$1*:*", "$Y"] . m);
+
+set_option("imap_password","burl17");
+set_option("imap_username","burl17");
+set_option("imap.submituser","burl17");
+set_option("imap.plaintextmincipher","1");
+set_option("imapproxy.plaintextmincipher","1");
+set_option("imapproxy.restrictplainpasswords","1");
+
+unset_option("channel:" . "tcp_submit" . ".maytlsserver");
+unset_option("channel:" . "tcp_submit" . ".maytlsclient");
+set_option("channel:" . "tcp_submit" . ".musttlsserver");
+set_option("channel:" . "tcp_submit" . ".musttlsclient");

@@ -1,0 +1,13 @@
+# Set up conversion mapping
+replace_mapping("SIEVE_EXTLISTS",
+["currentdate|*|*|*|*|holiday|*", "${HOLIDAY|$4}$Y", 
+"date|*|*|*|*|holiday|*", "${HOLIDAY|$4}$Y"]); 
+
+#system-level sieve filter
+filter1 = "require [\"date\",\"extlists\"];
+if currentdate :list \"date\" \"holiday\"
+{
+	addtag \"[HOLIDAY]\";
+} 
+";
+set_option("systemfilter", filter1 );

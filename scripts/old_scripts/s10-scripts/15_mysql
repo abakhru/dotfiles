@@ -1,0 +1,82 @@
+commsdemo# cd /opt/mysql/mysql
+commsdemo# ls
+INSTALL-BINARY  bin             include         mysql-test      sql-bench
+LICENSE.mysql   data            lib             scripts         support-files
+README          docs            man             share
+commsdemo# rm -rf data
+commsdemo# rm -rf /var/lib/mysql
+commsdemo# /opt/mysql/mysql/scripts/mysql_install_db --user=mysql --ldata=/var/mysql
+Installing MySQL system tables...
+InnoDB: The first specified data file ./ibdata1 did not exist:
+InnoDB: a new database to be created!
+090925 14:44:47  InnoDB: Setting file ./ibdata1 size to 10 MB
+InnoDB: Database physically writes the file full: wait...
+090925 14:44:47  InnoDB: Log file ./ib_logfile0 did not exist: new to be created
+InnoDB: Setting log file ./ib_logfile0 size to 5 MB
+InnoDB: Database physically writes the file full: wait...
+090925 14:44:47  InnoDB: Log file ./ib_logfile1 did not exist: new to be created
+InnoDB: Setting log file ./ib_logfile1 size to 5 MB
+InnoDB: Database physically writes the file full: wait...
+InnoDB: Doublewrite buffer not found: creating new
+InnoDB: Doublewrite buffer created
+InnoDB: Creating foreign key constraint system tables
+InnoDB: Foreign key constraint system tables created
+090925 14:44:47  InnoDB: Started; log sequence number 0 0
+090925 14:44:48  InnoDB: Starting shutdown...
+090925 14:44:49  InnoDB: Shutdown completed; log sequence number 0 46409
+090925 14:44:49 [Warning] Forcing shutdown of 1 plugins
+OK
+Filling help tables...
+090925 14:44:49  InnoDB: Started; log sequence number 0 46409
+090925 14:44:50  InnoDB: Starting shutdown...
+090925 14:44:50  InnoDB: Shutdown completed; log sequence number 0 46409
+090925 14:44:50 [Warning] Forcing shutdown of 1 plugins
+OK
+
+To start mysqld at boot time you have to copy
+support-files/mysql.server to the right place for your system
+
+PLEASE REMEMBER TO SET A PASSWORD FOR THE MySQL root USER !
+To do so, start the server, then issue the following commands:
+
+/opt/mysql/mysql/bin/mysqladmin -u root password 'new-password'
+/opt/mysql/mysql/bin/mysqladmin -u root -h commsdemo password 'new-password'
+
+Alternatively you can run:
+/opt/mysql/mysql/bin/mysql_secure_installation
+
+which will also give you the option of removing the test
+databases and anonymous user created by default.  This is
+strongly recommended for production servers.
+
+See the manual for more instructions.
+
+You can start the MySQL daemon with:
+cd /opt/mysql/mysql ; /opt/mysql/mysql/bin/mysqld_safe &
+
+You can test the MySQL daemon with mysql-test-run.pl
+cd /opt/mysql/mysql/mysql-test ; perl mysql-test-run.pl
+
+Please report any problems with the /opt/mysql/mysql/scripts/mysqlbug script!
+
+The latest information about MySQL is available at http://www.mysql.com/
+Support MySQL by buying support/licenses from http://shop.mysql.com/
+
+commsdemo# vi /etc/my.cnf
+[mysqld]
+basedir = /opt/mysql/mysql
+datadir = /var/mysql
+default-storage-engine = InnoDB
+character-set-server = utf8
+
+commsdemo# cp /opt/mysql/mysql/support-files/mysql.server /etc/init.d/mysql
+commsdemo# /etc/init.d/mysql start
+commsdemo#/opt/mysql/mysql/bin/mysqladmin -u root password 'password'
+commsdemo#/opt/mysql/mysql/bin/mysql_secure_installation
+commsdemo#/opt/mysql/mysql/bin/mysql -uroot -ppassword < setup_caldav_db.sql
+
+commsdemo# asadmin create-jdbc-connection-pool --user admin --datasourceclassname com.mysql.jdbc.jdbc2.optional.MysqlDataSource --restype javax.sql.DataSource --property "DatabaseName=caldav:serverName=localhost:user=mysql:password=mysql:portNumber=3306:networkProtocol=jdbc:characterEncoding=UTF-8" caldavPool
+
+commsdemo# /opt/glassfish/bin/asadmin create-jms-resource --restype javax.jms.TopicConnectionFactory --enabled=true jms/CommsConnectionFactory
+
+commsdemo# /opt/glassfish/bin/asadmin create-jms-resource --restype javax.jms.Topic --enabled=true --property Name=DavNotificationTopic jms/DavNotificationTopic

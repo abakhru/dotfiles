@@ -1,0 +1,1 @@
+for i in `cat "./packagelist"`; do  pkginfo $i 2>/dev/null; done 

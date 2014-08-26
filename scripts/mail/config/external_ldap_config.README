@@ -1,0 +1,30 @@
+#For setting up external ldap support in mta, do the following:
+
+#Add the following to option.dat file:
+LDAP_EXT_HOST=algy.sfbay.sun.com
+LDAP_EXT_USERNAME=cn=Directory Manager
+LDAP_EXT_PASSWORD=netscape
+LDAP_EXT_PORT=389
+!LDAP_EXT_BASEDN=o=usergroup
+
+
+#add the following to any group as an external ldap members:
+
+#mgrpDeliverTo: extldap:///ou=people,o=domain.nl,dc=domain,dc=nl?mail?sub?(mail=*)
+#mgrpDeliverTo: extldap:///ou=people,o=sfbay.sun.com,o=usergroup??sub?(mail=algy9*)
+mgrpDeliverTo: extldap:///algy.sfbay.sun.com:389/o=usergroup??sub?(uid=algy9*)
+#mgrpDeliverTo: ldap:///o=usergroup??sub?(uid=neo1*)
+
+
+Or you could use it in a mapping table callout e.g.
+
+FORWARD
+ 
+  ! USE_FORWARD_DATABASE=16
+  ! source-channel|from-address|to-address
+  tcp_*|*|*    $CRESULT|$2|$]extldap:///dc=domain,dc=nl?mailhost?sub?(mail=$2)[
+  RESULT|*|*   $Y$D$H@$1:$0
+  *            $N
+
+
+The above mapping table entry searches the external LDAP server for an entry which has a "mail:" attribute set to the RCPT TO: envelope address, then if a match exists uses source routing to forward the email to the "mailhost:" value for the user.

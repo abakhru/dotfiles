@@ -1,0 +1,3210 @@
+Script started on Wed Sep 30 14:56:31 2009
+# bash
+bash-3.00# ls
+10_im              15_mysql           18_uwc_install     2_dirpatch         8_msg
+11_iwc             16_caldav          19_uwc_config      3_jis              9_calendar
+12_issprep         17_caldav          1_directory        4_comms
+13_iss             17_caldav.final    20_appsrvmgw       5_glassfish
+14_glassfish2      17_caldav.new      20_appsrvmgw2      6_dssetup
+14_glassfish2.new  17_caldav.new2     21_smime           7_da
+bash-3.00# . /export/home/guest/.bashrc r 
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/export/home/guest/ScriptCaptures[0;1;22m# ls
+total 1708
+-rw-r--r--   1 root     root         87K Sep 23 13:24 1_directory
+-rw-r--r--   1 root     root         24K Sep 23 13:52 2_dirpatch
+-rw-r--r--   1 root     root         38K Sep 23 15:05 3_jis
+-rw-r--r--   1 root     root         16K Sep 23 15:35 4_comms
+-rw-r--r--   1 root     root         36K Sep 23 16:12 5_glassfish
+-rw-r--r--   1 root     root         26K Sep 23 16:42 6_dssetup
+-rw-r--r--   1 root     root         28K Sep 23 22:55 7_da
+-rw-r--r--   1 root     root        6.4K Sep 24 00:02 8_msg
+-rw-r--r--   1 root     root        135K Sep 24 00:09 9_calendar
+-rw-r--r--   1 root     root         13K Sep 24 01:34 11_iwc
+-rw-r--r--   1 root     root         28K Sep 24 08:26 10_im
+-rw-r--r--   1 root     root         39K Sep 24 14:57 12_issprep
+-rw-r--r--   1 root     root         11K Sep 24 15:29 13_iss
+-rw-r--r--   1 root     root         24K Sep 25 14:22 14_glassfish2
+-rw-r--r--   1 root     root        6.4K Sep 25 14:48 15_mysql
+-rw-r--r--   1 root     root         15K Sep 25 15:31 16_caldav
+-rw-r--r--   1 root     root         13K Sep 25 16:41 17_caldav
+-rw-r--r--   1 root     root         24K Sep 26 21:05 14_glassfish2.new
+-rw-r--r--   1 root     root         13K Sep 26 21:07 17_caldav.new
+-rw-r--r--   1 root     root         13K Sep 26 23:31 17_caldav.new2
+-rw-r--r--   1 root     root         13K Sep 26 23:37 17_caldav.final
+-rw-r--r--   1 root     root        7.0K Sep 27 00:14 18_uwc_install
+-rw-r--r--   1 root     root         30K Sep 27 00:36 19_uwc_config
+-rw-r--r--   1 root     root         42K Sep 27 01:41 20_appsrvmgw
+-rw-r--r--   1 root     root         17K Sep 27 02:16 20_appsrvmgw2
+-rw-r--r--   1 root     root           0 Sep 30 14:56 21_smime
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/export/home/guest/ScriptCaptures[0;1;22m# cd /opt/sun/comms/messaging64/config/
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 228
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail         10K Sep 23 23:59 smime.conf
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 root     root        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 root     root        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+-rw-r-----   1 mailsrv  mail        2.0K Sep 27 23:13 msg.conf
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# vi smime.conf 
+bash: vim: command not found
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# configutil -o |    |grep smime
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# conf    configutil -o local.webmail.smime.enable -v yes
+OK SET
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m#         configutil -o local.webmail.cert.enable -v yes
+OK SET
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 223
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail         10K Sep 23 23:59 smime.conf
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 root     root        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 root     root        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls        configutil -o local.webmail.cert.enable -v yes
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# confg igutil |grep smime
+local.webmail.smime.enable = yes
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# configutil |grep smime    c  cert
+local.webmail.cert.enable = yes
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 228
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail         10K Sep 23 23:59 smime.conf
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 root     root        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 root     root        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# vi smime.conf 
+bash: vim: command not found
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# \vi smime.conf 
+[40;1H[?1h="smime.conf" 261 lines, 10684 characters [H[J#[H
+#  smime.conf - Example SMIME configuration
+#
+#
+#  File Format rules:
+#[7CEach entry must begin at the start of a new line.
+#[7CEach entry consists of LHS==RHS
+#[7CEach LHS is a case insensitive keyword.
+#[7CWhite space is not allowed before the ==.
+#[7CAll blank lines or lines where first non-blank character is # are comments.
+#
+#
+# The following entry is used to search for certificates by attributes of directory objects.
+# It is used in conjunction with the certurl.
+# It is required when smime features are enabled.
+# Use any combinations of these three email address attributes (but at least one).
+#
+# userCertFilter==(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))
+#
+#
+# The following entry is used to search for trusted certificates used to verify user certificates.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+# Note: the administrator must create the ldap entry for "SMIME Admin".
+#
+# trustedurl==ldap://mail.siroe.com:389/cn=SMIME Admin, ou=people, o=mail.siroe.com, o=mailUsers?cacertif
+icate;binary?sub?(objectclass=certificationauthority)
+#
+#
+# The following entry is used to search for user certificates. The filter in userCertFilter is
+# appended to this url with the "%e" specifiers replaced by the email address of the user for
+# whom certificates are being searched.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+#[H[39B"smime.conf" 261 lines, 10684 characters[H[39B[K
+[A# certurl==ldap://mail.siroe.com:389/ou=people, o=mail.siroe.com, o=mailUsers?userCertificate;binary?sub?
+
+[A#
+
+[A#
+
+[A# The following entry is used to locate the Root certificates used for secure HTTP protocol
+
+[A# It is required when smime features are enabled and SSL protocols are enabled.
+
+[A# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+
+[A# |<logindn>|<loginpw>
+
+[A# Both or neither must appear.
+
+[A# Note: the administrator must create the ldap entry for "SSL Root CA Certs".
+
+[A#
+
+[A# sslRootCACertsURL==ldap://mail.siroe.com:389/cn=SSL Root CA Certs, ou=people, o=mail.siroe.com, o=mailQ
+
+[AA?cacertificate;binary?base?(objectclass=certificationauthority)
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the Root UID for LDAP access to all
+
+[A# the URLs specified in this configuration file. It is optional; if not specified,
+
+[A# the credentials of the iMS server are used. If specified, loginpw must also be specified.
+
+[A# Note: any local credentials appended to a URL are used instead of this specification.
+
+[A#
+
+[A# logindn==cn=Directory Manager[H[39B
+[A#
+
+[A#
+
+[A# The following entry is used to specify the password for LDAP access to all
+
+[A# the URLs specified in this configuration file. It is optional; if not specified,
+
+[A# the credentials of the iMS server are used. If specified, logindn must also be specified.
+
+[A# Note: any local credentials appended to a URL are used instead of this specification.
+
+[A#
+
+[A# loginpw==<password>
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key
+
+[A# store on the Windows platform.  The setting below is the default; you need to
+
+[A# specify this option only if your library settings differ. This option is required if any
+
+[A# Communications Express Mail users use the Windows platform.
+
+[A#
+
+[A# platformWin==CAPI:library=capibridge.dll;
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key[H
+[38B
+[A# store on the Macintosh platform.  The setting below is the default; you need to
+
+[A# specify this option only if your library settings differ. This option is required if any
+
+[A# Communications Express Mail users use the Macintosh platform.
+
+[A#
+
+[A# platformMac==MOZILLA:library=libsoftokn3.dylib;
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key
+
+[A# store on the Linux platform.  The setting below is the default; you need to
+
+[A# specify this option only if your library settings differ. This option is required if any
+
+[A# Communications Express Mail users use the Linux platform.
+
+[A#
+
+[A# platformLinuxx86==MOZILLA:library=libsoftokn3.so;
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key
+
+[A# store on the Sparc Solaris platform.  The setting below is the default; you need to
+
+[A# specify this option only if your library settings differ. This option is required if any
+
+[A# Communications Express Mail users use the Sparc Solaris platform.[H
+
+[37B
+[A#
+
+[A# platformSolarisSparc==MOZILLA:library=libsoftokn3.so;
+
+[A#
+
+[A#
+
+[A#
+
+[A# Controls the initial setting for whether all outgoing messages
+
+[A# are automatically encrypted for all Communications Express Mail users
+
+[A# with permission to use S/MIME.
+
+[A#
+
+[A# Choose one of these values:
+
+[A#   0 - do not encrypt messages. The encryption checkboxes
+
+[A#[7Cwithin Communications Express Mail are displayed as unchecked. This is the default.
+
+[A#   1 - always encrypt messages.The encryption checkboxes
+
+[A#[7Cwithin Communications Express Mail are displayed as checked.
+
+[A#
+
+[A# alwaysencrypt==0
+
+[A#
+
+[A#
+
+[A# Controls the initial setting for whether all outgoing messages[H
+
+[37B
+[A# are automatically signed for all Communications Express Mail users
+
+[A# with permission to use S/MIME.
+
+[A# Choose one of these values:
+
+[A#   0 - do not sign messages. The signature checkboxes within
+
+[A#[7CCommunications Express Mail are displayed as unchecked. This is the default.
+
+[A#   1 - always sign messages. The signature checkboxes within
+
+[A#[7CCommunications Express Mail are displayed as checked.
+
+[A#
+
+[A# alwayssign==0
+
+[A#
+
+[A#
+
+[A# Certificate Validation Support - Each of the following specifiers is optional.
+
+[A#
+
+[A#
+
+[A# Controls whether certificates are checked against CRLs. If
+
+[A# there is a match, a certificate is considered revoked. The
+
+[A# values of the send*revoked parameters determine whether a revoked
+
+[A# certificate is rejected or used by Communications Express Mail.
+
+[A# Choose one of these values:[H
+
+[37B
+[A#   0 - each certificate is not checked against a CRL.
+
+[A#   1 - each certificate is checked against a CRL. This is the default.
+
+[A#
+
+[A# crlenable==1
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the directory path information to locate the
+
+[A# database where CRL information is stored.
+
+[A#
+
+[A# crldir==<instance>/data/store/mboxlist
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the Root UID for LDAP access to all
+
+[A# the URLs specified in the CRL Mapping table. It is optional; if not specified,
+
+[A# the credentials of the iMS server are used. If specified, crlurlloginpw must also be specified.
+
+[A# Note: any local credentials appended to a URL in the CRL Mapping table are used instead of this specifi
+
+[Acation.
+
+[A#
+
+[A# crlurllogindn==cn=Directory Manager
+
+[A#[H
+[38B
+[A#
+
+[A# The following entry is used to specify the password for LDAP access to all
+
+[A# the URLs specified in the CRL Mapping table. It is optional; if not specified,
+
+[A# the credentials of the iMS server are used. If specified, crlurllogindn must also be specified.
+
+[A# Note: any local credentials appended to a URL in the CRL Mapping table are used instead of this specifi
+
+[Acation.
+
+[A#
+
+[A# crlurlloginpw==<password>
+
+[A#
+
+[A#
+
+[A# The following entry is used to locate the CRL mapping.
+
+[A# (format: crlmappingurl==ldap url of CRL map)
+
+[A# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+
+[A# |<logindn>|<loginpw>
+
+[A# Both or neither must appear.
+
+[A# Note: the administrator must create the ldap entry for "SMIME Admin".
+
+[A#
+
+[A# crlmappingurl==ldap://mail.siroe.com:389/cn=SMIME Admin, ou=people, o=mail.siroe.com, o=mailQA?msgCRLMa
+
+[AppingRecord?sub?(objectclass=msgCRLMappingTable)
+
+[A#
+
+[A#[H[39B
+[A# The following entry is used to specify the time interval before the received time on messages.
+
+[A# (format: timestampdelta==<numberofseconds>)
+
+[A#
+
+[A# timestampdelta==360
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the time interval to wait after multiple CRL attempts.
+
+[A# crlaccessfail==#fails:#mins:#minswait
+
+[A#     where   #fails    = number of CRL URL failures before triggering wait
+
+[A#[13C#mins     = number of minutes during which the #fails must occur
+
+[A#[13C#minswait = number of minutes to wait until another CRL URL attempt will be allowed
+
+[A#     If crlaccessfail is used, no fields are optional, and all values must be greater than 0.
+
+[A#
+
+[A# crlaccessfail==2:20:10
+
+[A#
+
+[A#
+
+[A# Controls whether an SSL communications link is used when
+
+[A# checking a certificate against a CRL .
+
+[A#[H
+[38B
+[A# Choose one of these values:
+
+[A#   0 - do not use an SSL communications link.
+
+[A#   1 - use an SSL communications link. This is the default.
+
+[A#
+
+[A# checkoverssl==1
+
+[A#
+
+[A#
+
+[A# Controls whether the certificate used to sign a message is
+
+[A# checked against a CRL when the message is read.
+
+[A# Choose one of these values:
+
+[A#   0 - do not check the certificate against a CRL.
+
+[A#   1 - check the certificate against a CRL. This is the default.
+
+[A#
+
+[A# readsigncert==1
+
+[A#
+
+[A#
+
+[A# Determines the action to take when an ambiguous status is
+
+[A# returned when checking a certificate against a CRL. In this case,
+
+[A# it is not certain if the certificate is valid or has a revoked status.[H
+
+
+[36B
+[A# Choose one of these values:
+
+[A#   ok[6C- treat the certificate as valid.
+
+[A#   revoked - treat the certificate as revoked. This is the default.
+
+[A#
+
+[A# revocationunknown==revoked
+
+[A#
+
+[A#
+
+[A# Controls whether a certificate used to encrypt an outgoing
+
+[A# message is checked against a CRL before using it.
+
+[A# Choose one of these values:
+
+[A#   0 - do not check the certificate against a CRL.
+
+[A#   1 - check the certificate against a CRL. This is the default.
+
+[A#
+
+[A# sendencryptcert==1
+
+[A#
+
+[A#
+
+[A# Determines the action to take if a certificate used to encrypt
+
+[A# an outgoing message has been revoked.
+
+[A# Choose one of these values:[H
+
+
+[36B
+[A#   allow    - use the certificate.
+
+[A#   disallow - do not use the certificate. This is the default.
+
+[A#
+
+[A# sendencryptcertrevoked==disallow
+
+[A#
+
+[A#
+
+[A# Controls whether a certificate used for signing an outgoing
+
+[A# message is checked against a CRL before using it.
+
+[A# Choose one of these values:
+
+[A#   0 - do not check the certificate against a CRL.
+
+[A#   1 - check the certificate against a CRL. This is the default.
+
+[A#
+
+[A# sendsigncert==1
+
+[A#
+
+[A#
+
+[A# Determines the action to take if the certificate used to sign an
+
+[A# outgoing message has been revoked.
+
+[A# Choose one of these values:
+
+[A#   allow    - use the certificate.[H
+
+
+[36B
+[A#   disallow - do not use the certificate. This is the default.
+
+[A#
+
+[A# sendsigncertrevoked==disallow
+
+[A#
+
+[A#
+
+[A# The following entry specifies whether to continue to use a CRL after its
+
+[A# next update date (in case a new CRL is not available or accessible).
+
+[A# Choose one of these values:
+
+[A#   0 - do not use a CRL after its next update date.
+
+[A#   1 - continue to use a CRL after its next update date. This is the default.
+
+[A#
+
+[A# crlusepastnextupdate==1
+
+[A#
+
+[A#[9;1H[19B[11B
+[J[?1l>[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 228
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail         10K Sep 23 23:59 smime.conf
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 root     root        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 root     root        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# cp smime.conf smime.conf  .bk  orig
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 229
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail         10K Sep 23 23:59 smime.conf
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 root     root        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 root     root        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+-rw-------   1 root     root         10K Sep 30 14:59 smime.conf.orig
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# mv /epox  x  xport/home/guest/smime.conf .
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 230
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 root     root        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 root     root        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+-rw-r--r--   1 guest    mysql        11K Sep 30 14:59 smime.conf
+-rw-------   1 root     root         10K Sep 30 14:59 smime.conf.orig
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# vi smime.conf
+bash: vim: command not found
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# \vi smime.conf
+[40;1H[?1h="smime.conf" 266 lines, 11155 characters [H[J#[H
+#  smime.conf - Example SMIME configuration
+#
+#
+#  File Format rules:
+#[7CEach entry must begin at the start of a new line.
+#[7CEach entry consists of LHS==RHS
+#[7CEach LHS is a case insensitive keyword.
+#[7CWhite space is not allowed before the ==.
+#[7CAll blank lines or lines where first non-blank character is # are comments.
+#
+#
+# The following entry is used to search for certificates by attributes of directory objects.
+# It is used in conjunction with the certurl.
+# It is required when smime features are enabled.
+# Use any combinations of these three email address attributes (but at least one).
+#
+userCertFilter==(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))
+#
+#
+# The following entry is used to search for trusted certificates used to verify user certificates.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+# Note: the administrator must create the ldap entry for "SMIME".
+#
+trustedurl==ldap://bakhru.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com, o=usergroup?cacerti
+ficate;binary?sub?(objectclass=certificationauthority)
+#
+#
+# The following entry is used to search for user certificates. The filter in userCertFilter is
+# appended to this url with the "%e" specifiers replaced by the email address of the user for
+# whom certificates are being searched.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+#[H[39B"smime.conf" 266 lines, 11155 characters[H
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[AuserCertFilter==(|(mail=%e)(mailAlternate
+
+
+[41C
+
+
+[20D
+[8C
+[12C
+
+[41C
+
+[28;42Hbakhr$[6Dcomm.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com, o=usergroup?cacertif
+cate;binary?sub?(objectclass=certificationauthority)[K[28;23Hbakhru.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com, o=usergroup?cacert
+ficate;binary?sub?(objectclass=certificationauthority)[28;20H[12B[K:%s/bakhru.red.iplanet.com/commsdemo.demo.sun.com/g[H[J# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:[H
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+# Note: the administrator must create the ldap entry for "SMIME".
+#
+trustedurl==ldap://commsdemo.demo.sun.com:389/cn=SMIME, ou=people, o=red.iplanet.com, o=usergroup?cacerti
+ficate;binary?sub?(objectclass=certificationauthority)
+#
+#
+# The following entry is used to search for user certificates. The filter in userCertFilter is
+# appended to this url with the "%e" specifiers replaced by the email address of the user for
+# whom certificates are being searched.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+#
+certurl==ldap://commsdemo.demo.sun.com:389/ou=people, o=red.iplanet.com, o=usergroup?userCertificate;bina
+ry?sub?
+#
+#
+# The following entry is used to locate the Root certificates used for secure HTTP protocol
+# It is required when smime features are enabled and SSL protocols are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+# Note: the administrator must create the ldap entry for "SSL Root CA Certs".
+#
+# sslRootCACertsURL==ldap://dianthos.red.iplanet.com:389/cn=SSL Root CA Certs, ou=people, o=belugie.red.i
+planet.com, o=mailQA?cacertificate;binary?base?(objectclass=certificationauthority)
+#sslRootCACertsURL==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com, dc=red,dc
+=iplanet,dc=com?cacertificate;binary?sub?(objectclass=certificationauthority)
+#
+#
+# The following entry is used to specify the Root UID for LDAP access to all
+# the URLs specified in this configuration file. It is optional; if not specified,
+# the credentials of the iMS server are used. If specified, loginpw must also be specified.
+# Note: any local credentials appended to a URL are used instead of this specification.
+#[18;1H[H[J#[H
+#  smime.conf - Example SMIME configuration
+#
+#
+#  File Format rules:
+#[7CEach entry must begin at the start of a new line.
+#[7CEach entry consists of LHS==RHS
+#[7CEach LHS is a case insensitive keyword.
+#[7CWhite space is not allowed before the ==.
+#[7CAll blank lines or lines where first non-blank character is # are comments.
+#
+#
+# The following entry is used to search for certificates by attributes of directory objects.
+# It is used in conjunction with the certurl.
+# It is required when smime features are enabled.
+# Use any combinations of these three email address attributes (but at least one).
+#
+userCertFilter==(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))
+#
+#
+# The following entry is used to search for trusted certificates used to verify user certificates.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+# Note: the administrator must create the ldap entry for "SMIME".
+#
+trustedurl==ldap://commsdemo.demo.sun.com:389/cn=SMIME, ou=people, o=red.iplanet.com, o=usergroup?cacerti
+ficate;binary?sub?(objectclass=certificationauthority)
+#
+#
+# The following entry is used to search for user certificates. The filter in userCertFilter is
+# appended to this url with the "%e" specifiers replaced by the email address of the user for
+# whom certificates are being searched.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+#[H
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+trustedurl==ldap://commsdemo.demo.sun.com:389/cn=SMIME, ou=people, o=r[10C$[11Ddemo.sun.com, o=usergroup?cacertific
+ate;binary?sub?(objectclass=certificationauthority)[K[28;77Hn.com, o=[8C$[9Disp?cacertificate;bi
+nary?sub?(objectclass=certificationauthority)[K[28;88Hp?cacertificate;b
+nary?sub?(objectclass=certif
+
+
+[94C
+[34;39H
+[10C
+[50C[37;22H
+[8C
+
+
+[Acerturl==ldap://commsdemo.demo.sun.com:389/ou=people, o=red.iplanet.com, o=usergroup?userCertificate;bina
+
+[Ary?sub?
+
+[A#
+
+[A#
+
+[A# The following entry is used to locate the Root certificates used for secure HTTP protocol
+
+[A# It is required when smime features are enabled and SSL protocols are enabled.
+
+[A# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+
+[A# |<logindn>|<loginpw>
+
+[A# Both or neither must appear.
+
+[A# Note: the administrator must create the ldap entry for "SSL Root CA Certs".[38;30H[37;22H[36;99H[35;79H[34;91H[A[A[31;7H[2A[28;30H
+
+
+[6C[30;105H[8C$[9Disp?userCertificate;binary?sub
+?[K[30;78H[10C$[11Ddemo.sun.com, o=isp?userCertificate;binary?sub?[K
+7[31;40r[40;1H
+[1;40r8[8B#[30;64H
+
+
+[63C
+
+[36;22H
+[8C
+[34C
+
+
+[A# sslRootCACertsURL==ldap://dianthos.red.iplanet.com:389/cn=SSL Root CA Certs, ou=people, o=belugie.red.i
+
+[Aplanet.com, o=mailQA?cacertificate;binary?base?(objectclass=certificationauthority)[38;64H
+
+
+[A#sslRootCACertsURL==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com, dc=red,dc
+
+[A=iplanet,dc=com?cacertificate;binary?sub?(objectclass=certificationauthority)[38;64H
+
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the Root UID for LDAP access to all[13D
+
+[A# the URLs specified in this configuration file. It is optional; if not specified,[19D
+
+[A# the credentials of the iMS server are used. If specified, loginpw must also be specified.[28D
+
+[A# Note: any local credentials appended to a URL are used instead of this specification.[24D[A
+
+
+[A#
+
+[Alogindn==cn=Directory Manager
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the password for LDAP access to all[13D
+
+[A# the URLs specified in this configuration file. It is optional; if not specified,[19D
+
+[A# the credentials of the iMS server are used. If specified, logindn must also be specified.[28D[A[A[A[A[34;29H[A[32;64H[A[A[A[A[A[25;64H[2A[A[21;64H
+
+[63C7[23;40r[40;1H
+
+[1;40r8[15B# Note: any local credentials appended to a URL are used instead of this specification.
+#[16A
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[Aloginpw==netscape
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key
+
+[A# store on the Windows platform.  The setting below is the default; you need to
+
+[A# specify this option only if your library settings differ. This option is required if any
+
+[A# Communications Express Mail users use the Windows platform.[A[A[A[A[A[Aloginpw==ne[7C$[8D6dtualegs
+
+
+[17C
+
+
+
+
+[A#
+
+[AplatformWin==CAPI:library=capibridge.dll;CAC:library=acpkcs211.dll;[17C
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key[17C
+
+[A# store on the Macintosh platform.  The setting below is the default; you need to[17C
+
+[A# specify this option only if your library settings differ. This option is required if any[17C
+
+[A# Communications Express Mail users use the Macintosh platform.[17C
+
+[A#
+
+[A# platformMac==MOZILLA:library=libsoftokn3.dylib;[17C
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key[17C
+
+[A# store on the Linux platform.  The setting below is the default; you need to[17C
+
+[A# specify this option only if your library settings differ. This option is required if any[17C
+
+[A# Communications Express Mail users use the Linux platform.[17C
+
+[A#
+
+[A# platformLinuxx86==MOZILLA:library=libsoftokn3.so;[17C
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key[17C
+
+[A# store on the Sparc Solaris platform.  The setting below is the default; you need to[17C
+
+[A# specify this option only if your library settings differ. This option is required if any[17C
+
+[A# Communications Express Mail users use the Sparc Solaris platform.[17C
+
+[A#
+
+[A# platformSolarisSparc==MOZILLA:library=libsoftokn3.so;[17C
+
+[A#
+
+[A#
+
+[A#
+
+[A# Controls the initial setting for whether all outgoing messages[17C
+
+[A# are automatically encrypted for all Communications Express Mail users[17C
+
+[A# with permission to use S/MIME.[15D
+
+[A#
+
+[A# Choose one of these values:[12D
+
+[A#   0 - do not encrypt messages. The encryption checkboxes[17C
+
+[A#[7Cwithin Communications Express Mail are displayed as unchecked. This is the default.[17C
+
+[A#   1 - always encrypt messages.The encryption checkboxes[17C
+
+[A#[7Cwithin Communications Express Mail are displayed as checked.[17C
+
+[A#
+
+[A# alwaysencrypt==0
+
+[A#
+
+[A#
+
+[A# Controls the initial setting for whether all outgoing messages[17C
+
+[A# are automatically signed for all Communications Express Mail users[17C
+
+[A# with permission to use S/MIME.[15D
+
+[A# Choose one of these values:[12D
+
+[A#   0 - do not sign messages. The signature checkboxes within[17C
+
+[A#[7CCommunications Express Mail are displayed as unchecked. This is the default.[17C
+
+[A#   1 - always sign messages. The signature checkboxes within[17C
+
+[A#[7CCommunications Express Mail are displayed as checked.[17C
+
+[A#
+
+[A# alwayssign==0
+
+[A#
+
+[A#
+
+[A# Certificate Validation Support - Each of the following specifiers is optional.[17C
+
+[A#
+
+[A#
+
+[A# Controls whether certificates are checked against CRLs. If[17C
+
+[A# there is a match, a certificate is considered revoked. The[17C
+
+[A# values of the send*revoked parameters determine whether a revoked[17C
+
+[A# certificate is rejected or used by Communications Express Mail.[17C
+
+[A# Choose one of these values:[12D
+
+[A#   0 - each certificate is not checked against a CRL.[17C
+
+[A#   1 - each certificate is checked against a CRL. This is the default.[17C
+
+[A#
+
+[Acrlenable==1
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the directory path information to locate the[17C
+
+[A# database where CRL information is stored.[17C
+
+[A#
+
+[Acrldir==/opt/sun/comms/messaging64/data/store/mboxlist/[17C
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the Root UID for LDAP access to all[17C
+
+[A# the URLs specified in the CRL Mapping table. It is optional; if not specified,[17C
+
+[A# the credentials of the iMS server are used. If specified, crlurlloginpw must also be specified.[17C
+
+[A# Note: any local credentials appended to a URL in the CRL Mapping table are used instead of this specifi
+
+[Acation.[38;18H
+
+
+[A#
+
+[Acrlurllogindn==cn=Directory Manager[18D
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the password for LDAP access to all[17C
+
+[A# the URLs specified in the CRL Mapping table. It is optional; if not specified,[17C
+
+[A# the credentials of the iMS server are used. If specified, crlurllogindn must also be specified.[17C
+
+[A# Note: any local credentials appended to a URL in the CRL Mapping table are used instead of this specifi
+
+[Acation.[38;18H
+
+
+[A#
+
+[Acrlurlloginpw==netscape[6D
+
+[A#
+
+[A#
+
+[A# The following entry is used to locate the CRL mapping.[17C
+
+[A# (format: crlmappingurl==ldap url of CRL map)[17C
+
+[A# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:[17C
+
+[A# |<logindn>|<loginpw>[A[A[A[A[A[33;18H[A[30;18H[A[A[A[A[A[24;18H[A[21;18H[A[A
+
+
+
+
+[17C
+
+
+[17C
+
+
+
+
+
+[17C[7C$[8D6dtualegs
+
+
+[23C
+
+
+
+
+[A# Both or neither must appear.[7D
+
+[A# Note: the administrator must create the ldap entry for "SMIME".[23C
+
+[A#
+
+[A#crlmappingurl==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com, dc=red,dc=ipl
+
+[Aanet,dc=com?msgCRLMappingRecord?sub?(objectclass=msgCRLMappingTable)[38;24H
+
+
+[A#crlmappingurl=="http://marceau.red.iplanet.com/cert.crl"[23C
+
+[A#crlmappingurl==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com,dc=red,dc=ipla
+
+[Anet,dc=com?certificaterevocationlist;binary?sub?[38;24H
+
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the time interval before the received time on messages.[23C
+
+[A# (format: timestampdelta==<numberofseconds>)[22D
+
+[A#
+
+[A# timestampdelta==360
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the time interval to wait after multiple CRL attempts.[23C
+
+[A# crlaccessfail==#fails:#mins:#minswait[16D
+
+[A#     where   #fails    = number of CRL URL failures before triggering wait[23C
+
+[A#[13C#mins     = number of minutes during which the #fails must occur[23C
+
+[A#[13C#minswait = number of minutes to wait until another CRL URL attempt will be allowed[23C
+
+[A#     If crlaccessfail is used, no fields are optional, and all values must be greater than 0.[23C
+
+[A#
+
+[A# crlaccessfail==2:20:10
+
+[A#
+
+[A#
+
+[A# Controls whether an SSL communications link is used when[23C
+
+[A# checking a certificate against a CRL .[17D
+
+[A#
+
+[A# Choose one of these values:[6D
+
+[A#   0 - do not use an SSL communications link.[23D
+
+[A#   1 - use an SSL communications link. This is the default.[23C
+
+[A#
+
+[Acheckoverssl==0
+
+[A#
+
+[A#
+
+[A# Controls whether the certificate used to sign a message is[23C
+
+[A# checked against a CRL when the message is read.[23C
+
+[A# Choose one of these values:[6D
+
+[A#   0 - do not check the certificate against a CRL.[23C
+
+[A#   1 - check the certificate against a CRL. This is the default.[23C
+
+[A#
+
+[A#readsigncert==1
+
+[A#
+
+[A#
+
+[A# Determines the action to take when an ambiguous status is[23C
+
+[A# returned when checking a certificate against a CRL. In this case,[23C
+
+[A# it is not certain if the certificate is valid or has a revoked status.[23C
+
+[A# Choose one of these values:[6D
+
+[A#   ok[6C- treat the certificate as valid.[22D
+
+[A#   revoked - treat the certificate as revoked. This is the default.[23C
+
+[A#
+
+[Arevocationunknown==ok
+
+[A#
+
+[A#
+
+[A# Controls whether a certificate used to encrypt an outgoing[23C
+
+[A# message is checked against a CRL before using it.[23C
+
+[A# Choose one of these values:[6D
+
+[A#   0 - do not check the certificate against a CRL.[23C
+
+[A#   1 - check the certificate against a CRL. This is the default.[23C
+
+[A#
+
+[Asendencryptcert==1
+
+[A#
+
+[A#
+
+[A# Determines the action to take if a certificate used to encrypt[23C
+
+[A# an outgoing message has been revoked.[16D
+
+[A# Choose one of these values:[6D
+
+[A#   allow    - use the certificate.[12D
+
+[A#   disallow - do not use the certificate. This is the default.[23C
+
+[A#
+
+[Asendencryptcertrevoked==allow[6D
+
+[A#
+
+[A#
+
+[A# Controls whether a certificate used for signing an outgoing[23C
+
+[A# message is checked against a CRL before using it.[23C
+
+[A# Choose one of these values:[6D
+
+[A#   0 - do not check the certificate against a CRL.[23C
+
+[A#   1 - check the certificate against a CRL. This is the default.[23C
+
+[A#
+
+[Asendsigncert==1
+
+[A#
+
+[A#
+
+[A# Determines the action to take if the certificate used to sign an[23C
+
+[A# outgoing message has been revoked.[13D
+
+[A# Choose one of these values:[6D
+
+[A#   allow    - use the certificate.[12D
+
+[A#   disallow - do not use the certificate. This is the default.[23C
+
+[A#
+
+[Asendsigncertrevoked==allow
+
+[A#
+
+[A#
+
+[A# The following entry specifies whether to continue to use a CRL after its[23C
+
+[A# next update date (in case a new CRL is not available or accessible).[23C
+
+[A# Choose one of these values:[6D
+
+[A#   0 - do not use a CRL after its next update date.[23C
+
+[A#   1 - continue to use a CRL after its next update date. This is the default.[23C
+
+[A#
+
+[Acrlusepastnextupdate==1
+
+[A#
+
+[A# To enable applet logging
+
+[A#
+
+[Aappletlogging==1
+"smime.conf" 265 lines, 10950 characters 
+[J[?1l>[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 252
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 root     root        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 root     root        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+-rw-------   1 root     root         10K Sep 30 14:59 smime.conf.orig
+-rw-r--r--   1 guest    mysql        11K Sep 30 15:02 smime.conf
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 252
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 root     root        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 root     root        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+-rw-------   1 root     root         10K Sep 30 14:59 smime.conf.orig
+-rw-r--r--   1 guest    mysql        11K Sep 30 15:02 smime.conf
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# chown mailsrv:mail *
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 252
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 mailsrv  mail        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 mailsrv  mail        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+-rw-------   1 mailsrv  mail         10K Sep 30 14:59 smime.conf.orig
+-rw-r--r--   1 mailsrv  mail         11K Sep 30 15:02 smime.conf
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# vi smime.conf
+bash: vim: command not found
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 252
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 mailsrv  mail        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 mailsrv  mail        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+-rw-------   1 mailsrv  mail         10K Sep 30 14:59 smime.conf.orig
+-rw-r--r--   1 mailsrv  mail         11K Sep 30 15:02 smime.conf
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# \vi smime.conf
+[40;1H[?1h="smime.conf" 265 lines, 10950 characters [H[J#[H
+#  smime.conf - Example SMIME configuration
+#
+#
+#  File Format rules:
+#[7CEach entry must begin at the start of a new line.
+#[7CEach entry consists of LHS==RHS
+#[7CEach LHS is a case insensitive keyword.
+#[7CWhite space is not allowed before the ==.
+#[7CAll blank lines or lines where first non-blank character is # are comments.
+#
+#
+# The following entry is used to search for certificates by attributes of directory objects.
+# It is used in conjunction with the certurl.
+# It is required when smime features are enabled.
+# Use any combinations of these three email address attributes (but at least one).
+#
+userCertFilter==(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))
+#
+#
+# The following entry is used to search for trusted certificates used to verify user certificates.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+# Note: the administrator must create the ldap entry for "SMIME".
+#
+trustedurl==ldap://commsdemo.demo.sun.com:389/cn=SMIME, ou=people, o=demo.sun.com, o=isp?cacertificate;bi
+nary?sub?(objectclass=certificationauthority)
+#
+#
+# The following entry is used to search for user certificates. The filter in userCertFilter is
+# appended to this url with the "%e" specifiers replaced by the email address of the user for
+# whom certificates are being searched.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+#[H[39B"smime.conf" 265 lines, 10950 characters[H[39B[K
+[Acerturl==ldap://commsdemo.demo.sun.com:389/ou=people, o=demo.sun.com, o=isp?userCertificate;binary?sub?
+
+[A#
+
+[A#
+
+[A# The following entry is used to locate the Root certificates used for secure HTTP protocol
+
+[A# It is required when smime features are enabled and SSL protocols are enabled.
+
+[A# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+
+[A# |<logindn>|<loginpw>
+
+[A# Both or neither must appear.
+
+[A# Note: the administrator must create the ldap entry for "SSL Root CA Certs".
+
+[A#
+
+[A#sslRootCACertsURL==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com, dc=red,dc
+
+[A=iplanet,dc=com?cacertificate;binary?sub?(objectclass=certificationauthority)
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the Root UID for LDAP access to all
+
+[A# the URLs specified in this configuration file. It is optional; if not specified,
+
+[A# the credentials of the iMS server are used. If specified, loginpw must also be specified.
+
+[A# Note: any local credentials appended to a URL are used instead of this specification.
+
+[A#
+
+[Alogindn==cn=Directory Manager[H[39B
+[A#
+
+[A#
+
+[A# The following entry is used to specify the password for LDAP access to all
+
+[A# the URLs specified in this configuration file. It is optional; if not specified,
+
+[A# the credentials of the iMS server are used. If specified, logindn must also be specified.
+
+[A# Note: any local credentials appended to a URL are used instead of this specification.
+
+[A#
+
+[Aloginpw==6dtualegs
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key
+
+[A# store on the Windows platform.  The setting below is the default; you need to
+
+[A# specify this option only if your library settings differ. This option is required if any
+
+[A# Communications Express Mail users use the Windows platform.
+
+[A#
+
+[AplatformWin==CAPI:library=capibridge.dll;CAC:library=acpkcs211.dll;
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key[H
+[38B
+[A# store on the Macintosh platform.  The setting below is the default; you need to
+
+[A# specify this option only if your library settings differ. This option is required if any
+
+[A# Communications Express Mail users use the Macintosh platform.
+
+[A#
+
+[A# platformMac==MOZILLA:library=libsoftokn3.dylib;
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key
+
+[A# store on the Linux platform.  The setting below is the default; you need to
+
+[A# specify this option only if your library settings differ. This option is required if any
+
+[A# Communications Express Mail users use the Linux platform.
+
+[A#
+
+[A# platformLinuxx86==MOZILLA:library=libsoftokn3.so;
+
+[A#
+
+[A#
+
+[A# Specifies one or more library names needed by smart cards or local key
+
+[A# store on the Sparc Solaris platform.  The setting below is the default; you need to
+
+[A# specify this option only if your library settings differ. This option is required if any
+
+[A# Communications Express Mail users use the Sparc Solaris platform.[H
+
+[37B
+[A#
+
+[A# platformSolarisSparc==MOZILLA:library=libsoftokn3.so;
+
+[A#
+
+[A#
+
+[A#
+
+[A# Controls the initial setting for whether all outgoing messages
+
+[A# are automatically encrypted for all Communications Express Mail users
+
+[A# with permission to use S/MIME.
+
+[A#
+
+[A# Choose one of these values:
+
+[A#   0 - do not encrypt messages. The encryption checkboxes
+
+[A#[7Cwithin Communications Express Mail are displayed as unchecked. This is the default.
+
+[A#   1 - always encrypt messages.The encryption checkboxes
+
+[A#[7Cwithin Communications Express Mail are displayed as checked.
+
+[A#
+
+[A# alwaysencrypt==0
+
+[A#
+
+[A#
+
+[A# Controls the initial setting for whether all outgoing messages[H
+
+[37B
+[A# are automatically signed for all Communications Express Mail users
+
+[A# with permission to use S/MIME.
+
+[A# Choose one of these values:
+
+[A#   0 - do not sign messages. The signature checkboxes within
+
+[A#[7CCommunications Express Mail are displayed as unchecked. This is the default.
+
+[A#   1 - always sign messages. The signature checkboxes within
+
+[A#[7CCommunications Express Mail are displayed as checked.
+
+[A#
+
+[A# alwayssign==0
+
+[A#
+
+[A#
+
+[A# Certificate Validation Support - Each of the following specifiers is optional.
+
+[A#
+
+[A#
+
+[A# Controls whether certificates are checked against CRLs. If
+
+[A# there is a match, a certificate is considered revoked. The
+
+[A# values of the send*revoked parameters determine whether a revoked
+
+[A# certificate is rejected or used by Communications Express Mail.
+
+[A# Choose one of these values:[H
+
+[37B
+[A#   0 - each certificate is not checked against a CRL.
+
+[A#   1 - each certificate is checked against a CRL. This is the default.
+
+[A#
+
+[Acrlenable==1
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the directory path information to locate the
+
+[A# database where CRL information is stored.
+
+[A#
+
+[Acrldir==/opt/sun/comms/messaging64/data/store/mboxlist/
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the Root UID for LDAP access to all
+
+[A# the URLs specified in the CRL Mapping table. It is optional; if not specified,
+
+[A# the credentials of the iMS server are used. If specified, crlurlloginpw must also be specified.
+
+[A# Note: any local credentials appended to a URL in the CRL Mapping table are used instead of this specifi
+
+[Acation.
+
+[A#
+
+[Acrlurllogindn==cn=Directory Manager
+
+[A#[H
+[38B
+[A#
+
+[A# The following entry is used to specify the password for LDAP access to all
+
+[A# the URLs specified in the CRL Mapping table. It is optional; if not specified,
+
+[A# the credentials of the iMS server are used. If specified, crlurllogindn must also be specified.
+
+[A# Note: any local credentials appended to a URL in the CRL Mapping table are used instead of this specifi
+
+[Acation.
+
+[A#
+
+[Acrlurlloginpw==6dtualegs
+
+[A#
+
+[A#
+
+[A# The following entry is used to locate the CRL mapping.
+
+[A# (format: crlmappingurl==ldap url of CRL map)
+
+[A# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+
+[A# |<logindn>|<loginpw>
+
+[A# Both or neither must appear.
+
+[A# Note: the administrator must create the ldap entry for "SMIME".
+
+[A#
+
+[A#crlmappingurl==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com, dc=red,dc=ipl
+
+[Aanet,dc=com?msgCRLMappingRecord?sub?(objectclass=msgCRLMappingTable)
+
+[A#crlmappingurl=="http://marceau.red.iplanet.com/cert.crl"
+
+[A#crlmappingurl==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com,dc=red,dc=ipla
+
+[Anet,dc=com?certificaterevocationlist;binary?sub?[Hcrlenable==0[H7[1;40r8M[1;40r8#[40;1H[K[A@[K[H#[H7[1;40r8M[1;40r8#   1 - each certificate is checked against a CRL. This is the default.[40;1H[K[1;12H[H7[1;40r8M[1;40r8#   0 - each certificate is not checked against a CRL.[40;1H[K[1;12H[H7[1;40r8M[1;40r8# Choose one of these values:[40;1H[K[A@[K[1;12H[H7[1;40r8M[1;40r8# certificate is rejected or used by Communications Express Mail.[40;1H[K[1;12H[H7[1;40r8M[1;40r8# values of the send*revoked parameters determine whether a revoked[40;1H[K[1;12H[H7[1;40r8M[1;40r8# there is a match, a certificate is considered revoked. The[40;1H[K[1;12H
+
+
+
+
+
+#
+[10C
+
+
+[11C
+
+
+[11C
+
+
+[11C
+
+
+
+
+
+[11C
+
+
+[11C
+
+
+
+
+
+[11C
+
+
+[11C
+
+
+
+
+
+[A# Note: the administrator must create the ldap entry for "SMIME".[11C
+
+[A#
+
+[A#crlmappingurl==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com, dc=red,dc=ipl
+
+[Aanet,dc=com?msgCRLMappingRecord?sub?(objectclass=msgCRLMappingTable)[38;12H
+
+
+[A#crlmappingurl=="http://marceau.red.iplanet.com/cert.crl"[11C
+
+[A#crlmappingurl==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com,dc=red,dc=ipla
+
+[Anet,dc=com?certificaterevocationlist;binary?sub?[38;12H
+
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the time interval before the received time on messages.[11C
+
+[A# (format: timestampdelta==<numberofseconds>)[11C
+
+[A#
+
+[A# timestampdelta==360[10D
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the time interval to wait after multiple CRL attempts.[11C
+
+[A# crlaccessfail==#fails:#mins:#minswait[11C
+
+[A#     where   #fails    = number of CRL URL failures before triggering wait[11C
+
+[A#[13C#mins     = number of minutes during which the #fails must occur[11C
+
+[A#[13C#minswait = number of minutes to wait until another CRL URL attempt will be allowed[11C
+
+[A#     If crlaccessfail is used, no fields are optional, and all values must be greater than 0.[11C
+
+[A#
+
+[A# crlaccessfail==2:20:10[11C
+
+[A#
+
+[A#
+
+[A# Controls whether an SSL communications link is used when[11C
+
+[A# checking a certificate against a CRL .[11C
+
+[A#
+
+[A# Choose one of these values:[11C
+
+[A#   0 - do not use an SSL communications link.[11C
+
+[A#   1 - use an SSL communications link. This is the default.[11C
+
+[A#
+
+[Acheckoverssl==0
+
+[A#
+
+[A#
+
+[A# Controls whether the certificate used to sign a message is[11C
+
+[A# checked against a CRL when the message is read.[11C
+
+[A# Choose one of these values:[11C
+
+[A#   0 - do not check the certificate against a CRL.[11C
+
+[A#   1 - check the certificate against a CRL. This is the default.[11C
+
+[A#
+
+[A#readsigncert==1
+
+[A#
+
+[A#
+
+[A# Determines the action to take when an ambiguous status is[11C
+
+[A# returned when checking a certificate against a CRL. In this case,[11C
+
+[A# it is not certain if the certificate is valid or has a revoked status.[11C
+
+[A# Choose one of these values:[11C
+
+[A#   ok[6C- treat the certificate as valid.[11C
+
+[A#   revoked - treat the certificate as revoked. This is the default.[11C
+
+[A#
+
+[Arevocationunknown==ok[10D
+
+[A#
+
+[A#
+
+[A# Controls whether a certificate used to encrypt an outgoing[11C
+
+[A# message is checked against a CRL before using it.[11C
+
+[A# Choose one of these values:[11C
+
+[A#   0 - do not check the certificate against a CRL.[11C
+
+[A#   1 - check the certificate against a CRL. This is the default.[11C
+
+[A#
+
+[Asendencryptcert==1[7D
+
+[A#
+
+[A#
+
+[A# Determines the action to take if a certificate used to encrypt[11C
+
+[A# an outgoing message has been revoked.[11C
+
+[A# Choose one of these values:[11C
+
+[A#   allow    - use the certificate.[11C
+
+[A#   disallow - do not use the certificate. This is the default.[11C
+
+[A#
+
+[Asendencryptcertrevoked==allow[11C
+
+[A#
+
+[A#
+
+[A# Controls whether a certificate used for signing an outgoing[11C
+
+[A# message is checked against a CRL before using it.[11C
+
+[A# Choose one of these values:[11C
+
+[A#   0 - do not check the certificate against a CRL.[11C
+
+[A#   1 - check the certificate against a CRL. This is the default.[11C
+
+[A#
+
+[Asendsigncert==1
+
+[A#
+
+[A#
+
+[A# Determines the action to take if the certificate used to sign an[11C
+
+[A# outgoing message has been revoked.[11C
+
+[A# Choose one of these values:[11C
+
+[A#   allow    - use the certificate.[11C
+
+[A#   disallow - do not use the certificate. This is the default.[11C
+
+[A#
+
+[Asendsigncertrevoked==allow[11C
+
+[A#
+
+[A#
+
+[A# The following entry specifies whether to continue to use a CRL after its[11C
+
+[A# next update date (in case a new CRL is not available or accessible).[11C
+
+[A# Choose one of these values:[11C
+
+[A#   0 - do not use a CRL after its next update date.[11C
+
+[A#   1 - continue to use a CRL after its next update date. This is the default.[11C
+
+[A#
+
+[Acrlusepastnextupdate==1[12D
+
+[A#
+
+[A# To enable applet logging[11C
+
+[A#
+
+[Aappletlogging==1ng==
+"smime.conf" 265 lines, 10950 characters 
+[J[?1l>[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 252
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 mailsrv  mail        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 mailsrv  mail        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+-rw-------   1 mailsrv  mail         10K Sep 30 14:59 smime.conf.orig
+-rw-r--r--   1 mailsrv  mail         11K Sep 30 15:03 smime.conf
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# configutil |grep http
+local.service.http.smtpauthpassword = 6dtualegs
+service.http.enable = 1
+service.http.port = 2080
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 252
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 mailsrv  mail        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 mailsrv  mail        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+-rw-------   1 mailsrv  mail         10K Sep 30 14:59 smime.conf.orig
+-rw-r--r--   1 mailsrv  mail         11K Sep 30 15:03 smime.conf
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# 
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 252
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 mailsrv  mail        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 mailsrv  mail        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-------   1 mailsrv  mail          10 Sep 27 23:14 store.parts
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+-rw-------   1 mailsrv  mail         10K Sep 30 14:59 smime.conf.orig
+-rw-r--r--   1 mailsrv  mail         11K Sep 30 15:03 smime.conf
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# cd /opt/sun/comms/iwc/
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc[0;1;22m# ls
+total 19
+drwxr-xr-x   5 bin      bin           11 Sep 23 15:30 lib
+drwxr-xr-x   4 bin      bin            4 Sep 23 15:30 web-src
+lrwxrwxrwx   1 root     root          29 Sep 24 01:30 config -> /var/opt/sun/comms/iwc/config
+lrwxrwxrwx   1 root     root          22 Sep 24 01:30 data -> /var/opt/sun/comms/iwc
+lrwxrwxrwx   1 root     root           9 Sep 24 01:30 logs -> data/logs
+drwxr-xr-x   2 bin      bin           10 Sep 24 01:30 sbin
+drwx------   3 bin      bin            5 Sep 24 01:34 install
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc[0;1;22m# cd sbin/
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# ls
+total 77
+-rwxr-xr-x   1 bin      bin          723 Jul  7  2008 iwcadmin
+-rwxr-xr-x   1 bin      bin         1.8K Jul  7  2008 locatejdk
+-rwxr-xr-x   1 bin      bin          589 Sep  6 18:58 xslTransform
+-rwxr-xr-x   1 bin      bin         3.6K Sep  6 18:58 init-config
+-rwxr-xr-x   1 bin      bin         9.7K Sep  6 18:58 config-servicetags
+-rwxr-x---   1 bin      bin          431 Sep 24 01:30 config-unwar
+-rwxr-x---   1 bin      bin          12K Sep 24 01:30 config-appsvr
+-rwxr-x---   1 bin      bin          564 Sep 24 01:30 config-rewar
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# ./iwcadmin -u admin -w 6dtualegs -l|grep smime
+smime.enable = false
+user.smime.enablepreview = no
+user.smime.sendencrypted = no
+user.smime.sendsigned = no
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# ./iwcadmin -u admin -w 6dtualegs -l|grep smime            o smime.enable -v true
+smime.enable updated successfully
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# [K./iwcadmin -u admin -w 6dtualegs -o smime.enable -v truel|grep smime[K
+smime.enable = true
+user.smime.enablepreview = no
+user.smime.sendencrypted = no
+user.smime.sendsigned = no
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# ls
+total 77
+-rwxr-xr-x   1 bin      bin          723 Jul  7  2008 iwcadmin
+-rwxr-xr-x   1 bin      bin         1.8K Jul  7  2008 locatejdk
+-rwxr-xr-x   1 bin      bin          589 Sep  6 18:58 xslTransform
+-rwxr-xr-x   1 bin      bin         3.6K Sep  6 18:58 init-config
+-rwxr-xr-x   1 bin      bin         9.7K Sep  6 18:58 config-servicetags
+-rwxr-x---   1 bin      bin          431 Sep 24 01:30 config-unwar
+-rwxr-x---   1 bin      bin          12K Sep 24 01:30 config-appsvr
+-rwxr-x---   1 bin      bin          564 Sep 24 01:30 config-rewar
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# ls
+total 77
+-rwxr-xr-x   1 bin      bin          723 Jul  7  2008 iwcadmin
+-rwxr-xr-x   1 bin      bin         1.8K Jul  7  2008 locatejdk
+-rwxr-xr-x   1 bin      bin          589 Sep  6 18:58 xslTransform
+-rwxr-xr-x   1 bin      bin         3.6K Sep  6 18:58 init-config
+-rwxr-xr-x   1 bin      bin         9.7K Sep  6 18:58 config-servicetags
+-rwxr-x---   1 bin      bin          431 Sep 24 01:30 config-unwar
+-rwxr-x---   1 bin      bin          12K Sep 24 01:30 config-appsvr
+-rwxr-x---   1 bin      bin          564 Sep 24 01:30 config-rewar
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# stop
+Connecting to watcher ...
+Shutting down all servers...
+Stopping job_controller server 22165 .... done
+Stopping dispatcher server 22128 ... done
+Stopping sched server 22084 ... done
+Stopping http server 21976 ... done
+cert server is not running
+Stopping pop server 21935 ... done
+Stopping imap server 21934 .... done
+Stopping purge server 21933 ... done
+Stopping store server 21932 .... done
+Stopping metermaid server 21931 ... done
+Stopping watcher 21930 ... done
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# start[H[J[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# start
+Connecting to watcher ...
+Launching watcher ... 5791
+Starting metermaid server .... 5792
+Starting store server .... 5793
+Checking store server status ...... ready
+Starting purge server .... 5794
+Starting imap server ..... 5795
+Starting pop server ..... 5796
+Starting cert server .... 5797
+Starting http server ..... 5798
+Starting sched server ... 5799
+Starting dispatcher server .... 5801
+Starting job_controller server .... 5808
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# ls
+total 77
+-rwxr-xr-x   1 bin      bin          723 Jul  7  2008 iwcadmin
+-rwxr-xr-x   1 bin      bin         1.8K Jul  7  2008 locatejdk
+-rwxr-xr-x   1 bin      bin          589 Sep  6 18:58 xslTransform
+-rwxr-xr-x   1 bin      bin         3.6K Sep  6 18:58 init-config
+-rwxr-xr-x   1 bin      bin         9.7K Sep  6 18:58 config-servicetags
+-rwxr-x---   1 bin      bin          431 Sep 24 01:30 config-unwar
+-rwxr-x---   1 bin      bin          12K Sep 24 01:30 config-appsvr
+-rwxr-x---   1 bin      bin          564 Sep 24 01:30 config-rewar
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# cd /opt/c/
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# /opt/S
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# appstop
+bash: /opt/glassfishv3/bin/asadmin: No such file or directory
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# /opt/Sa  
+SUNWam/                SUNWappserverMGW.old/  SUNWjstl/              SUNWwbsvr7/
+SUNWappserver/         SUNWdsee/              SUNWma/                Scripts/
+SUNWappserverCS7/      SUNWimq/               SUNWmfwk/              etc/
+SUNWappserverCS7.old/  SUNWits/               SUNWmlib/              mysql/
+SUNWappserverCS7.old2/ SUNWjax/               SUNWrtvc/              staroffice8/
+SUNWappserverMGW/      SUNWjdmk/              SUNWstjapi/            sun/
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/iwc/sbin[0;1;22m# /opt/S      cd /
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/[0;1;22m# ls
+total 1084
+drwxr-xr-x   4 root     root           4 Jan 26  2009 system
+drwxr-xr-x   2 root     sys            2 Jan 26  2009 mnt
+drwxr-xr-x   7 root     sys           24 Jan 26  2009 platform
+drwxr-xr-x   2 root     sys           44 Jan 26  2009 sbin
+drwxr-xr-x   7 root     bin          233 Jan 26  2009 lib
+lrwxrwxrwx   1 root     root           9 Sep 14 16:29 bin -> ./usr/bin
+drwxr-xr-x  12 root     other         51 Sep 14 16:54 dev
+dr-xr-xr-x   1 root     root           1 Sep 14 16:54 net
+dr-xr-xr-x   1 root     root           1 Sep 14 16:54 home
+drwxr-xr-x   3 root     sys            3 Sep 23 10:45 export
+drwxr-xr-x   7 root     root          10 Sep 23 13:10 DSEE
+drwxr-xr-x   3 root     root           4 Sep 23 14:20 JIS5
+drwxr-xr-x   6 root     root           8 Sep 23 15:14 JCS7
+drwxr-xr-x  40 root     sys           54 Sep 23 15:50 usr
+drwxr-xr-x   2 root     root           3 Sep 23 15:55 Glassfish
+drwxr-xr-x  44 root     sys           44 Sep 24 15:11 var
+drwxr-xr-x   2 root     root           3 Sep 27 00:52 APPSRV91DEV
+drwxr-xr-x   2 root     root           3 Sep 27 00:52 MobileGW
+drwxr-xr-x  26 root     sys           27 Sep 27 02:10 opt
+-rw-r--r--   1 root     root         602 Sep 27 17:04 Installation
+-rwxr-xr-x   1 root     root         851 Sep 29 00:02 stopit.sh
+-rw-r--r--   1 root     root          62 Sep 29 00:13 pwfile
+-rwxr-xr-x   1 root     root         973 Sep 29 00:25 startit.sh
+drwxr-xr-x  76 root     sys          214 Sep 29 12:10 etc
+drwxrwxrwt  12 root     sys         1.9K Sep 30 15:10 tmp
+dr-xr-xr-x 291 root     root        469K Sep 30 15:11 proc
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/[0;1;22m# cd    more startit.sh 
+#!/bin/sh
+./stopit.sh
+echo "Starting Java System Server Daemons"
+echo "Starting LDAP...."
+/opt/SUNWdsee/ds6/bin/dsadm start /var/opt/SUNWdsee/dsins1
+sleep 30
+echo "LDAP started."
+echo "Starting Messaging Server..."
+/opt/sun/comms/messaging64/sbin/start-msg
+echo "Messaging Started."
+echo "Starting Web Server..."
+/var/opt/SUNWwbsvr7/admin-server/bin/startserv
+/var/opt/SUNWwbsvr7/https-commsdemo.demo.sun.com/bin/startserv
+echo "Web Server Started."
+echo "Starting Admin Server"
+echo "Starting Calendar Server..."
+/opt/sun/comms/calendar/SUNWics5/cal/sbin/start-cal
+sleep 30
+echo "Calendar Started"
+echo "Starting Access Manager..."
+/etc/init.d/amserver start
+sleep 15
+echo "Starting Instant Messaging Server..."
+/opt/sun/comms/im/sbin/imadmin start
+echo "Instant Messaging Started."
+echo "Starting App Server"
+/opt/SUNWappserver/bin/asadmin start-domain --user admin --passwordfile pwfile domain1
+echo "App Server Started"
+echo "All Java System Server Processes Started"
+
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/[0;1;22m# /opt/SUNWappserver/bin/asadmin stop-domain
+Domain domain1 stopped.
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/[0;1;22m# /opt/SUNWappserver/bin/asadmin start-domain --user admin --passwordfile pwfile domain1
+Starting Domain domain1, please wait.
+Default Log location is /opt/SUNWappserver/domains/domain1/logs/server.log.
+Redirecting output to /opt/SUNWappserver/domains/domain1/logs/server.log
+Domain domain1 started.
+Domain [domain1] is running [Sun GlassFish Enterprise Server v2.1 Patch02 (9.1_02 Patch08) (build b02-p02)] with its configuration and logs at: [/opt/SUNWappserver/domains].
+Admin Console is available at [https://localhost:4848].
+Use the same port [4848] for "asadmin" commands.
+User web applications are available at these URLs:
+[http://localhost:80 https://localhost:8181 ].
+Following web-contexts are available:
+[/web1  /__wstx-services /iwc rest searchui store ].
+Standard JMX Clients (like JConsole) can connect to JMXServiceURL:
+[service:jmx:rmi:///jndi/rmi://commsdemo.demo.sun.com:8686/jmxrmi] for domain management purposes.
+Domain listens on at least following ports for connections:
+[80 8181 4848 3700 3820 3920 8686 ].
+Domain supports application server clusters and other standalone instances.
+
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/[0;1;22m# [Kls
+total 1084
+drwxr-xr-x   4 root     root           4 Jan 26  2009 system
+drwxr-xr-x   2 root     sys            2 Jan 26  2009 mnt
+drwxr-xr-x   7 root     sys           24 Jan 26  2009 platform
+drwxr-xr-x   2 root     sys           44 Jan 26  2009 sbin
+drwxr-xr-x   7 root     bin          233 Jan 26  2009 lib
+lrwxrwxrwx   1 root     root           9 Sep 14 16:29 bin -> ./usr/bin
+drwxr-xr-x  12 root     other         51 Sep 14 16:54 dev
+dr-xr-xr-x   1 root     root           1 Sep 14 16:54 net
+dr-xr-xr-x   1 root     root           1 Sep 14 16:54 home
+drwxr-xr-x   3 root     sys            3 Sep 23 10:45 export
+drwxr-xr-x   7 root     root          10 Sep 23 13:10 DSEE
+drwxr-xr-x   3 root     root           4 Sep 23 14:20 JIS5
+drwxr-xr-x   6 root     root           8 Sep 23 15:14 JCS7
+drwxr-xr-x  40 root     sys           54 Sep 23 15:50 usr
+drwxr-xr-x   2 root     root           3 Sep 23 15:55 Glassfish
+drwxr-xr-x  44 root     sys           44 Sep 24 15:11 var
+drwxr-xr-x   2 root     root           3 Sep 27 00:52 APPSRV91DEV
+drwxr-xr-x   2 root     root           3 Sep 27 00:52 MobileGW
+drwxr-xr-x  26 root     sys           27 Sep 27 02:10 opt
+-rw-r--r--   1 root     root         602 Sep 27 17:04 Installation
+-rwxr-xr-x   1 root     root         851 Sep 29 00:02 stopit.sh
+-rw-r--r--   1 root     root          62 Sep 29 00:13 pwfile
+-rwxr-xr-x   1 root     root         973 Sep 29 00:25 startit.sh
+drwxr-xr-x  76 root     sys          214 Sep 29 12:10 etc
+drwxrwxrwt  12 root     sys         1.9K Sep 30 15:10 tmp
+dr-xr-xr-x 291 root     root        469K Sep 30 15:18 proc
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/[0;1;22m# cd    mslog
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# ls
+total 34
+-rw-------   1 mailsrv  mail          58 Sep 30 15:10 watcher
+-rw-------   1 mailsrv  mail         463 Sep 30 15:10 metermaid
+-rw-------   1 mailsrv  mail          11 Sep 30 15:10 stored.rdy
+-rw-------   1 mailsrv  mail         434 Sep 30 15:10 default
+-rw-r-----   1 mailsrv  mail           0 Sep 30 15:10 dispatcher.log-0KQT004001M5H500
+-rw-------   1 mailsrv  mail           0 Sep 30 15:10 tcp_smtp_server.log-0KQT004021M5H500
+-rw-------   1 mailsrv  mail           0 Sep 30 15:10 tcp_smtp_server.log-0KQT004041M5H500
+-rw-------   1 mailsrv  mail           0 Sep 30 15:10 tcp_submit_server.log-0KQT004061M5H500
+-rw-------   1 mailsrv  mail           0 Sep 30 15:10 job_controller.log-0KQT004001M5HC00
+-rw-------   1 mailsrv  mail         497 Sep 30 15:15 pop
+-rw-------   1 mailsrv  mail        1.1K Sep 30 15:16 http
+-rw-------   1 mailsrv  mail         645 Sep 30 15:16 imap
+-rw-------   1 mailsrv  mail          11 Sep 30 15:17 stored.ckp
+-rw-------   1 mailsrv  mail          11 Sep 30 15:17 stored.lcu
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# less http 
+[?1h=[40;1H[K[30/Sep/2009:15:10:50 -0700] commsdemo httpd[5797]: General Information: Log created (1254348650)
+[30/Sep/2009:15:10:50 -0700] commsdemo httpd[5797]: General Warning: mscertd_initialize: configuration ha
+s CRLD disabled
+[30/Sep/2009:15:10:50 -0700] commsdemo httpd[5797]: General Warning: Sun Java(tm) System Messaging Server
+ mscertd 7.3-11.01 64bit (built Sep  1 2009) starting up
+[30/Sep/2009:15:10:51 -0700] commsdemo httpd[5798]: General Warning: mscertd_initialize: configuration ha
+s CRLD disabled
+[30/Sep/2009:15:10:51 -0700] commsdemo httpd[5798]: General Notice: jmqNotify plugin loaded: index
+[30/Sep/2009:15:10:52 -0700] commsdemo httpd[5798]: General Warning: Sun Java(tm) System Messaging Server
+ mshttpd 7.3-11.01 64bit (built Sep  1 2009) starting up
+[30/Sep/2009:15:15:01 -0700] commsdemo httpd[5798]: Account Notice: close [127.0.0.1:62864] [unauthentica
+ted] 2009/9/30 15:15:01 0:00:00 19 0 0
+[30/Sep/2009:15:15:01 -0700] commsdemo httpd[5797]: Account Notice: close [127.0.0.1:62865] [unauthentica
+ted] 2009/9/30 15:15:01 0:00:00 19 0 0
+[30/Sep/2009:15:16:17 -0700] commsdemo httpd[5798]: Account Notice: close [] duncan 2009/9/30 15:14:01 0:
+02:16 0 0 1
+[40;1H[K[1;7mhttp (END) [m[40;1H[K[1;7m(END) [m[40;1H[K[1;7m(END) [m[40;1H[K[1;7m(END) [m[40;1H[K[?1l>[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# cd ../config/
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls
+total 252
+-rw-------   1 mailsrv  mail        6.0K Sep 23 23:59 ImapProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        6.3K Sep 23 23:59 PopProxyAService-def.cfg
+-rw-------   1 mailsrv  mail        7.5K Sep 23 23:59 SmtpProxyAService-def.cfg
+-rw-------   1 mailsrv  mail          88 Sep 23 23:59 imta_tailor
+-rw-------   1 mailsrv  mail        1.9K Sep 23 23:59 job_controller.cnf
+-rw-------   1 mailsrv  mail        1.4K Sep 23 23:59 certmap.conf.sample
+-rw-------   1 mailsrv  mail        3.7K Sep 23 23:59 imta.cnf
+-rw-------   1 mailsrv  mail         131 Sep 23 23:59 aliases
+-rw-------   1 mailsrv  mail          36 Sep 23 23:59 sslpassword.conf
+-rw-------   1 mailsrv  mail        1.1K Sep 23 23:59 msg.conf.defaults
+-rw-------   1 mailsrv  mail         18K Sep 23 23:59 mappings.locale
+-rw-------   1 mailsrv  mail         21K Sep 23 23:59 internet.rules
+-rw-r--r--   1 mailsrv  mail         248 Sep 23 23:59 AService.cfg
+-rw-------   1 mailsrv  mail           0 Sep 24 00:01 stored.lck
+-rw-------   1 mailsrv  mail         130 Sep 24 00:33 option.dat
+-rw-------   1 mailsrv  mail        1.5K Sep 27 21:04 dispatcher.cnf.orig
+-rw-------   1 mailsrv  mail        1.6K Sep 27 21:05 dispatcher.cnf
+-rw-------   1 mailsrv  mail        1.9K Sep 27 23:03 mappings.orig
+-rw-------   1 mailsrv  mail        2.4K Sep 27 23:10 mappings
+drwx------   2 mailsrv  mail           5 Sep 27 23:13 advanced
+-rw-r-----   1 mailsrv  mail        2.1K Sep 30 14:57 msg.conf
+-rw-------   1 mailsrv  mail         10K Sep 30 14:59 smime.conf.orig
+-rw-r--r--   1 mailsrv  mail         11K Sep 30 15:03 smime.conf
+-rw-------   1 mailsrv  mail          10 Sep 30 15:10 store.parts
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# vi smime.conf/ c\
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# \vi smime.conf
+[40;1H[?1h="smime.conf" 265 lines, 10950 characters [H[J#[H
+#  smime.conf - Example SMIME configuration
+#
+#
+#  File Format rules:
+#[7CEach entry must begin at the start of a new line.
+#[7CEach entry consists of LHS==RHS
+#[7CEach LHS is a case insensitive keyword.
+#[7CWhite space is not allowed before the ==.
+#[7CAll blank lines or lines where first non-blank character is # are comments.
+#
+#
+# The following entry is used to search for certificates by attributes of directory objects.
+# It is used in conjunction with the certurl.
+# It is required when smime features are enabled.
+# Use any combinations of these three email address attributes (but at least one).
+#
+userCertFilter==(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))
+#
+#
+# The following entry is used to search for trusted certificates used to verify user certificates.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+# Note: the administrator must create the ldap entry for "SMIME".
+#
+trustedurl==ldap://commsdemo.demo.sun.com:389/cn=SMIME, ou=people, o=demo.sun.com, o=isp?cacertificate;bi
+nary?sub?(objectclass=certificationauthority)
+#
+#
+# The following entry is used to search for user certificates. The filter in userCertFilter is
+# appended to this url with the "%e" specifiers replaced by the email address of the user for
+# whom certificates are being searched.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+#[H[39B"smime.conf" 265 lines, 10950 characters[H[39B[K/crl[H[J#[7CCommunications Express Mail are displayed as unchecked. This is the default.[H
+#   1 - always sign messages. The signature checkboxes within
+#[7CCommunications Express Mail are displayed as checked.
+#
+# alwayssign==0
+#
+#
+# Certificate Validation Support - Each of the following specifiers is optional.
+#
+#
+# Controls whether certificates are checked against CRLs. If
+# there is a match, a certificate is considered revoked. The
+# values of the send*revoked parameters determine whether a revoked
+# certificate is rejected or used by Communications Express Mail.
+# Choose one of these values:
+#   0 - each certificate is not checked against a CRL.
+#   1 - each certificate is checked against a CRL. This is the default.
+#
+crlenable==0
+#
+#
+# The following entry is used to specify the directory path information to locate the
+# database where CRL information is stored.
+#
+crldir==/opt/sun/comms/messaging64/data/store/mboxlist/
+#
+#
+# The following entry is used to specify the Root UID for LDAP access to all
+# the URLs specified in the CRL Mapping table. It is optional; if not specified,
+# the credentials of the iMS server are used. If specified, crlurlloginpw must also be specified.
+# Note: any local credentials appended to a URL in the CRL Mapping table are used instead of this specifi
+cation.
+#
+crlurllogindn==cn=Directory Manager
+#
+#
+# The following entry is used to specify the password for LDAP access to all
+# the URLs specified in the CRL Mapping table. It is optional; if not specified,
+# the credentials of the iMS server are used. If specified, crlurllogindn must also be specified.[19;1H[21B/[15A[15B[K[J[?1l>[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls /opt/sun/comms/messaging64/data/store/mboxlist/
+total 92594
+-rw-------   1 mailsrv  mail        8.0K Sep 24 00:01 lright.db
+-rw-------   1 mailsrv  mail        8.0K Sep 29 13:32 subscr.db
+-rw-------   1 mailsrv  mail        9.5K Sep 29 21:00 quota.db
+-rw-------   1 mailsrv  mail        108K Sep 29 21:00 folder.db
+drwx------   2 mailsrv  mail           5 Sep 30 15:10 folderlock
+drwx------   2 mailsrv  mail          11 Sep 30 15:10 mqueue
+-rw-------   1 mailsrv  mail         24K Sep 30 15:11 __db.001
+-rw-------   1 mailsrv  mail         16K Sep 30 15:11 annotate.db
+-rw-------   1 mailsrv  mail         37M Sep 30 15:17 __db.005
+-rw-------   1 mailsrv  mail         40K Sep 30 15:17 peruser.db
+-rw-------   1 mailsrv  mail         10M Sep 30 15:17 log.0000000001
+-rw-------   1 mailsrv  mail         20M Sep 30 15:18 __db.003
+-rw-------   1 mailsrv  mail        352K Sep 30 15:18 __db.004
+-rw-------   1 mailsrv  mail        3.7M Sep 30 15:18 __db.006
+-rw-------   1 mailsrv  mail        5.2M Sep 30 15:18 __db.002
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# ls /opt/sun/comms/messaging64/data/store/mboxlist/\vi smime.conf[K
+[40;1H[?1h="smime.conf" 265 lines, 10950 characters [H[J#[H
+#  smime.conf - Example SMIME configuration
+#
+#
+#  File Format rules:
+#[7CEach entry must begin at the start of a new line.
+#[7CEach entry consists of LHS==RHS
+#[7CEach LHS is a case insensitive keyword.
+#[7CWhite space is not allowed before the ==.
+#[7CAll blank lines or lines where first non-blank character is # are comments.
+#
+#
+# The following entry is used to search for certificates by attributes of directory objects.
+# It is used in conjunction with the certurl.
+# It is required when smime features are enabled.
+# Use any combinations of these three email address attributes (but at least one).
+#
+userCertFilter==(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))
+#
+#
+# The following entry is used to search for trusted certificates used to verify user certificates.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+# Note: the administrator must create the ldap entry for "SMIME".
+#
+trustedurl==ldap://commsdemo.demo.sun.com:389/cn=SMIME, ou=people, o=demo.sun.com, o=isp?cacertificate;bi
+nary?sub?(objectclass=certificationauthority)
+#
+#
+# The following entry is used to search for user certificates. The filter in userCertFilter is
+# appended to this url with the "%e" specifiers replaced by the email address of the user for
+# whom certificates are being searched.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+#[H[39B"smime.conf" 265 lines, 10950 characters[H[39B[K/crl[H[J#[7CCommunications Express Mail are displayed as unchecked. This is the default.[H
+#   1 - always sign messages. The signature checkboxes within
+#[7CCommunications Express Mail are displayed as checked.
+#
+# alwayssign==0
+#
+#
+# Certificate Validation Support - Each of the following specifiers is optional.
+#
+#
+# Controls whether certificates are checked against CRLs. If
+# there is a match, a certificate is considered revoked. The
+# values of the send*revoked parameters determine whether a revoked
+# certificate is rejected or used by Communications Express Mail.
+# Choose one of these values:
+#   0 - each certificate is not checked against a CRL.
+#   1 - each certificate is checked against a CRL. This is the default.
+#
+crlenable==0
+#
+#
+# The following entry is used to specify the directory path information to locate the
+# database where CRL information is stored.
+#
+crldir==/opt/sun/comms/messaging64/data/store/mboxlist/
+#
+#
+# The following entry is used to specify the Root UID for LDAP access to all
+# the URLs specified in the CRL Mapping table. It is optional; if not specified,
+# the credentials of the iMS server are used. If specified, crlurlloginpw must also be specified.
+# Note: any local credentials appended to a URL in the CRL Mapping table are used instead of this specifi
+cation.
+#
+crlurllogindn==cn=Directory Manager
+#
+#
+# The following entry is used to specify the password for LDAP access to all
+# the URLs specified in the CRL Mapping table. It is optional; if not specified,
+# the credentials of the iMS server are used. If specified, crlurllogindn must also be specified.[19;1H[21B/[15A[15B[K/[30;61H[10B[K/[6A[6B[K/[39;61H
+[K/[K
+[A# Note: any local credentials appended to a URL in the CRL Mapping table are used instead of this specifi
+
+[Acation.
+
+[A#
+
+[Acrlurlloginpw==6dtualegs
+/[K
+[A#
+
+[A#
+
+[A# The following entry is used to locate the CRL mapping.
+
+[A# (format: crlmappingurl==ldap url of CRL map)[11C
+
+[A# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:[11C
+
+[A# |<logindn>|<loginpw>[11D
+
+[A# Both or neither must appear.[11C
+
+[A# Note: the administrator must create the ldap entry for "SMIME".[11C
+
+[A#
+
+[A#crlmappingurl==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com, dc=red,dc=ipl
+
+[Aanet,dc=com?msgCRLMappingRecord?sub?(objectclass=msgCRLMappingTable)[38;12H
+
+
+[A#crlmappingurl=="http://marceau.red.iplanet.com/cert.crl"[11C
+
+[A#crlmappingurl==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com,dc=red,dc=ipla
+
+[Anet,dc=com?certificaterevocationlist;binary?sub?[38;12H
+
+
+[A#
+
+[A#
+
+[A# The following entry is used to specify the time interval before the received time on messages.[11C
+
+[A# (format: timestampdelta==<numberofseconds>)[11C
+
+[A#
+
+[A# timestampdelta==360[10D
+[J[?1l>[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# c confitu  gutil -Hgre   |grep http |grep log
+        Description: Store admin login name for a specific host if different from local.service.http.proxy.admin. Not configured by default.
+        Description: AMSDK logging level. The SSO library used by Messaging Server has its own logging mechanism separate from Messaging Server. Its messages are logged in a file called http_sso under msg-svr-base/log. By default only messages with info (3) or higher are logged, but it is possible to increase the logging level by setting the logging level to a value from 1 to 5 (1: errors, 2: warnings, 3: info, 4: debug, 5: maxdebug). Be aware that the library doesn't have the same notion of message importances as Messaging Server and that setting the level to debug (4) can result in a lot of meaningless data. Also the http_sso log file is not managed by common Messaging Server logging code and is never cleaned up or rolled over. It is the responsibility of the system administrator to clean it up when setting the log level higher than the default.
+logfile.http.expirytime is currently unset
+logfile.http.flushinterval is currently unset
+logfile.http.logdir is currently unset
+logfile.http.loglevel is currently unset
+logfile.http.logtype is currently unset
+logfile.http.maxlogfiles is currently unset
+logfile.http.maxlogfilesize is currently unset
+logfile.http.maxlogsize is currently unset
+logfile.http.rollovertime is currently unset
+logfile.http.syslogfacility is currently unset
+Configuration option: logfile.http.expirytime
+logfile.http.expirytime is currently unset
+Configuration option: logfile.http.flushinterval
+logfile.http.flushinterval is currently unset
+Configuration option: logfile.http.logdir
+logfile.http.logdir is currently unset
+Configuration option: logfile.http.loglevel
+logfile.http.loglevel is currently unset
+Configuration option: logfile.http.logtype
+logfile.http.logtype is currently unset
+Configuration option: logfile.http.maxlogfiles
+logfile.http.maxlogfiles is currently unset
+Configuration option: logfile.http.maxlogfilesize
+logfile.http.maxlogfilesize is currently unset
+Configuration option: logfile.http.maxlogsize
+logfile.http.maxlogsize is currently unset
+Configuration option: logfile.http.rollovertime
+logfile.http.rollovertime is currently unset
+Configuration option: logfile.http.syslogfacility
+logfile.http.syslogfacility is currently unset
+Configuration option: service.http.allowanonymouslogin
+service.http.allowanonymouslogin is currently unset
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# coinf   nfg  figutil -o logfile.http.loglevel -v debug
+OK SET
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# stop
+Connecting to watcher ...
+Shutting down all servers...
+Stopping job_controller server 5808 .... done
+Stopping dispatcher server 5801 ... done
+Stopping sched server 5799 ... done
+Stopping http server 5798 ... done
+Stopping cert server 5797 ... done
+Stopping pop server 5796 ... done
+Stopping imap server 5795 .... done
+Stopping purge server 5794 ... done
+Stopping store server 5793 .... done
+Stopping metermaid server 5792 ... done
+Stopping watcher 5791 ... done
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# start[H[J[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# start
+Connecting to watcher ...
+Launching watcher ... 8935
+Starting metermaid server .... 8936
+Starting store server .... 8937
+Checking store server status ....msl.og. ready
+Starting purge server .... 8939
+Starting imap server ..... 8940
+Starting pop server ..... 8941
+Starting cert server .... 8942
+Starting http server ..... 8943
+Starting sched server ... 8944
+Starting dispatcher server .... 8946
+Starting job_controller server .... 8953
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/config[0;1;22m# mslog
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# ls
+total 13
+-rw-------   1 mailsrv  mail          58 Sep 30 15:19 watcher
+-rw-------   1 mailsrv  mail         463 Sep 30 15:19 metermaid
+-rw-------   1 mailsrv  mail          11 Sep 30 15:19 stored.rdy
+-rw-------   1 mailsrv  mail          11 Sep 30 15:19 stored.ckp
+-rw-------   1 mailsrv  mail         357 Sep 30 15:19 imap
+-rw-------   1 mailsrv  mail         353 Sep 30 15:19 pop
+-rw-------   1 mailsrv  mail         11K Sep 30 15:19 http
+-rw-------   1 mailsrv  mail         434 Sep 30 15:19 default
+-rw-r-----   1 mailsrv  mail           0 Sep 30 15:19 dispatcher.log-0KQT0060020PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 tcp_smtp_server.log-0KQT0060220PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 tcp_smtp_server.log-0KQT0060420PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 tcp_submit_server.log-0KQT0060620PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 job_controller.log-0KQT0060020PWP00
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# tail -f http [H[J[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# tail -f http 
+clienttable['hpux'+'moz'+'v5']='token-hpux.jar'
+clienttable['solarissparc'+'moz'+'v5']='token-sparc.jar'
+clienttable['win'+'msie'+'v6']='token-win32.jar'
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Warning: mscertd_initialize: configuration has CRLD disabled
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Notice: jmqNotify plugin loaded: index
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Debug: jmqNotify readParams debugLevel=0 maxBodySize=262144 maxHeaderSize=16388 hasNewMsg=1 hasUpdateMsg=1 hasReadMsg=0 hasDeleteMsg=0 hasPurgeMsg=0 hasCopyMsg=1 jmqHost=localhost jmqPort=7676 jmqTopic=JES-MS jmqUser=guest destinationtype=Topic Priority=4 ttl=0 Persistent = 0 Ldatdestination=(null)
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Debug: jmqNotify dest=index jmqHost=127.0.0.1 jmqPort=7676 jmqQueue=INDEXMS jmqUser=jmquser destinationtype=Queue Priority=4 ttl=3600000 Persistent = 0
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Warning: Sun Java(tm) System Messaging Server mshttpd 7.3-11.01 64bit (built Sep  1 2009) starting up
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: Store Debug: session_expire: starting
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: Store Debug: session_expire: done
+
+
+
+^C
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# less http [H[J[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# less http 
+[?1h=[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Information: Log created (1254349175)
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize crlmappingurl not f
+ound in file=/opt/sun/comms/messaging64/config/smime.conf
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize crlaccessfail not f
+ound in file=/opt/sun/comms/messaging64/config/smime.conf
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize trustedurl found OK
+: value=ldap://commsdemo.demo.sun.com:389/cn=SMIME, ou=people, o=demo.sun.com, o=isp?cacertificate;binary
+?sub?(objectclass=certificationauthority)
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize sslRootCACertsURL n
+ot found in file=/opt/sun/comms/messaging64/config/smime.conf
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize timestampdelta not 
+found in file=/opt/sun/comms/messaging64/config/smime.conf
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize certurl found OK: v
+alue=ldap://commsdemo.demo.sun.com:389/ou=people, o=demo.sun.com, o=isp?userCertificate;binary?sub?
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize usercertfilter foun
+d OK: value=(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize crldir found OK: va
+lue=/opt/sun/comms/messaging64/data/store/mboxlist/
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize logindn found OK: v
+alue=cn=Directory Manager
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize crlurllogindn found
+ OK: value=cn=Directory Manager
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize alwaysencrypt not f
+ound in file=/opt/sun/comms/messaging64/config/smime.conf
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize alwayssign not foun
+d in file=/opt/sun/comms/messaging64/config/smime.conf
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize checkoverssl found 
+OK: value=0
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize readsigncert not fo
+und in file=/opt/sun/comms/messaging64/config/smime.conf
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize revocationunknown f
+ound OK: value=ok
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize sendencryptcert fou
+nd OK: value=1
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize sendencryptcertrevo
+ked found OK: value=allow
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize sendsigncert found 
+OK: value=1
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize sendsigncertrevoked
+[40;1H[K[1;7mhttp [m[40;1H[40;1H[K found OK: value=allow
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize crlusepastnextupdat
+[40;1H[K:[40;1H[40;1H[Ke found OK: value=1
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize crlenable found OK:
+[40;1H[K:[40;1H[40;1H[K value=0
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize appletlogging found
+[40;1H[K:[40;1H[40;1H[K OK: value=1
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize platformWin found O
+[40;1H[K:[40;1H[40;1H[KK: value=CAPI:library=capibridge.dll;CAC:library=acpkcs211.dll;
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize platformMac not fou
+[40;1H[K:[40;1H[40;1H[Knd in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize platformLinuxx86 no
+[40;1H[K:[40;1H[40;1H[Kt found in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize platformHpux not fo
+[40;1H[K:[40;1H[40;1H[Kund in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize platformSolarisSpar
+[40;1H[K:[40;1H[40;1H[Kc not found in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: mscertd_initialize platformSolarisx86 
+[40;1H[K:[40;1H[40;1H[Knot found in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: searchLDAPURL: url=ldap://commsdemo.de
+[40;1H[K:[40;1H[40;1H[Kmo.sun.com:389/cn=SMIME, ou=people, o=demo.sun.com, o=isp?cacertificate;binary?sub?(objectclass=certifica
+[40;1H[K:[40;1H[40;1H[Ktionauthority)
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: new_ldpoolctx_with_credentials: user=c
+[40;1H[K:[40;1H[40;1H[Kn=Directory Manager
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Debug: clientmapping is ...
+[40;1H[K:[40;1H[40;1H[Kvar clienttable = new Array
+[40;1H[K:[40;1H[40;1H[Kclienttable['win'+'moz'+'v5']='token-win32.jar'
+[40;1H[K:[40;1H[40;1H[Kclienttable['mac'+'moz'+'v5']='token-mac.jar'
+[40;1H[K:[40;1H[40;1H[Kclienttable['linuxx86'+'moz'+'v5']='token-linux.jar'
+[40;1H[K:[40;1H[40;1H[Kclienttable['hpux'+'moz'+'v5']='token-hpux.jar'
+[40;1H[K:[40;1H[40;1H[Kclienttable['solarissparc'+'moz'+'v5']='token-sparc.jar'
+[40;1H[K:[40;1H[40;1H[Kclienttable['win'+'msie'+'v6']='token-win32.jar'
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Warning: mscertd_initialize: configuration ha
+[40;1H[K:[40;1H[40;1H[Ks CRLD disabled
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8942]: General Warning: Sun Java(tm) System Messaging Server
+[40;1H[K:[40;1H[40;1H[K mscertd 7.3-11.01 64bit (built Sep  1 2009) starting up
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize trustedurl found OK
+[40;1H[K:[40;1H[40;1H[K: value=ldap://commsdemo.demo.sun.com:389/cn=SMIME, ou=people, o=demo.sun.com, o=isp?cacertificate;binary
+[40;1H[K:[40;1H[40;1H[K?sub?(objectclass=certificationauthority)
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize sslRootCACertsURL n
+[40;1H[K:[40;1H[40;1H[Kot found in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize timestampdelta not 
+[40;1H[K:[40;1H[40;1H[Kfound in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize certurl found OK: v
+[40;1H[K:[40;1H[40;1H[Kalue=ldap://commsdemo.demo.sun.com:389/ou=people, o=demo.sun.com, o=isp?userCertificate;binary?sub?
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize usercertfilter foun
+[40;1H[K:[40;1H[40;1H[Kd OK: value=(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize crldir found OK: va
+[40;1H[K:[40;1H[40;1H[Klue=/opt/sun/comms/messaging64/data/store/mboxlist/
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize logindn found OK: v
+[40;1H[K:[40;1H[40;1H[Kalue=cn=Directory Manager
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize crlurllogindn found
+[40;1H[K:[40;1H[40;1H[K OK: value=cn=Directory Manager
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize alwaysencrypt not f
+[40;1H[K:[40;1H[40;1H[Kound in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize alwayssign not foun
+[40;1H[K:[40;1H[40;1H[Kd in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize checkoverssl found 
+[40;1H[K:[40;1H[40;1H[KOK: value=0
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize readsigncert not fo
+[40;1H[K:[40;1H[40;1H[Kund in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize revocationunknown f
+[40;1H[K:[40;1H[40;1H[Kound OK: value=ok
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize sendencryptcert fou
+[40;1H[K:[40;1H[40;1H[Knd OK: value=1
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize sendencryptcertrevo
+[40;1H[K:[40;1H[40;1H[Kked found OK: value=allow
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize sendsigncert found 
+[40;1H[K:[40;1H[40;1H[KOK: value=1
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize sendsigncertrevoked
+[40;1H[K:[40;1H[40;1H[K found OK: value=allow
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize crlusepastnextupdat
+[40;1H[K:[40;1H[40;1H[Ke found OK: value=1
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize crlenable found OK:
+[40;1H[K:[40;1H[40;1H[K value=0
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize appletlogging found
+[40;1H[K:[40;1H[40;1H[K OK: value=1
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize platformWin found O
+[40;1H[K:[40;1H[40;1H[KK: value=CAPI:library=capibridge.dll;CAC:library=acpkcs211.dll;
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize platformMac not fou
+[40;1H[K:[40;1H[40;1H[Knd in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize platformLinuxx86 no
+[40;1H[K:[40;1H[40;1H[Kt found in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize platformHpux not fo
+[40;1H[K:[40;1H[40;1H[Kund in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize platformSolarisSpar
+[40;1H[K:[40;1H[40;1H[Kc not found in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: mscertd_initialize platformSolarisx86 
+[40;1H[K:[40;1H[40;1H[Knot found in file=/opt/sun/comms/messaging64/config/smime.conf
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: searchLDAPURL: url=ldap://commsdemo.de
+[40;1H[K:[40;1H[40;1H[Kmo.sun.com:389/cn=SMIME, ou=people, o=demo.sun.com, o=isp?cacertificate;binary?sub?(objectclass=certifica
+[40;1H[K:[40;1H[40;1H[Ktionauthority)
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: new_ldpoolctx_with_credentials: user=c
+[40;1H[K:[40;1H[40;1H[Kn=Directory Manager
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Debug: clientmapping is ...
+[40;1H[K:[40;1H[40;1H[Kvar clienttable = new Array
+[40;1H[K:[40;1H[40;1H[Kclienttable['win'+'moz'+'v5']='token-win32.jar'
+[40;1H[K:[40;1H[40;1H[Kclienttable['mac'+'moz'+'v5']='token-mac.jar'
+[40;1H[K:[40;1H[40;1H[Kclienttable['linuxx86'+'moz'+'v5']='token-linux.jar'
+[40;1H[K:[40;1H[40;1H[Kclienttable['hpux'+'moz'+'v5']='token-hpux.jar'
+[40;1H[K:[40;1H[40;1H[Kclienttable['solarissparc'+'moz'+'v5']='token-sparc.jar'
+[40;1H[K:[40;1H[40;1H[Kclienttable['win'+'msie'+'v6']='token-win32.jar'
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Warning: mscertd_initialize: configuration ha
+[40;1H[K:[40;1H[40;1H[Ks CRLD disabled
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Notice: jmqNotify plugin loaded: index
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Debug: jmqNotify readParams debugLevel=0 maxB
+[40;1H[K:[40;1H[40;1H[KodySize=262144 maxHeaderSize=16388 hasNewMsg=1 hasUpdateMsg=1 hasReadMsg=0 hasDeleteMsg=0 hasPurgeMsg=0 h
+[40;1H[K:[40;1H[40;1H[KasCopyMsg=1 jmqHost=localhost jmqPort=7676 jmqTopic=JES-MS jmqUser=guest destinationtype=Topic Priority=4
+[40;1H[K:[40;1H[40;1H[K ttl=0 Persistent = 0 Ldatdestination=(null)
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Debug: jmqNotify dest=index jmqHost=127.0.0.1
+[40;1H[K:[40;1H[40;1H[K jmqPort=7676 jmqQueue=INDEXMS jmqUser=jmquser destinationtype=Queue Priority=4 ttl=3600000 Persistent = 
+[40;1H[K:[40;1H[40;1H[K0
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Warning: Sun Java(tm) System Messaging Server
+[40;1H[K:[40;1H[40;1H[K mshttpd 7.3-11.01 64bit (built Sep  1 2009) starting up
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: Store Debug: session_expire: starting
+[40;1H[K:[40;1H[40;1H[K[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: Store Debug: session_expire: done
+[40;1H[K[1;7m(END) [m[40;1H[40;1H[K[40;1H[K[1;7m(END) [m[40;1H[40;1H[K[40;1H[K[1;7m(END) [m[40;1H[40;1H[K[40;1H[K[1;7m(END) [m[40;1H[40;1H[K[40;1H[K[1;7m(END) [m[40;1H[40;1H[K[40;1H[K[1;7m(END) [m[40;1H[40;1H[K[40;1H[K[1;7m(END) [m[40;1H[40;1H[K[40;1H[K[1;7m(END) [m[40;1H[40;1H[K[40;1H[K[1;7m(END) [m[40;1H[40;1H[K[40;1H[K[1;7m(END) [m[40;1H[K[?1l>[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# ls
+total 50
+-rw-------   1 mailsrv  mail          58 Sep 30 15:19 watcher
+-rw-------   1 mailsrv  mail         463 Sep 30 15:19 metermaid
+-rw-------   1 mailsrv  mail          11 Sep 30 15:19 stored.rdy
+-rw-------   1 mailsrv  mail          11 Sep 30 15:19 stored.ckp
+-rw-------   1 mailsrv  mail         357 Sep 30 15:19 imap
+-rw-------   1 mailsrv  mail         353 Sep 30 15:19 pop
+-rw-------   1 mailsrv  mail         11K Sep 30 15:19 http
+-rw-------   1 mailsrv  mail         434 Sep 30 15:19 default
+-rw-r-----   1 mailsrv  mail           0 Sep 30 15:19 dispatcher.log-0KQT0060020PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 tcp_smtp_server.log-0KQT0060220PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 tcp_smtp_server.log-0KQT0060420PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 tcp_submit_server.log-0KQT0060620PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 job_controller.log-0KQT0060020PWP00
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# taikl -f 
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# tail -f http [H[J[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# tail -f http 
+clienttable['hpux'+'moz'+'v5']='token-hpux.jar'
+clienttable['solarissparc'+'moz'+'v5']='token-sparc.jar'
+clienttable['win'+'msie'+'v6']='token-win32.jar'
+[30/Sep/2009:15:19:35 -0700] commsdemo httpd[8943]: General Warning: mscertd_initialize: configuration has CRLD disabled
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Notice: jmqNotify plugin loaded: index
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Debug: jmqNotify readParams debugLevel=0 maxBodySize=262144 maxHeaderSize=16388 hasNewMsg=1 hasUpdateMsg=1 hasReadMsg=0 hasDeleteMsg=0 hasPurgeMsg=0 hasCopyMsg=1 jmqHost=localhost jmqPort=7676 jmqTopic=JES-MS jmqUser=guest destinationtype=Topic Priority=4 ttl=0 Persistent = 0 Ldatdestination=(null)
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Debug: jmqNotify dest=index jmqHost=127.0.0.1 jmqPort=7676 jmqQueue=INDEXMS jmqUser=jmquser destinationtype=Queue Priority=4 ttl=3600000 Persistent = 0
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: General Warning: Sun Java(tm) System Messaging Server mshttpd 7.3-11.01 64bit (built Sep  1 2009) starting up
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: Store Debug: session_expire: starting
+[30/Sep/2009:15:19:36 -0700] commsdemo httpd[8943]: Store Debug: session_expire: done
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[30/Sep/2009:15:20:35 -0700] commsdemo httpd[8943]: Account Information: connect [192.18.49.94:63110] 
+[30/Sep/2009:15:20:35 -0700] commsdemo httpd[8943]: General Information: [192.18.49.94:63110] POST /login.msc HTTP/1.1
+[30/Sep/2009:15:20:35 -0700] commsdemo httpd[8943]: Account Information: login [192.18.49.94:63110] duncan proxy sid=XM9EPdLu0AA
+[30/Sep/2009:15:20:35 -0700] commsdemo httpd[8943]: Account Information: connect [192.18.49.94:63122] 
+[30/Sep/2009:15:20:35 -0700] commsdemo httpd[8943]: General Information: [192.18.49.94:63110] sid=XM9EPdLu0AA GET /cfg.mjs?rev=3&sid=&lang=en-us&dojo.preventCache=1254349823879 HTTP/1.1
+[30/Sep/2009:15:20:35 -0700] commsdemo httpd[8943]: General Information: [192.18.49.94:63122] sid=XM9EPdLu0AA GET /cmd.mjs?rev=3&sid=&mbox=INBOX&cmd=noop&dojo.preventCache=1254349823882 HTTP/1.1
+[30/Sep/2009:15:20:35 -0700] commsdemo httpd[8943]: General Information: [192.18.49.94:63122] sid=XM9EPdLu0AA GET /listfolders.mjs?rev=3&sid=&unread=1&dojo.preventCache=1254349824288 HTTP/1.1
+[30/Sep/2009:15:20:36 -0700] commsdemo httpd[8943]: General Information: [192.18.49.94:63122] sid=XM9EPdLu0AA GET /mbox.mjs?rev=3&sid=&mbox=INBOX&count=50&date=true&lang=en-us&sortby=recv&sortorder=R&start=0&dojo.preventCache=1254349825528 HTTP/1.1
+[30/Sep/2009:15:20:37 -0700] commsdemo httpd[8943]: General Information: [192.18.49.94:63122] sid=XM9EPdLu0AA GET /msg.mjs?rev=3&sid=&mbox=INBOX&uid=87&process=html%2Cjs%2Clink%2Ctarget%2Cbinhex&maxtext=155000&security=false&lang=en-us&dojo.preventCache=1254349826401 HTTP/1.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[30/Sep/2009:15:20:46 -0700] commsdemo httpd[8943]: General Information: [192.18.49.94:63122] sid=XM9EPdLu0AA GET /cmd.mjs?rev=3&sid=&mbox=INBOX&cmd=noop&dojo.preventCache=1254349835755 HTTP/1.1
+[30/Sep/2009:15:20:47 -0700] commsdemo httpd[8943]: General Information: [192.18.49.94:63122] sid=XM9EPdLu0AA GET /cmd.mjs?rev=3&sid=&mbox=INBOX&cmd=noop&dojo.preventCache=1254349836443 HTTP/1.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[30/Sep/2009:15:21:08 -0700] commsdemo httpd[8943]: General Information: [192.18.49.94:63122] sid=XM9EPdLu0AA POST /cert.msc HTTP/1.1
+[30/Sep/2009:15:21:08 -0700] commsdemo httpd[8943]: General Debug: searchLDAPURL: url=ldap://commsdemo.demo.sun.com:389/ou=people, o=demo.sun.com, o=isp?userCertificate;binary?sub?(|(mail=duncan@demo.sun.com)(mailAlternateAddress=duncan@demo.sun.com)(mailEquivalentAddress=duncan@demo.sun.com))
+[30/Sep/2009:15:21:08 -0700] commsdemo httpd[8943]: General Debug: new_ldpoolctx_with_credentials: user=cn=Directory Manager
+[30/Sep/2009:15:21:08 -0700] commsdemo httpd[8943]: General Debug: generateCertlist called, resultcount=1, attr=userCertificate;binary
+^C
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# vi ../config/smime.conf
+bash: vim: command not found
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# vi ../config/smime.conf\vi ../config/smime.conf
+[40;1H[?1h="../config/smime.conf" 265 lines, 10950 characters [H[J#[H
+#  smime.conf - Example SMIME configuration
+#
+#
+#  File Format rules:
+#[7CEach entry must begin at the start of a new line.
+#[7CEach entry consists of LHS==RHS
+#[7CEach LHS is a case insensitive keyword.
+#[7CWhite space is not allowed before the ==.
+#[7CAll blank lines or lines where first non-blank character is # are comments.
+#
+#
+# The following entry is used to search for certificates by attributes of directory objects.
+# It is used in conjunction with the certurl.
+# It is required when smime features are enabled.
+# Use any combinations of these three email address attributes (but at least one).
+#
+userCertFilter==(|(mail=%e)(mailAlternateAddress=%e)(mailEquivalentAddress=%e))
+#
+#
+# The following entry is used to search for trusted certificates used to verify user certificates.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+# Note: the administrator must create the ldap entry for "SMIME".
+#
+trustedurl==ldap://commsdemo.demo.sun.com:389/cn=SMIME, ou=people, o=demo.sun.com, o=isp?cacertificate;bi
+nary?sub?(objectclass=certificationauthority)
+#
+#
+# The following entry is used to search for user certificates. The filter in userCertFilter is
+# appended to this url with the "%e" specifiers replaced by the email address of the user for
+# whom certificates are being searched.
+# It is required when smime features are enabled.
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+#[H[39B"../config/smime.conf" 265 lines, 10950 characters[H[39B[K/password[H[J# It is required when smime features are enabled and SSL protocols are enabled.[H
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.
+# Note: the administrator must create the ldap entry for "SSL Root CA Certs".
+#
+#sslRootCACertsURL==ldap://dianthos.red.iplanet.com:389/cn=SMIME, ou=people, o=red.iplanet.com, dc=red,dc
+=iplanet,dc=com?cacertificate;binary?sub?(objectclass=certificationauthority)
+#
+#
+# The following entry is used to specify the Root UID for LDAP access to all
+# the URLs specified in this configuration file. It is optional; if not specified,
+# the credentials of the iMS server are used. If specified, loginpw must also be specified.
+# Note: any local credentials appended to a URL are used instead of this specification.
+#
+logindn==cn=Directory Manager
+#
+#
+# The following entry is used to specify the password for LDAP access to all
+# the URLs specified in this configuration file. It is optional; if not specified,
+# the credentials of the iMS server are used. If specified, logindn must also be specified.
+# Note: any local credentials appended to a URL are used instead of this specification.
+#
+loginpw==6dtualegs
+#
+#
+# Specifies one or more library names needed by smart cards or local key
+# store on the Windows platform.  The setting below is the default; you need to
+# specify this option only if your library settings differ. This option is required if any
+# Communications Express Mail users use the Windows platform.
+#
+platformWin==CAPI:library=capibridge.dll;CAC:library=acpkcs211.dll;
+#
+#
+# Specifies one or more library names needed by smart cards or local key
+# store on the Macintosh platform.  The setting below is the default; you need to
+# specify this option only if your library settings differ. This option is required if any
+# Communications Express Mail users use the Macintosh platform.
+#[19;46H
+
+
+
+
+[17Ctualeg[16B/pwd[K[24;6H[16B[K/[H[J# there is a match, a certificate is considered revoked. The[H
+# values of the send*revoked parameters determine whether a revoked
+# certificate is rejected or used by Communications Express Mail.
+# Choose one of these values:
+#   0 - each certificate is not checked against a CRL.
+#   1 - each certificate is checked against a CRL. This is the default.
+#
+crlenable==0
+#
+#
+# The following entry is used to specify the directory path information to locate the
+# database where CRL information is stored.
+#
+crldir==/opt/sun/comms/messaging64/data/store/mboxlist/
+#
+#
+# The following entry is used to specify the Root UID for LDAP access to all
+# the URLs specified in the CRL Mapping table. It is optional; if not specified,
+# the credentials of the iMS server are used. If specified, crlurlloginpw must also be specified.
+# Note: any local credentials appended to a URL in the CRL Mapping table are used instead of this specifi
+cation.
+#
+crlurllogindn==cn=Directory Manager
+#
+#
+# The following entry is used to specify the password for LDAP access to all
+# the URLs specified in the CRL Mapping table. It is optional; if not specified,
+# the credentials of the iMS server are used. If specified, crlurllogindn must also be specified.
+# Note: any local credentials appended to a URL in the CRL Mapping table are used instead of this specifi
+cation.
+#
+crlurlloginpw==6dtualegs
+#
+#
+# The following entry is used to locate the CRL mapping.
+# (format: crlmappingurl==ldap url of CRL map)
+# Optional logindn/loginpw credentials for use when accessing this url can be appended in the form:
+# |<logindn>|<loginpw>
+# Both or neither must appear.[19;72H[21B/[32;12Hpw==6dtualeg[8B[K[J[?1l>[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# s ;s  ls
+total 58
+-rw-------   1 mailsrv  mail          58 Sep 30 15:19 watcher
+-rw-------   1 mailsrv  mail         463 Sep 30 15:19 metermaid
+-rw-------   1 mailsrv  mail          11 Sep 30 15:19 stored.rdy
+-rw-------   1 mailsrv  mail         357 Sep 30 15:19 imap
+-rw-------   1 mailsrv  mail         353 Sep 30 15:19 pop
+-rw-------   1 mailsrv  mail         434 Sep 30 15:19 default
+-rw-r-----   1 mailsrv  mail           0 Sep 30 15:19 dispatcher.log-0KQT0060020PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 tcp_smtp_server.log-0KQT0060220PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 tcp_smtp_server.log-0KQT0060420PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 tcp_submit_server.log-0KQT0060620PWI00
+-rw-------   1 mailsrv  mail           0 Sep 30 15:19 job_controller.log-0KQT0060020PWP00
+-rw-------   1 mailsrv  mail         14K Sep 30 15:21 http
+-rw-------   1 mailsrv  mail          11 Sep 30 15:21 stored.ckp
+-rw-------   1 mailsrv  mail          11 Sep 30 15:21 stored.lcu
+[0;1;31mroot[0;1;22m@[0;1;31mcommsdemo[0;1;22m:[0;1;30m/opt/sun/comms/messaging64/log[0;1;22m# exit
+# ^D
+script done on Wed Sep 30 15:25:06 2009

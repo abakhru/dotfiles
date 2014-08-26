@@ -1,0 +1,55 @@
+#Setting up PORT_ACCESS MAPPING table for LMTP
+if exists_mapping("PORT_ACCESS") {
+  m = get_mapping("PORT_ACCESS");
+}
+else {
+  m = [];
+}
+
+replace_mapping("PORT_ACCESS",[m .
+"TCP|*|225|10.133.152.154|*","$Y",
+"TCP|*|2025|10.133.152.154|*","$Y",
+"TCP|*|225|10.133.152.154.*|*","$Y",
+"TCP|*|2025|10.133.152.154.*|*","$Y",
+"TCP|*|*|*","$N500$ Do$ not$ connect$ to$ this$ machine"]);
+
+#delete_mapping("FROM_ACCESS");
+
+if exists_group("dispatcher.service:LMTPSS") {
+  delete_group("dispatcher.service:LMTPSS");
+}
+add_group("dispatcher.service:LMTPSS", ["enable", "1", "image", "IMTA_BIN:tcp_lmtp_server", "logfilename", "IMTA_LOG:tcp_lmtpss_server.log", "parameter", "CHANNEL=tcp_lmtpss", "tcp_ports", "225", "stacksize", "2048000"]);
+
+if exists_group("dispatcher.service:LMTPN") {
+  delete_group("dispatcher.service:LMTPN");
+}
+add_group("dispatcher.service:LMTPN", ["enable", "1", "image", "IMTA_BIN:tcp_lmtpn_server", "logfilename", "IMTA_LOG:tcp_lmtpsn_server.log", "parameter", "CHANNEL=tcp_lmtpsn","tcp_ports", "2025", "stacksize", "2048000"]);
+
+#autoreply defragment master_debug slave_debug subdirs 20
+#autoreply-daemon
+if exists_channel("autoreply") {
+  delete_channel("autoreply");
+}
+add_channel("autoreply", ["master_debug", "", "slave_debug", "", "defragment", "", "subdirs", "20", "official_host_name", "autoreply-daemon"]);
+#set_option("job_controller.channel_class:autoreply.master_command","IMTA_BIN:autoreply");
+
+# tcp_lmtpss (LMTP server - store)
+if exists_channel("tcp_lmtpss") {
+  delete_channel("tcp_lmtpss");
+}
+#tcp_lmtpss lmtp master_debug maxjobs 7 nomx pool SMTP_POOL single_sys slave_debug smtp subdirs 20
+#tcp_lmtpss-daemon
+add_channel("tcp_lmtpss", ["lmtp", "", "nomx", "", "single_sys", "", "subdirs", "20", "maxjobs", "7", "pool", "SMTP_POOL", "master_debug", "", "slave_debug", "", "official_host_name", "tcp_lmtpss-daemon"]);
+
+#! tcp_lmtpsn (LMTP server - native)
+if exists_channel("tcp_lmtpsn") {
+  delete_channel("tcp_lmtpsn");
+}
+#tcp_lmtpsn lmtp master_debug maxjobs 7 nomx pool SMTP_POOL single_sys slave_debug smtp subdirs 20
+#tcp_lmtpsn-daemon
+add_channel("tcp_lmtpsn", ["lmtp", "", "nomx", "", "single_sys", "", "subdirs", "20", "maxjobs", "7", "pool", "SMTP_POOL", "master_debug", "", "slave_debug", "", "official_host_name", "tcp_lmtpsn-daemon"]);
+
+append_rewrites([".lmtpn","$E$F$U%$H.lmtpn@lmtpcn-daemon"]);
+append_rewrites([".lmtpn","$B$F$U%$H@$H@lmtpcn-daemon"]);
+append_rewrites([".&/IMTA_DEFAULTDOMAIN/","$U%$H.&/IMTA_DEFAULTDOMAIN/@tcp_intranet-daemon"]);
+append_rewrites([".native-daemon","$U%$H.native-daemon@native-daemon"]);

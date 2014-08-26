@@ -1,0 +1,422 @@
+#!/bin/sh
+SCRIPT_HOME=/net/thistle.red.iplanet.com/export/home/wtsvr/charles/bin
+${SCRIPT_HOME}/amcleanup
+${SCRIPT_HOME}/rmas
+ADMIN=/tmp/rm_pkgadmin
+echo "action=nocheck" > $ADMIN
+echo "idepend=nocheck" >> $ADMIN
+echo "rdepend=nocheck" >> $ADMIN
+echo "space=nocheck" >> $ADMIN
+echo "mail=" >> $ADMIN
+
+#COMMCLI
+pkgrm -A -n -a $ADMIN  SUNWcomic
+pkgrm -A -n -a $ADMIN  SUNWcomis
+
+pkgrm -A -n -a $ADMIN  SUNWaclg
+pkgrm -A -n -a $ADMIN  SUNWamcds
+
+# Access Manager
+pkgrm -A -n -a $ADMIN  SUNWamcon
+pkgrm -A -n -a $ADMIN  SUNWamdoc
+pkgrm -A -n -a $ADMIN  SUNWamdistauth
+pkgrm -A -n -a $ADMIN  SUNWamdsc
+pkgrm -A -n -a $ADMIN  SUNWamext
+pkgrm -A -n -a $ADMIN  SUNWamfcd
+pkgrm -A -n -a $ADMIN  SUNWamrsa
+pkgrm -A -n -a $ADMIN  SUNWamsac
+pkgrm -A -n -a $ADMIN  SUNWamsai
+pkgrm -A -n -a $ADMIN  SUNWamsam
+pkgrm -A -n -a $ADMIN  SUNWamsas
+pkgrm -A -n -a $ADMIN  SUNWamsci
+pkgrm -A -n -a $ADMIN  SUNWamsdk
+pkgrm -A -n -a $ADMIN  SUNWamsvc
+pkgrm -A -n -a $ADMIN  SUNWamsws
+pkgrm -A -n -a $ADMIN  SUNWamutl
+pkgrm -A -n -a $ADMIN  SUNWamwlc
+pkgrm -A -n -a $ADMIN  SUNWamwli
+pkgrm -A -n -a $ADMIN  SUNWamwls
+pkgrm -A -n -a $ADMIN  SUNWamws
+pkgrm -A -n -a $ADMIN  SUNWamwsc
+pkgrm -A -n -a $ADMIN  SUNWamwsi
+pkgrm -A -n -a $ADMIN  SUNWamwss
+pkgrm -A -n -a $ADMIN  SUNWamsdkconfig
+pkgrm -A -n -a $ADMIN  SUNWamsvcconfig
+pkgrm -A -n -a $ADMIN  SUNWammae
+pkgrm -A -n -a $ADMIN SUNWamma
+pkgrm -A -n -a $ADMIN  SUNWamclnt
+pkgrm -A -n -a $ADMIN  SUNWamsfodb
+pkgrm -A -n -a $ADMIN  SUNWampwd
+pkgrm -A -n -a $ADMIN  SUNWcomds
+
+# Federation Manager
+pkgrm -A -n -a $ADMIN  SUNWamfm
+
+#SAMLv2
+pkgrm -A -n -a $ADMIN  SUNWsaml2
+
+
+pkgrm -A -n -a $ADMIN  SUNWasha
+pkgrm -A -n -a $ADMIN  SUNWasvc
+pkgrm -A -n -a $ADMIN  SUNWasvcp
+pkgrm -A -n -a $ADMIN  SUNWasvu
+pkgrm -A -n -a $ADMIN  SUNWdsha
+pkgrm -A -n -a $ADMIN  SUNWdsvcp
+pkgrm -A -n -a $ADMIN  SUNWdsvh
+pkgrm -A -n -a $ADMIN  SUNWdsvhx
+pkgrm -A -n -a $ADMIN  SUNWdsvpl
+pkgrm -A -n -a $ADMIN  SUNWdsvr
+pkgrm -A -n -a $ADMIN  SUNWdsvmn
+pkgrm -A -n -a $ADMIN  SUNWasvmn
+
+# Directory Server EE 6.0
+pkgrm -A -n -a $ADMIN  SUNWldap-shared-l10n
+pkgrm -A -n -a $ADMIN  SUNWldap-shared
+pkgrm -A -n -a $ADMIN  SUNWldap-console-agent
+pkgrm -A -n -a $ADMIN  SUNWldap-console-cli
+pkgrm -A -n -a $ADMIN  SUNWldap-console-common
+pkgrm -A -n -a $ADMIN  SUNWldap-console-gui-help-l10n
+pkgrm -A -n -a $ADMIN  SUNWldap-console-gui-help
+pkgrm -A -n -a $ADMIN  SUNWldap-console-gui-l10n
+pkgrm -A -n -a $ADMIN  SUNWldap-console-gui
+pkgrm -A -n -a $ADMIN  SUNWldap-console-var
+pkgrm -A -n -a $ADMIN  SUNWldap-directory-config
+pkgrm -A -n -a $ADMIN  SUNWldap-directory-client-l10n
+pkgrm -A -n -a $ADMIN  SUNWldap-directory-client
+pkgrm -A -n -a $ADMIN  SUNWldap-directory-dev
+pkgrm -A -n -a $ADMIN  SUNWldap-directory-l10n
+pkgrm -A -n -a $ADMIN  SUNWldap-directory
+
+
+pkgrm -A -n -a $ADMIN  SUNWdsvu
+pkgrm -A -n -a $ADMIN  SUNWdsvx
+pkgrm -A -n -a $ADMIN  SUNWjaf
+pkgrm -A -n -a $ADMIN  SUNWjato
+pkgrm -A -n -a $ADMIN  SUNWjatodoc
+pkgrm -A -n -a $ADMIN  SUNWjatodmo
+pkgrm -A -n -a $ADMIN  SUNWjaxp
+pkgrm -A -n -a $ADMIN  SUNWjmail
+pkgrm -A -n -a $ADMIN  SUNWldk
+pkgrm -A -n -a $ADMIN  SUNWldjk
+pkgrm -A -n -a $ADMIN  SUNWldkx
+pkgrm -A -n -a $ADMIN  SUNWljdk
+
+OS_REV=`uname -r`
+if [ $OS_REV = "5.8" -o $OS_REV = "5.9" ]; then
+  pkgrm -A -n -a $ADMIN  SUNWpr
+  pkgrm -A -n -a $ADMIN  SUNWprx
+  pkgrm -A -n -a $ADMIN  SUNWprd
+  pkgrm -A -n -a $ADMIN  SUNWtls
+  pkgrm -A -n -a $ADMIN  SUNWtlsu
+  pkgrm -A -n -a $ADMIN  SUNWtlsx
+  pkgrm -A -n -a $ADMIN  SUNWjss
+  pkgrm -A -n -a $ADMIN  SUNWjss3
+  pkgrm -A -n -a $ADMIN  SUNWjssx
+  pkgrm -A -n -a $ADMIN  SUNWicux
+  pkgrm -A -n -a $ADMIN  SUNWicud
+  pkgrm -A -n -a $ADMIN  SUNWicu
+  pkgrm -A -n -a $ADMIN  SUNWant
+  pkgrm -A -n -a $ADMIN  SUNWsaslx
+  pkgrm -A -n -a $ADMIN  SUNWsasl
+  pkgrm -A -n -a $ADMIN SUNWmctag
+  pkgrm -A -n -a $ADMIN SUNWmcosx
+  pkgrm -A -n -a $ADMIN SUNWmcos
+  pkgrm -A -n -a $ADMIN SUNWmconr
+  pkgrm -A -n -a $ADMIN SUNWmcon
+  pkgrm -A -n -a $ADMIN SUNWtcatu
+fi
+
+pkgrm -A -n -a $ADMIN  SUNWxrpcrt
+pkgrm -A -n -a $ADMIN  SUNWxsrt
+pkgrm -A -n -a $ADMIN  SUNWxrgrt
+pkgrm -A -n -a $ADMIN  SUNWOrionUninstaller
+pkgrm -A -n -a $ADMIN  SUNWwbsvr
+pkgrm -A -n -a $ADMIN  SUNWwbsvr7x
+pkgrm -A -n -a $ADMIN  SUNWwbsvr7-dev
+pkgrm -A -n -a $ADMIN  SUNWwbsvr7-cli
+pkgrm -A -n -a $ADMIN  SUNWwbsvr7
+pkgrm -A -n -a $ADMIN  SUNWawbsvr
+pkgrm -A -n -a $ADMIN SUNWebnfs
+pkgrm -A -n -a $ADMIN SUNWiimps
+pkgrm -A -n -a $ADMIN SUNWpsap
+
+pkgrm -A -n -a $ADMIN SUNWjdmk-runtime-jmx
+pkgrm -A -n -a $ADMIN SUNWjdmk-runtime
+pkgrm -A -n -a $ADMIN SUNWjhrt
+
+
+#IM
+pkgrm -A -n -a $ADMIN SUNWiim
+pkgrm -A -n -a $ADMIN SUNWiimc
+pkgrm -A -n -a $ADMIN SUNWiimd
+pkgrm -A -n -a $ADMIN SUNWiimid
+pkgrm -A -n -a $ADMIN SUNWiimin
+pkgrm -A -n -a $ADMIN SUNWiimjd
+pkgrm -A -n -a $ADMIN SUNWiimm
+
+#UWC
+pkgrm -A -n -a $ADMIN SUNWuwc
+
+#PORTAL
+
+pkgrm -A -n -a $ADMIN SUNWebnfs
+pkgrm -A -n -a $ADMIN SUNWps
+pkgrm -A -n -a $ADMIN SUNWpsa
+pkgrm -A -n -a $ADMIN SUNWpsc
+pkgrm -A -n -a $ADMIN SUNWpscfg
+pkgrm -A -n -a $ADMIN SUNWpscp
+pkgrm -A -n -a $ADMIN SUNWpsdis
+pkgrm -A -n -a $ADMIN SUNWpsdt
+pkgrm -A -n -a $ADMIN SUNWpsdta
+pkgrm -A -n -a $ADMIN SUNWpsdtc
+pkgrm -A -n -a $ADMIN SUNWpsdtm
+pkgrm -A -n -a $ADMIN SUNWpsdtp
+pkgrm -A -n -a $ADMIN SUNWpsdtx
+pkgrm -A -n -a $ADMIN SUNWpsgw
+pkgrm -A -n -a $ADMIN SUNWpsgwa
+pkgrm -A -n -a $ADMIN SUNWpsgwm
+pkgrm -A -n -a $ADMIN SUNWpsgws
+pkgrm -A -n -a $ADMIN SUNWpsks
+pkgrm -A -n -a $ADMIN SUNWpslcfg
+pkgrm -A -n -a $ADMIN SUNWpsma
+pkgrm -A -n -a $ADMIN SUNWpsmad
+pkgrm -A -n -a $ADMIN SUNWpsmai
+pkgrm -A -n -a $ADMIN SUNWpsmas
+pkgrm -A -n -a $ADMIN SUNWpsmig
+pkgrm -A -n -a $ADMIN SUNWpsmp
+pkgrm -A -n -a $ADMIN SUNWpsnf
+pkgrm -A -n -a $ADMIN SUNWpsnl
+pkgrm -A -n -a $ADMIN SUNWpsnlp
+pkgrm -A -n -a $ADMIN SUNWpsnm
+pkgrm -A -n -a $ADMIN SUNWpsoh
+pkgrm -A -n -a $ADMIN SUNWpsp
+pkgrm -A -n -a $ADMIN SUNWpsplt
+pkgrm -A -n -a $ADMIN SUNWpspltconfig
+pkgrm -A -n -a $ADMIN SUNWpsps
+pkgrm -A -n -a $ADMIN SUNWpsrw
+pkgrm -A -n -a $ADMIN SUNWpsrwa
+pkgrm -A -n -a $ADMIN SUNWpsrwp
+pkgrm -A -n -a $ADMIN SUNWpssdk
+pkgrm -A -n -a $ADMIN SUNWpsse
+pkgrm -A -n -a $ADMIN SUNWpssea
+pkgrm -A -n -a $ADMIN SUNWpssep
+pkgrm -A -n -a $ADMIN SUNWpssp
+pkgrm -A -n -a $ADMIN SUNWpsss
+pkgrm -A -n -a $ADMIN SUNWpssso
+pkgrm -A -n -a $ADMIN SUNWpsssoa
+pkgrm -A -n -a $ADMIN SUNWpssub
+pkgrm -A -n -a $ADMIN SUNWpstlj
+pkgrm -A -n -a $ADMIN SUNWpswp
+pkgrm -A -n -a $ADMIN SUNWpswsrpcommon
+pkgrm -A -n -a $ADMIN SUNWpswsrpconsumer
+pkgrm -A -n -a $ADMIN SUNWpswsrpconsumerconfig
+pkgrm -A -n -a $ADMIN SUNWpswsrpconsumersample
+pkgrm -A -n -a $ADMIN SUNWpswsrpproducer
+pkgrm -A -n -a $ADMIN SUNWpswsrpproducersample
+pkgrm -A -n -a $ADMIN SUNWiqjx
+pkgrm -A -n -a $ADMIN SUNWiqcdv
+pkgrm -A -n -a $ADMIN SUNWiqcrt
+pkgrm -A -n -a $ADMIN SUNWiqdzh
+pkgrm -A -n -a $ADMIN SUNWiqcde
+pkgrm -A -n -a $ADMIN SUNWiqces
+pkgrm -A -n -a $ADMIN SUNWiqcfr
+pkgrm -A -n -a $ADMIN SUNWiqcja
+pkgrm -A -n -a $ADMIN SUNWiqcko
+pkgrm -A -n -a $ADMIN SUNWiqctw
+pkgrm -A -n -a $ADMIN SUNWiqczh
+pkgrm -A -n -a $ADMIN SUNWiqdja
+pkgrm -A -n -a $ADMIN SUNWiqdoc
+pkgrm -A -n -a $ADMIN SUNWiqdz
+pkgrm -A -n -a $ADMIN SUNWiqfs
+pkgrm -A -n -a $ADMIN SUNWiqide
+pkgrm -A -n -a $ADMIN SUNWiqies
+pkgrm -A -n -a $ADMIN SUNWiqifr
+pkgrm -A -n -a $ADMIN SUNWiqija
+pkgrm -A -n -a $ADMIN SUNWiqiko
+pkgrm -A -n -a $ADMIN SUNWiqitw
+pkgrm -A -n -a $ADMIN SUNWiqizh
+pkgrm -A -n -a $ADMIN SUNWiqjx
+pkgrm -A -n -a $ADMIN SUNWiqlen
+pkgrm -A -n -a $ADMIN SUNWiqlpl
+pkgrm -A -n -a $ADMIN SUNWiqr
+pkgrm -A -n -a $ADMIN SUNWiqu
+pkgrm -A -n -a $ADMIN SUNWiquc
+pkgrm -A -n -a $ADMIN SUNWiqum
+pkgrm -A -n -a $ADMIN SUNWamjwsdp
+pkgrm -A -n -a $ADMIN SUNWamconsdk
+pkgrm -A -n -a $ADMIN SUNWmsgco
+pkgrm -A -n -a $ADMIN SUNWmsgen
+pkgrm -A -n -a $ADMIN SUNWmsgin
+pkgrm -A -n -a $ADMIN SUNWmsglb
+pkgrm -A -n -a $ADMIN SUNWmsgmf
+pkgrm -A -n -a $ADMIN SUNWmsgmp
+pkgrm -A -n -a $ADMIN SUNWmsgmt
+pkgrm -A -n -a $ADMIN SUNWmsgst
+pkgrm -A -n -a $ADMIN SUNWmsgwm
+pkgrm -A -n -a $ADMIN SUNWasvc
+pkgrm -A -n -a $ADMIN SUNWasvcp
+pkgrm -A -n -a $ADMIN SUNWasvr
+pkgrm -A -n -a $ADMIN SUNWasvu
+
+#CALENDAR
+
+pkgrm -A -n -a $ADMIN SUNWica5
+pkgrm -A -n -a $ADMIN SUNWics5
+
+#DPS
+pkgrm -A -n -a $ADMIN SUNWdps
+pkgrm -A -n -a $ADMIN SUNWdpsg
+pkgrm -A -n -a $ADMIN SUNWdpsi
+
+#MAP
+pkgrm -A -n -a $ADMIN SUNWma
+pkgrm -A -n -a $ADMIN SUNWmae
+
+#Application Server
+pkgrm -A -n -a $ADMIN SUNWaswbcr
+pkgrm -A -n -a $ADMIN SUNWasut
+pkgrm -A -n -a $ADMIN SUNWasuee
+pkgrm -A -n -a $ADMIN SUNWast
+pkgrm -A -n -a $ADMIN SUNWasmanee
+pkgrm -A -n -a $ADMIN SUNWasman
+pkgrm -A -n -a $ADMIN SUNWasjdoc
+pkgrm -A -n -a $ADMIN SUNWasdemdb
+pkgrm -A -n -a $ADMIN SUNWasdem
+pkgrm -A -n -a $ADMIN SUNWasu
+pkgrm -A -n -a $ADMIN SUNWashdm
+pkgrm -A -n -a $ADMIN SUNWashdemdb
+pkgrm -A -n -a $ADMIN SUNWashdem
+pkgrm -A -n -a $ADMIN SUNWasdb
+pkgrm -A -n -a $ADMIN SUNWascmnse
+pkgrm -A -n -a $ADMIN SUNWascmn
+pkgrm -A -n -a $ADMIN SUNWascml
+pkgrm -A -n -a $ADMIN SUNWasacee
+pkgrm -A -n -a $ADMIN SUNWasac
+pkgrm -A -n -a $ADMIN SUNWasJdbcDrivers
+pkgrm -A -n -a $ADMIN SUNWaslb
+pkgrm -A -n -a $ADMIN SUNWasr
+
+#HADB
+pkgrm -A -n -a $ADMIN SUNWhadbx
+pkgrm -A -n -a $ADMIN SUNWhadbs
+pkgrm -A -n -a $ADMIN SUNWhadbm
+pkgrm -A -n -a $ADMIN SUNWhadbj
+pkgrm -A -n -a $ADMIN SUNWhadbc
+pkgrm -A -n -a $ADMIN SUNWhadba
+pkgrm -A -n -a $ADMIN SUNWhadbe
+pkgrm -A -n -a $ADMIN SUNWhadbv
+pkgrm -A -n -a $ADMIN SUNWhadbi
+
+#Sleepycat DB
+pkgrm -A -n -a $ADMIN SUNWbdb
+pkgrm -A -n -a $ADMIN SUNWbdbj
+
+
+#JavaHelp
+pkgrm -A -n -a $ADMIN SUNWjhdem
+pkgrm -A -n -a $ADMIN SUNWjhdev
+pkgrm -A -n -a $ADMIN SUNWjhdoc
+pkgrm -A -n -a $ADMIN SUNWjhrt
+
+
+#Java
+pkgrm -A -n -a $ADMIN SUNWj5dvx
+pkgrm -A -n -a $ADMIN SUNWj5rtx
+pkgrm -A -n -a $ADMIN SUNWj5man
+pkgrm -A -n -a $ADMIN SUNWj5jmp
+pkgrm -A -n -a $ADMIN SUNWj5dmx
+pkgrm -A -n -a $ADMIN SUNWj5dmo
+pkgrm -A -n -a $ADMIN SUNWj5cfg
+pkgrm -A -n -a $ADMIN SUNWj5dev
+pkgrm -A -n -a $ADMIN SUNWj5rt
+
+#Monitoring Framework
+pkgrm -A -n -a $ADMIN SUNWmfwk-rt
+
+#Cacao
+pkgrm -A -n -a $ADMIN SUNWcacaort
+pkgrm -A -n -a $ADMIN SUNWcacaowsvr
+pkgrm -A -n -a $ADMIN SUNWcacao
+pkgrm -A -n -a $ADMIN SUNWcacaocfg
+pkgrm -A -n -a $ADMIN SUNWcacaomon
+
+#Derby
+pkgrm -A -n -a $ADMIN SUNWderby-usr 
+pkgrm -A -n -a $ADMIN SUNWderby-javadoc-dev
+pkgrm -A -n -a $ADMIN SUNWderby-core
+
+#Fast Infoset
+pkgrm -A -n -a $ADMIN SUNWfastinfoset
+
+#LDAPCSDK
+pkgrm -A -n -a $ADMIN SUNW-ldapcsdk-tools
+pkgrm -A -n -a $ADMIN SUNW-ldapcsdk-libs
+pkgrm -A -n -a $ADMIN SUNW-ldapcsdk-dev
+
+if [ -f /var/sadm/prod/entsys/uninstall_Sun_Java_tm__Enterprise_System_2004Q2.class ]; then
+	pkgrm -A -n -a $ADMIN SUNWj3dvx
+	pkgrm -A -n -a $ADMIN SUNWj3rtx
+	pkgrm -A -n -a $ADMIN SUNWj3man
+	pkgrm -A -n -a $ADMIN SUNWj3jmp
+	pkgrm -A -n -a $ADMIN SUNWj3dmo
+	pkgrm -A -n -a $ADMIN SUNWj3cfg
+	pkgrm -A -n -a $ADMIN SUNWj3dev
+	pkgrm -A -n -a $ADMIN SUNWj3rt
+fi
+
+pkgrm -A -n -a $ADMIN SUNWentsys5
+pkgrm -A -n -a $ADMIN SUNWentsys5i
+pkgrm -A -n -a $ADMIN SUNWentsys-uninstall
+pkgrm -A -n -a $ADMIN SUNWentsys4
+pkgrm -A -n -a $ADMIN SUNWentsysl10n-uninstall
+pkgrm -A -n -a $ADMIN SUNWentsys4-uninstall-l10n
+
+${SCRIPT_HOME}/killj ns-slapd
+rm -rf /opt/SUNWam
+rm -rf /opt/SUNWcomds
+rm -rf /opt/SUNWasvmn
+rm -rf /opt/SUNWcomm
+rm -rf /opt/SUNWdsvmn
+rm -rf /opt/SUNWps
+rm -rf /opt/SUNWiim
+rm -rf /opt/SUNWappserver7
+rm -rf /opt/SUNWwbsvr
+rm -rf /opt/SUNWmfwk-rt
+rm -rf /opt/SUNWcacao
+rm -rf /opt/SUNWwbsvr*
+rm -rf /var/opt/SUNWwbsvr*
+rm -rf /opt/locale
+rm -rf /var/opt/mps
+rm -rf /usr/sunone/servers
+rm -rf /usr/jdk
+rm -rf /var/sadm/prod/SUNWentsys*
+rm -rf /var/sadm/prod/SUNWam-*
+rm -rf /var/sadm/prod/entsys
+rm -rf /var/sadm/prod/orion
+rm -rf /var/opt/SUNWappserver*
+rm -rf /var/opt/SUNWps
+rm -rf /var/opt/SUNWam
+rm -rf /var/opt/SUNWiim
+rm -rf /var/opt/SUNWcacao
+rm -rf /var/opt/SUNWmfwk
+rm -rf /var/opt/webconsole
+rm -rf /var/opt/sun
+
+rm -rf /etc/opt/SUNWps
+rm -rf /etc/opt/SUNWappserver7
+rm -rf /etc/opt/SUNWam
+rm -rf /etc/opt/SUNWiim
+rm -rf /etc/opt/SUNWma
+rm -rf /etc/opt/webconsole
+rm -rf /etc/opt/SUNWcacao
+rm -rf /etc/opt/SUNWmfwk
+rm -rf /opt/SUNWma
+rm -rf /etc/ds/v5.2
+rm -rf /usr/ds/v5.2
+rm -rf /am_*
+rm -rf /opt/ws
+rm -rf /opt/as
+rm -rf /opt/as_var
+rm -rf /opt/ds
+rm -rf /jes*
+rm -rf /am71*

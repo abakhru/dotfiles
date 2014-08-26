@@ -1,0 +1,359 @@
+<?xml version='1.0' encoding='utf-8'?>
+<installation xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:bmi='http://brightmail.com/bmiconfig.xsd' os='solaris' arch='sparc' version='6.0.0.1'>
+  <totalProfiling>true</totalProfiling>
+  <productName>SBAS</productName>
+  <productVersion>6.1.0.0000</productVersion>
+  <loadpoint>/space/brightmail/symantec/sbas/Scanner</loadpoint>
+  <logdir>/var/log/brightmail</logdir>
+  <spooldir>/var/spool/brightmail</spooldir>
+  <statsdir>/space/brightmail/symantec/sbas/Scanner/stats</statsdir>
+  <configdir>/space/brightmail/symantec/sbas/Scanner/etc</configdir>
+  <reinsertionKey>IK\Zr#F_mc&quot;,X-)x}x`.</reinsertionKey>
+  <services>
+    <service xsi:type='spamServiceType' name='spam' enabled='true' expired='false'>
+      <modules>
+        <module xsi:type='bodyhashModuleType' name='libbh' enabled='true' critical='false' profiling='false'>
+          <url>https://aztec.brightmail.com/rules2full/hashes</url>
+        </module>
+        <module xsi:type='intsigModuleType' name='libintsig' enabled='true' critical='false' profiling='false'>
+          <url>https://aztec.brightmail.com/rules2full/intsigs</url>
+        </module>
+        <module xsi:type='spamsigModuleType' name='libspamsig' enabled='true' critical='false' profiling='false'>
+          <url>https://aztec.brightmail.com/rules2full/spamsigs</url>
+        </module>
+        <module xsi:type='regexModuleType' name='libregexfilter' enabled='true' critical='false' profiling='false'>
+          <url>https://aztec.brightmail.com/rules2full/blrm</url>
+          <maxTotalHeadersLength>32768</maxTotalHeadersLength>
+          <RHK enabled='true'/>
+        </module>
+        <module xsi:type='spamhunterModuleType' name='libspamhunter' enabled='true' critical='false' profiling='false'>
+          <url>https://aztec.brightmail.com/rules2full/spamhunter</url>
+          <grayFactor>80</grayFactor>
+          <urlhashLimit>0</urlhashLimit>
+          <acceptedLanguages>
+            <language></language>
+          </acceptedLanguages>
+          <ruleTypes>
+          </ruleTypes>
+          <RHK enabled='true'/>
+          <RBE enabled='true'/>
+        </module>
+      </modules>
+    </service>
+    <service xsi:type='virusServiceType' name='virus' enabled='true' expired='false'>
+      <modules>
+        <module xsi:type='avModuleType' name='libantivirus' enabled='true' critical='false' profiling='false'>
+          <url>https://aztec.brightmail.com/rules2/av.symantec.solaris.sparc</url>
+          <heuristicLevel>2</heuristicLevel>
+          <reinsertionLeeway>600</reinsertionLeeway>
+          <maxContainedFileBytes>10485760</maxContainedFileBytes>
+          <worms>
+                <worm enabled='true'>Yaha</worm>
+                <worm enabled='true'>Bugbear</worm>
+                <worm enabled='true'>Hybris</worm>
+                <worm enabled='true'>Magistr</worm>
+                <worm enabled='true'>Sobig</worm>
+                <worm enabled='true'>Mimail</worm>
+                <worm enabled='true'>Cult</worm>
+                <worm enabled='true'>Dumaru</worm>
+          </worms>
+          <maxArchiveScanDepth>20</maxArchiveScanDepth>
+          <symantec fileSystemSize='209715200' fileSizeThreshold='10485760'>
+            <symEngine>dec2id|10</symEngine>
+            <symEngine>dec2zip|24</symEngine>
+            <symEngine>dec2ss|18</symEngine>
+            <symEngine>dec2gzip|7</symEngine>
+            <symEngine>dec2lha|12</symEngine>
+            <symEngine>dec2rar|19</symEngine>
+            <symEngine>dec2arj|3</symEngine>
+            <symEngine>dec2tnef|22</symEngine>
+            <symEngine>dec2amg|1</symEngine>
+            <symEngine>dec2tar|21</symEngine>
+            <symEngine>dec2rtf|20</symEngine>
+            <symEngine>dec2ole1|17</symEngine>
+            <symEngine>dec2mb3|35</symEngine>
+            <symEngine>dec2as|36</symEngine>
+            <symEngine>dec2lz|14</symEngine>
+            <symEngine platformControl='win32'>dec2cab|4</symEngine>
+            <symEngine>dec2text|33</symEngine>
+            <symOption>dec_option_enable_mime_engine</symOption>
+            <symOption>dec_option_enable_uue_engine</symOption>
+            <symOption>dec_option_enable_binhex_engine</symOption>
+          </symantec>
+          <maxArchiveScanTime>60</maxArchiveScanTime>
+        </module>
+      </modules>
+    </service>
+    <service xsi:type='customServiceType' name='custom' enabled='true' expired='false'>
+      <modules>
+        <module xsi:type='sieveModuleType' name='libsieve' enabled='true' profiling='false'>
+          <ruleFile>/space/brightmail/symantec/sbas/Scanner/etc/sieve_script.txt</ruleFile>
+        </module>
+      </modules>
+    </service>
+    <service xsi:type='consentServiceType' name='consent' enabled='true' expired='false'>
+      <modules>
+        <module xsi:type='fastpassModuleType' name='libfastpass' enabled='false' critical='false' profiling='false'>
+          <tableSize>250000</tableSize>
+          <entrySamplingRate>3</entrySamplingRate>
+          <legitMessagesRequired>12</legitMessagesRequired>
+          <initialSamplingRate>5</initialSamplingRate>
+          <ignoreGray enabled='false'/>
+          <excludeRanges/>
+          <bounceStrings>
+            <bounceString>mailer-daemon</bounceString>
+            <bounceString>postmaster</bounceString>
+            <bounceString>autoreply</bounceString>
+            <bounceString>auto-reply</bounceString>
+          </bounceStrings>
+          <persistIntervalSeconds enabled='true'>600</persistIntervalSeconds>
+          <dropBlock enabled='true'/>
+        </module>
+        <module xsi:type='permitModuleType' name='libpermit' enabled='true' critical='false' profiling='false'>
+          <url>https://aztec.brightmail.com/rules2full/permit_rules</url>
+          <ruleFile>/space/brightmail/symantec/sbas/Scanner/etc/allowedblockedlist.txt</ruleFile>
+          <internalRange hidden='true'>0.0.0.0/255.0.0.0</internalRange>
+          <internalRange hidden='true'>10.0.0.0/255.0.0.0</internalRange>
+          <internalRange hidden='true'>127.0.0.0/255.0.0.0</internalRange>
+          <internalRange hidden='true'>169.254.0.0/255.255.0.0</internalRange>
+          <internalRange hidden='true'>172.16.0.0/255.240.0.0</internalRange>
+          <internalRange hidden='true'>192.168.0.0/255.255.0.0</internalRange>
+          <bbl enabled='true'/>
+          <rcvdDNSBL enabled='false'/>
+          <safelist enabled='true'/>
+          <extendedWhiteCheck enabled='false'/>
+          <dbgShowScan enabled='false'/>
+          <dbgDumpRules enabled='false'/>
+          <dbgTimeRuleLoad enabled='false'/>
+          <dbgTimeRuleSearch enabled='false'/>
+        </module>
+      </modules>
+    </service>
+    <service xsi:type='languageServiceType' name='language' enabled='false' expired='false'>
+      <modules>
+        <module xsi:type='languageModuleType' name='liblanguageid' enabled='true' critical='false' profiling='false'>
+         <maxLanguages>3</maxLanguages>
+          <maxMessageSize>100000</maxMessageSize>
+          <sampleSize>512</sampleSize>
+        </module>
+      </modules>
+    </service>
+    <service xsi:type='reinsertServiceType' name='reinsert' enabled='true'>
+      <modules>
+        <module xsi:type='reinsertModuleType' name='libreinsert' enabled='true' critical='false' profiling='false'>
+          <timeout>600</timeout>
+          <recipients>
+            <trustedRecipient>*Feedback@Feedback-*.brightmail.com</trustedRecipient>
+          </recipients>
+          <xheader>X-BLTReinsert</xheader>
+        </module>
+      </modules>
+    </service>
+  </services>
+  <packages>
+    <package xsi:type='clientPackageType' name='clientPackage' installed='true' enabled='true'>
+      <programs>
+        <program xsi:type='bmifilterType' name='bmifilter'>
+          <sendmailConnection>inet:41001</sendmailConnection>
+          <errorHandling>reject</errorHandling>
+          <warningHandling>ignore</warningHandling>
+        </program>
+        <program xsi:type='bmClientType' name='bmclient'>
+          <servers>
+            <server host='127.0.0.1' port='41000'></server>
+          </servers>
+          <log level='4' period='1' periodUnits='DAY' numberRetained='30'>/var/log/brightmail/bmclient_log</log>
+          <connection timeoutSec='0' maxPerServer='1000' numberPersistent='512'/>
+          <transaction timeoutSec='0' bufferFlushSize='65536'/>
+          <delayCommunicationInit>false</delayCommunicationInit>
+        </program>
+      </programs>
+    </package>
+    <package xsi:type='serverPackageType' name='serverPackage' installed='true' enabled='true'>
+      <programs>
+        <program xsi:type='bmserverType' name='bmserver'>
+          <log level='4' period='1' periodUnits='DAY' numberRetained='30'>/var/log/brightmail/bmserver_log</log>
+          <networkAddress host='*' port='41000'></networkAddress>
+          <maxQueueSize>2048</maxQueueSize>
+          <maxServiceThreads>32</maxServiceThreads>
+        </program> 
+        <program xsi:type='conduitType' name='conduit'>
+          <log level='4' period='1' periodUnits='DAY' numberRetained='30'>/var/log/brightmail/conduit_log</log>
+          <encryptionType>BltEncryptBase64</encryptionType>
+          <kickCommand>/space/brightmail/symantec/sbas/Scanner/bin/kicker /space/brightmail/symantec/sbas/Scanner/etc/bmiconfig.xml /space/brightmail/symantec/sbas/Scanner/jobs/bmserver/bmserver.pid</kickCommand>
+          <interval>60</interval>
+          <blocStatsInterval>10</blocStatsInterval>
+          <statsCleanThreshold>3</statsCleanThreshold>
+          <httpTimeout>3600</httpTimeout>
+          <ackControl>on</ackControl>
+          <statsURL>https://aztec.brightmail.com/stats/</statsURL>
+          <registrationURL>https://register.brightmail.com/register</registrationURL>
+          <testURL>https://aztec.brightmail.com/rules2/blrm</testURL>
+          <proxy enabled='false'>
+            <server host='none'/>
+          </proxy>
+        </program>
+        <program xsi:type='cleanerType' name='cleaner'>
+          <log level='4' period='1' periodUnits='DAY' numberRetained='30'>/var/log/brightmail/cleaner_log</log>
+          <smtpClient>
+            <timeout>480000</timeout>
+            <servers>
+              <server host='127.0.0.1' port='25'/>
+            </servers>
+          </smtpClient>
+          <avNoticeFile>/space/brightmail/symantec/sbas/Scanner/etc/Notification.xml</avNoticeFile>
+          <maxSenderNotifications>0</maxSenderNotifications>
+          <numberThreads>5</numberThreads>
+          <spool width='8' depth='0'>/var/spool/brightmail/virus</spool>
+          <heuristicLevel>2</heuristicLevel>
+          <maxContainedFileBytes>104857600</maxContainedFileBytes>
+          <deleteBigFiles value='false'/>
+          <defaultUserName>avcleaner@yourdomain.com</defaultUserName>
+          <notificationSubject>You have a virus!</notificationSubject>
+          <maxScanTime>600</maxScanTime>
+        </program>
+        <program xsi:type='harvesterType' name='harvester'>
+          <log level='4' period='1' periodUnits='DAY' numberRetained='30'>/var/log/brightmail/harvester_log</log>
+          <interval>60</interval>
+          <numberThreads>5</numberThreads>
+          <smtpClient>
+            <timeout>60000</timeout>
+            <servers>
+              <server host='127.0.0.1' port='25'/>
+            </servers>
+          </smtpClient>
+          <spool width='8' depth='0'>/var/spool/brightmail/spam</spool>
+          <maxRetries>3</maxRetries>
+          <retryIntervals>0,300,1800</retryIntervals>
+        </program>
+      </programs>
+      <bmengine>
+        <precedence>reinsert-worm-custom_worm-virus-safe-allow-custom_allow-reject-custom_reject-spam-custom_spam-gray-custom_gray-sideline-discard-unscannable-custom_unscannable-knownlang</precedence>
+        <defaultDestination>inbox</defaultDestination>
+        <statsThreshold>1.0</statsThreshold>
+        <spamThreshold>90</spamThreshold>
+        <clientOptin enabled='false'/>
+        <allowActionsToOverrideDestination enabled='true'/>
+        <earlyVerdictsIP enabled='false'/>
+      </bmengine>
+      <clientCert>/space/brightmail/symantec/sbas/Scanner/etc/cert.pem</clientCert>
+      <trustedCert>/space/brightmail/symantec/sbas/Scanner/etc/trusted.cert</trustedCert>
+    </package>
+  </packages>
+  <policies>
+    <policy name='Default' precedence='64000' enabled='true'>
+      <population>
+        <member xsi:type='addressPattern'>*</member>
+      </population>
+      <attributes>
+        <engine>
+          <disposition name='custom_spam' referral='spam'>
+          </disposition>
+          <disposition name='custom_gray' referral='gray'>
+          </disposition>
+          <disposition name='custom_worm' referral='worm'>
+          </disposition>
+          <disposition name='custom_allow' referral='allow'>
+          </disposition>
+          <disposition name='custom_reject' referral='reject'>
+          </disposition>
+          <disposition name='custom_unscannable' referral='unscannable'>
+          </disposition>
+          <disposition name='reinsert'>
+            <destination>inbox</destination>
+          </disposition>
+          <disposition name='allow'>
+            <destination></destination>
+            <action name='modify' type='bmispool'>
+              <path>/var/spool/brightmail/spam</path>
+              <modify>
+                <headers>
+                  <replace>X-Whitelist: TRUE</replace>
+                </headers>
+              </modify>
+              <server host='127.0.0.1' port='25'/>
+            </action>
+          </disposition>
+          <disposition name='safe'>
+            <destination>inbox</destination>
+          </disposition>
+          <disposition name='knownlang'>
+            <destination></destination>
+            <action name='modify' type='bmispool'>
+              <path>/var/spool/brightmail/spam</path>
+              <modify>
+                <headers>
+                  <replace>X-Language-Identified: TRUE</replace>
+                </headers>
+              </modify>
+              <server host='127.0.0.1' port='25'/>
+            </action>
+          </disposition>
+          <disposition name='spam'>
+            <destination></destination>
+            <action name='modify' type='bmispool'>
+              <path>/var/spool/brightmail/spam</path>
+              <modify>
+                <headers>
+                  <transform>Subject: [Spam]%s</transform>
+                </headers>
+              </modify>
+              <server host='127.0.0.1' port='25'/>
+            </action>
+          </disposition>
+          <disposition name='gray'>
+            <destination></destination>
+            <action name='modify' type='bmispool'>
+              <path>/var/spool/brightmail/spam</path>
+              <modify>
+                <headers>
+                  <transform>Subject: [Suspected Spam]%s</transform>
+                </headers>
+              </modify>
+              <server host='127.0.0.1' port='25'/>
+            </action>
+          </disposition>
+          <disposition name='virus'>
+            <destination></destination>
+            <action name='clean' type='bmispool'>
+              <path>/var/spool/brightmail/virus</path>
+            </action>
+          </disposition>
+          <disposition name='worm'>
+            <destination></destination>
+          </disposition>
+          <disposition name='unscannable'>
+            <destination></destination>
+            <action name='modify' type='bmispool'>
+              <path>/var/spool/brightmail/spam</path>
+              <modify>
+                <headers>
+                  <transform>Subject: [WARNING - NOT VIRUS SCANNED]%s</transform>
+                </headers>
+              </modify>
+              <server host='127.0.0.1' port='25'/>
+            </action>
+          </disposition>
+          <disposition name='reject'>
+            <destination></destination>
+            <action name='modify' type='bmispool'>
+              <path>/var/spool/brightmail/spam</path>
+              <modify>
+                <headers>
+                  <transform>Subject: [Spam]%s</transform>
+                </headers>
+              </modify>
+              <server host='127.0.0.1' port='25'/>
+            </action>
+          </disposition>
+          <disposition name='sideline'>
+            <destination>inbox</destination>
+          </disposition>
+          <disposition name='discard'>
+            <destination></destination>
+          </disposition>
+        </engine>
+      </attributes>
+    </policy>
+  </policies>
+</installation>

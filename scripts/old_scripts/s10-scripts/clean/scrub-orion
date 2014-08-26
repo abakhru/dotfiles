@@ -1,0 +1,78 @@
+#!/bin/ksh
+
+AWK='/usr/bin/awk'
+CAT='/usr/bin/cat'
+CUT='/usr/bin/cut'
+ECHO='/usr/bin/echo'
+ID='/usr/bin/id'
+GREP='/usr/bin/grep'
+PKGINFO='/usr/bin/pkginfo'
+PKGRM='/usr/sbin/pkgrm'
+RM='/usr/bin/rm'
+SED='/usr/bin/sed'
+
+BELL_CHAR='\a'
+TMP_DIR='/tmp'
+
+###############################################
+# Remove package
+###############################################
+PackageRemove() {
+  local PACKAGES="$1"
+  local PACKAGE=''
+  local ADMIN_FILE=''
+
+  ADMIN_FILE="$TMP_DIR/package_remove_admin"
+
+  $ECHO 'action=nocheck' > $ADMIN_FILE
+  $ECHO 'idepend=nocheck' >> $ADMIN_FILE
+  $ECHO 'rdepend=nocheck' >> $ADMIN_FILE
+  $ECHO 'mail=' >> $ADMIN_FILE
+
+  for PACKAGE in $PACKAGES; do
+    $PKGINFO -q $PACKAGE
+    if [ $? -eq 0 ]; then
+      $ECHO "Removing $PACKAGE..."
+      #$RM -f /var/sadm/pkg/$PACKAGE/install/preremove
+      #$RM -f /var/sadm/pkg/$PACKAGE/install/postremove
+      $PKGRM -A -n -a $ADMIN_FILE $PACKAGE
+      $ECHO ''
+    else
+      $ECHO "Checking $PACKAGE..."
+    fi
+    $RM -rf /var/sadm/pkg/$PACKAGE 
+    $RM -rf /var/sadm/pkg/.*$PACKAGE 
+    $RM -f /var/sadm/install/logs/$PACKAGE 
+  done
+
+  $RM -f $ADMIN_FILE
+}
+
+###############################################
+# Do the scrub
+###############################################
+Scrub() {
+  local TAG="$1"
+  local PACKAGES=''
+
+  PACKAGES=`$GREP -l "$TAG" /var/sadm/pkg/*/pkginfo | $SED -e 's!^..*SUNW\(..*\)/pkginfo!SUNW\1!'`
+  PackageRemove "$PACKAGES"
+}
+
+###############################################
+# Main
+###############################################
+
+if [ `$ID | $AWK '{print $1}'` != "uid=0(root)" ]; then
+  $ECHO "You must be root user. $BELL_CHAR"
+  exit 1
+fi
+
+Scrub 'Sun ONE'
+Scrub 'Sun Java'
+Scrub 'Identity Server'
+Scrub 'Portal Server'
+Scrub 'Mobile Access'
+Scrub 'J2SDK'
+
+exit 0

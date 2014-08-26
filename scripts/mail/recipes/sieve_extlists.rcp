@@ -1,0 +1,19 @@
+filter1 = "require [\"extlists\", \"editheader\"];
+if (address :list \"from\" \":addrbook:default\") {
+	addheader \"X-Sender-in-PAB\" \"yes\";
+	keep;
+}
+";
+set_option("systemfilter",filter1);
+set_option("ldap_spare_4","psRoot");
+
+if exists_mapping("SIEVE_EXTLISTS") {
+  m = get_mapping("SIEVE_EXTLISTS");
+  write "=== previous mapping:" . m;
+}
+replace_mapping("SIEVE_EXTLISTS", 
+["address|*|*|*|*|urn:ietf:params:sieve:addrbook:default", "$Y",
+"address|*|*|*|*|urn:ietf:params:sieve:addrbook:default|*", "$C$]pabldap:///$1??one?(|(piEmail1=$4)(piEmail2=$4)(piEmail3=$4))[$Y$E",
+"address|*|*|*|*|urn:ietf:params:sieve:addrbook:default|*", "$N",
+"address||*|*|*|urn:ietf:params:sieve:addrbook:default|*", "$N",
+"valid_ext_list||*|*|*|urn:ietf:params:sieve:addrbook:default", "$N"]);

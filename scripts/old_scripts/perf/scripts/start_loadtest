@@ -1,0 +1,7 @@
+#!/bin/sh
+# start loadtest
+
+CLIENTJARS=/export/home/stress/client
+classpath=$CLIENTJARS/imservice.jar:$CLIENTJARS/jso.jar:$CLIENTJARS/log4j.jar:$CLIENTJARS/jaxen-core.jar:$CLIENTJARS/saxpath.jar:$CLIENTJARS/xp.jar
+jargs="-Xmx1024m" 
+/usr/bin/java $jargs -cp $classpath com.sun.im.service.load.Generate $1

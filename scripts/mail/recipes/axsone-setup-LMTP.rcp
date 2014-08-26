@@ -1,0 +1,112 @@
+#store archive related settings
+#set_option("partition:primary.path", "/opt/sun/comms/messaging641/data/store/partition/primary");
+#set_option("partition:axsonepart.path", "/opt/sun/comms/messaging641/data/store/partition/axsonePart");
+set_option("store.archive.compliance", "1");
+set_option("store.archive.operational", "1");
+set_option("store.archive.path", "T./store_archive");
+set_option("store.archive.reportdir", "T./report_dir");
+set_option("store.archive.retrieveserver", "portal.axsone.com");
+set_option("store.msghash.enable", "1");
+set_option("store.msghash.nummsgs", "1024");
+set_option("tcp_lmtp_server.logfile.loglevel", "Debug");
+set_option("channel:" . "bitbucket" . ".master_debug");
+set_option("channel:" . "bitbucket" . ".slave_debug");
+set_option("channel:" . "hold" . ".master_debug");
+set_option("channel:" . "hold" . ".slave_debug");
+set_option("channel:" . "ims-ms" . ".sourcespamfilter1");
+set_option("channel:" . "ims-ms" . ".destinationspamfilter1");
+set_option("channel:" . "ims-ms" . ".generatemessagehash");
+set_option("channel:" . "tcp_intranet" . ".destinationspamfilter1");
+set_option("channel:" . "tcp_intranet" . ".sourcespamfilter1");
+set_option("channel:" . "tcp_intranet" . ".generatemessagehash");
+
+#mta option settings for LMTP delivery
+slot=1;
+set_option("spamfilter" . slot . "_library", make_path("IMTA_LIB:libarch.so"));
+set_option("spamfilter" . slot . "_config_file", make_path("IMTA_TABLE:sample.conf"));
+set_option("ALIAS_URL0", "ldap:///$V?*?sub?$R");
+set_option("REVERSE_URL", "ldap:///$V?$N?sub?$R");
+set_option("USE_REVERSE_DATABASE", "4");
+set_option("USE_DOMAIN_DATABASE", "0");
+set_option("MM_DEBUG", "10");
+set_option("IMAP_PASSWORD", "password");
+set_option("MISSING_RECIPIENT_POLICY", "0");
+set_option("ALIAS_DOMAINS", "6");
+set_option("VACATION_TEMPLATE", "file:///opt/sun/comms/messaging641/data/vacation/$3I/$1A/$2A/$U.vac");
+
+#Setting up PORT_ACCESS MAPPING table for LMTP
+if exists_mapping("PORT_ACCESS") {
+  m = get_mapping("PORT_ACCESS");
+}
+else {
+  m = [];
+}
+
+replace_mapping("PORT_ACCESS",[m .
+"TCP|*|225|LENV_IPADDRESS|*","$Y",
+"TCP|*|226|LENV_IPADDRESS|*","$Y",
+"TCP|*|225|LENV_IPADDRESS.*|*","$Y",
+"TCP|*|226|LENV_IPADDRESS.*|*","$Y",
+"TCP|*|*|*","$N500$ Do$ not$ connect$ to$ this$ machine"]);
+
+#INTERNAL_IP
+if exists_mapping("INTERNAL_IP") {
+  m = get_mapping("INTERNAL_IP");
+}
+else {
+  m = [];
+}
+
+replace_mapping("INTERNAL_IP",
+["$(LENV_IPADDRESS/24)","$Y" . m]);
+
+if exists_group("dispatcher.service:LMTPSS") {
+  delete_group("dispatcher.service:LMTPSS");
+}
+add_group("dispatcher.service:LMTPSS", ["enable", "1", "image", "IMTA_BIN:tcp_lmtp_server", "logfilename", "IMTA_LOG:tcp_lmtpss_server.log", "parameter", "CHANNEL=tcp_lmtpss", "tcp_ports", "225", "stacksize", "2048000"]);
+
+if exists_group("dispatcher.service:LMTPN") {
+  delete_group("dispatcher.service:LMTPN");
+}
+add_group("dispatcher.service:LMTPN", ["enable", "1", "image", "IMTA_BIN:tcp_lmtpn_server", "logfilename", "IMTA_LOG:tcp_lmtpsn_server.log", "parameter", "CHANNEL=tcp_lmtpsn","tcp_ports", "226", "stacksize", "2048000"]);
+
+#autoreply
+if exists_channel("autoreply") {
+  delete_channel("autoreply");
+}
+add_channel("autoreply", ["master_debug", "", "slave_debug", "", "defragment", "", "subdirs", "20", "official_host_name", "autoreply-daemon"]);
+#set_option("job_controller.channel_class:autoreply.master_command","IMTA_BIN:autoreply");
+
+# tcp_lmtpss (LMTP server - store)
+if exists_channel("tcp_lmtpss") {
+  delete_channel("tcp_lmtpss");
+}
+add_channel("tcp_lmtpss", ["lmtp", "", "nomx", "", "single_sys", "", "subdirs", "20", "maxjobs", "7", "pool", "SMTP_POOL", "master_debug", "", "slave_debug", "", "official_host_name", "tcp_lmtpss-daemon"]);
+
+#! tcp_lmtpsn (LMTP server - native)
+if exists_channel("tcp_lmtpsn") {
+  delete_channel("tcp_lmtpsn");
+}
+add_channel("tcp_lmtpsn", ["lmtp", "", "nomx", "", "single_sys", "", "subdirs", "20", "maxjobs", "7", "pool", "SMTP_POOL", "master_debug", "", "slave_debug", "", "official_host_name", "tcp_lmtpsn-daemon"]);
+
+#! tcp_lmtpcn (LMTP client - native)
+if exists_channel("tcp_lmtpcn") {
+  delete_channel("tcp_lmtpcn");
+}
+add_channel("tcp_lmtpcn", ["defragment", "", "lmtp", "", "port", "226", "nomx", "", "single_sys", "", "subdirs", "20", "maxjobs", "7", "pool", "SMTP_POOL", "dequeueremoveroute", "", "master_debug", "", "slave_debug", "", "official_host_name", "lmtpcn-daemon"]);
+
+# tcp_lmtpcs (LMTP client - store)
+if exists_channel("tcp_lmtpcs") {
+  delete_channel("tcp_lmtpcs");
+}
+add_channel("tcp_lmtpcs", ["defragment", "", "lmtp", "", "port", "225", "nomx", "", "single_sys", "", "subdirs", "20", "maxjobs", "7", "pool", "SMTP_POOL", "dequeueremoveroute", "", "master_debug", "","multigate", "", "slave_debug", "", "official_host_name", "lmtpcs-daemon"]);
+
+
+#Setting rewrite rules for LMTP
+append_rewrites([".lmtp","$U%$H@lmtpcs-daemon"]);
+append_rewrites([".lmtpn","$U%$H@lmtpcn-daemon"]);
+append_rewrites([".&/IMTA_DEFAULTDOMAIN/","$U%$H.&/IMTA_DEFAULTDOMAIN/@tcp_intranet-daemon"]);
+append_rewrites([".native-daemon","$U%$H.native-daemon@native-daemon"]);
+
+#autoreply rule to process the autoreplies on relay machines
+set_option("delivery_options", "      #*mailbox=@$X.lmtp:$M$_+$2S$\\@$2I,     #&members=*,     #*native=@$X.lmtpn:$M     #*unix=@$X.lmtpn:$M     #/hold=$L%$D@hold,     #*file=@$X.lmtpn:+$F     #&@members_offline=*,     #program=$M%$P@pipe-daemon,     #forward=**,       !#^*autoreply=delivered@bitbucket");

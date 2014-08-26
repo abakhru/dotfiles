@@ -1,0 +1,57 @@
+a login immonitoruser1 immonitoruser1
+#a login ssr055@ssrhub1.com ssr055
+#a login imexpireUser64 imexpireUser64
+#1 enable condstore qresync
+#2 select inbox (condstore)
+3 select inbox
+#4 fetch 1:* (modseq)
+#5 store 1 (unchangedsince $imap1Modseq{1}) +flags.silent (\\Flagged)
+#6 store 3 (unchangedsince $imap1Modseq{3}) +flags.silent (\$MDNSent)
+#7 store 4 (unchangedsince $imap1Modseq{4}) +flags.silent (\$Forwarded)
+#8 noop
+#9 search modseq $imap2TmpVar all
+11 fetch 10 rfc822
+#12 fetch 1:* (flags modseq) (changedsince $imap1HighestModseq)
+#12 store 1:* +flags.silent (\\Deleted)
+#13 expunge
+#20 close
+#3 uid thread orderedsubject utf-8 subject "Test Mail"
+#4 uid thread references us-ascii subject "Test Mail"
+#24 uid thread orderedsubject us-ascii or subject regression subject greyed
+#25 thread references utf-8 subject regression
+#26 thread references utf-8 subject greyed
+#27 thread references utf-8 or subject regression subject greyed
+#28 uid thread references utf-8 or subject regression subject greyed
+#7 thread references us-ascii all
+#3 SEARCH FUZZY (SUBJECT "important bitbucket")
+#RFC 6203 - Fuzzy Search - ( NOT SUPPORTED in TIP and MS7u4)
+#3 SEARCH FUZZY (SUBJECT "money is important bitbucket")
+#C1 SORT (RELEVANCY) UTF-8 FUZZY SUBJECT "money"
+#RFC 4731- SEARCH Command for Controlling
+#A284 SEARCH RETURN (MIN) RECENT
+#A282 SEARCH RETURN (MIN COUNT) FLAGGED SINCE 1-Feb-2011 NOT FROM "neo1"
+#A283 SEARCH RETURN () FLAGGED SINCE 1-Feb-2011 NOT FROM "neo1"
+#A01 LIST "" % RETURN (STATUS (MESSAGES UNSEEN))
+#A02 LIST (SUBSCRIBED RECURSIVEMATCH)"" % RETURN (STATUS (MESSAGES))
+#a create inbox.MyTestfolder1
+#a create folder1
+#a delete folder2
+#a delete folder3
+#A03 LIST "" *
+#c getacl folder1
+#d deleteacl folder1 neo1
+#e listrights folder1 neo1
+#f myrights folder1
+#c getacl folder1
+#g deleteacl inbox neo1
+#h getacl inbox
+#f myrights inbox
+#A282 SEARCH RETURN (SAVE) FLAGGED SINCE 1-Feb-2011 NOT FROM "imap_condstore01"
+#4 SEARCH RETURN (SAVE) FROM "neo3"
+#A301 UID SEARCH UID $ SMALLER 4096
+#3 FETCH 1:* (flags modseq uid)
+#4 search return (min max count all) recent
+#5 search return (min max count all) modseq "/flags/Recent" all $imap1UidModseq{$imap1UidMap{1}}
+#6 uid search return (min max count all) all subject "bug verification"
+#7 uid search return (min max count all) modseq $imap1UidModseq{$imap1UidMap{3}} recent subject "bug verification"
+8 logout

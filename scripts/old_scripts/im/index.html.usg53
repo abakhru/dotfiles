@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!-- IM Splash Screen -->
+  <title>Sun‚äó Java System Instant Messaging</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link href="im.css" type="text/css" rel="stylesheet">
+  <script language="JavaScript" src="splash.js"></script>
+</head>
+<body class="LogBdy">
+<form action="#" name="form1" id="form1">
+  <table title="" align="center" border="0" cellpadding="0"
+ cellspacing="0">
+    <tbody>
+      <tr>
+        <td width="50%"><img src="images/other/dot.gif" alt=""
+ height="1" width="1"></td>
+        <td><img src="images/other/dot.gif" alt="" height="1"
+ width="728"></td>
+        <td width="50%"><img src="images/other/dot.gif" alt=""
+ height="1" width="1"></td>
+      </tr>
+      <tr class="LogTopBnd"
+ style="background-image: url(images/im-splash/gradlogtop.jpg); background-repeat: repeat-x; background-position: left top;">
+        <td><img src="images/other/dot.gif" alt="" height="30" width="1"></td>
+        <td nowrap="nowrap" valign="middle">
+        <table title="" border="0" cellpadding="0" cellspacing="0"
+ width="100%">
+          <tbody>
+            <tr>
+              <td>&nbsp;</td>
+              <td align="right"><a href=""
+ title="Start Messenger using Java Plug-In"
+ onmouseover="window.status='Launch Messenger using Java Plug-In'; return true"
+ onmouseout="window.status=''; return true"
+ onblur="window.status=''; return true"
+ onfocus="window.status='Launch Messenger using Java Plug-In'; return true"
+ onclick="window.open('en/im.html', '_blank', 'width=320,height=200,hotkeys=no,status=no,resizable=no,scrollbars=yes')"
+ class="MstLnkLft">Use Java Plug-In</a><a href="en/imhelp/qrtopics.html"
+ title="Launch Quick Reference Guide"
+ onmouseover="window.status='Launch Quick Reference Guide'; return true"
+ onmouseout="window.status=''; return true"
+ onblur="window.status=''; return true"
+ onfocus="window.status='Launch Quick Reference Guide'; return true"
+ class="MstLnkCen">Quick Reference</a><a href="en/imhelp/configur.html"
+ title="Launch Setup Instructions"
+ onmouseover="window.status='Launch Setup Instructions'; return true"
+ onmouseout="window.status=''; return true"
+ onblur="window.status=''; return true"
+ onfocus="window.status='Launch Setup Instructions'; return true"
+ class="MstLnkCen">Setup Instructions</a><a
+ href="en/imhelp/mainview.html" title="Launch Online Help Topics"
+ onmouseover="window.status='Launch Online Help Topics'; return true"
+ onmouseout="window.status=''; return true"
+ onblur="window.status=''; return true"
+ onfocus="window.status='Display Help for This Page'; return true"
+ class="MstLnkRt">Online Help</a></td>
+            </tr>
+          </tbody>
+        </table>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="LogMidBnd"
+ style="background-image: url(images/im-splash/gradlogsides.jpg); background-repeat: repeat-x; background-position: left top;">&nbsp;</td>
+        <td class="LogCntTd"
+ style="background-image: url(images/im-splash/im-splash-background.jpg); background-repeat: no-repeat; background-position: left top;"
+ align="center" height="391" valign="middle">
+        <table title="" background="images/other/dot.gif" border="0"
+ cellpadding="0" cellspacing="0" width="100%">
+          <tbody>
+            <tr>
+              <td width="200"><img src="images/other/dot.gif" alt=""
+ height="240" width="200"></td>
+              <td bgcolor="#ffffff" valign="top" width="458"><img
+ src="images/im-splash/im-splash-name.jpg"
+ alt="Java System Instant Messaging" height="36" width="458">
+              <div style="margin: 20px 0px 0px 5px;">
+              <div style="margin: 20px 0px 0px 5px;"> 
+              <input class="Btn1Hov" name="newButton" id="newButton" value="India.Sun.COM"
+ onfocus="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseover="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseout="if (this.disabled==0) this.className='Btn1'"
+ onblur="if (this.disabled==0) this.className='Btn1'"
+ onclick="javascript:onjavawsclick('en/india.jnlp');return false;"
+ title="Start Messenger using Java Web Start" type="submit">
+	      <input class="Btn1Hov" name="newButton1" id="newButton" value="Coke.COM"
+ onfocus="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseover="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseout="if (this.disabled==0) this.className='Btn1'"
+ onblur="if (this.disabled==0) this.className='Btn1'"
+ onclick="javascript:onjavawsclick('en/coke.jnlp');return false;"
+ title="Start Messenger using Java Web Start" type="submit">
+              <input class="Btn1Hov" name="newButton2" id="newButton" value="Pepsi.COM"
+ onfocus="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseover="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseout="if (this.disabled==0) this.className='Btn1'"
+ onblur="if (this.disabled==0) this.className='Btn1'"
+ onclick="javascript:onjavawsclick('en/pepsi.jnlp');return false;"
+              <input class="Btn1Hov" name="newButton2" id="newButton" value="Community.COM"
+ onfocus="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseover="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseout="if (this.disabled==0) this.className='Btn1'"
+ onblur="if (this.disabled==0) this.className='Btn1'"
+ onclick="javascript:onjavawsclick('en/community.jnlp');return false;"
+              <input class="Btn1Hov" name="newButton2" id="newButton" value="Enterprise.COM"
+ onfocus="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseover="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseout="if (this.disabled==0) this.className='Btn1'"
+ onblur="if (this.disabled==0) this.className='Btn1'"
+ onclick="javascript:onjavawsclick('en/enterprise.jnlp');return false;"
+              <input class="Btn1" name="newButton4" id="newButton" value="Developer.com"
+ onfocus="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseover="if (this.disabled==0) this.className='Btn1Hov'"
+ onmouseout="if (this.disabled==0) this.className='Btn1'"
+ onblur="if (this.disabled==0) this.className='Btn1'"
+ onclick="javascript:onjavawsclick('en/developer.jnlp');return false;"
+ title="Start Messenger using Java Web Start" type="submit">
+              <div style="margin: 20px 0px 0px 5px;"> </div>
+              </div>
+              </div>
+              </td>
+              <td width="93"><img src="images/other/dot.gif" alt=""
+ height="240" width="93"></td>
+            </tr>
+          </tbody>
+        </table>
+        </td>
+        <td class="LogMidBnd"
+ style="background-image: url(images/im-splash/gradlogsides.jpg); background-repeat: repeat-x; background-position: left top;">&nbsp;</td>
+      </tr>
+      <tr class="LogBotBnd"
+ style="background-image: url(images/im-splash/gradlogbot.jpg); background-repeat: repeat-x; background-position: left top;">
+        <td>&nbsp;</td>
+        <td>
+        <div class="logCpy"><span class="logTxtCpy">Copyright Ã¨
+2001-2006 Sun Microsystems, Inc. All rights reserved. U.S. Government
+Rights - Commercial software. Government users are subject to the Sun
+Microsystems, Inc. standard license agreement and applicable provisions
+of the FAR and its supplements. Use is subject to license terms. This
+distribution may include materials developed by third parties. Sun, Sun
+Microsystems, the Sun logo, Java and Sun Java System Instant Messaging
+are trademarks or registered trademarks of Sun Microsystems, Inc. in
+the U.S. and other countries.</span></div>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+</body>
+</html>

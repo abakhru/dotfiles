@@ -1,0 +1,9 @@
+dn:o=usergroup
+changetype:modify
+replace:aci
+aci: (target = ldap:///o=usergroup) (targetscope = base)(targetattr=\"*\") (version 3.0; acl \"anonymousBaseDN\"; allow (read, compare, search) (userdn = \"ldap:///anyone\") ;)
+
+dn:o=usergroup
+changetype:modify
+replace:aci
+aci: (target = ldap:///o=usergroup) (targetscope = subtree)(targetattr=\"*\") (version 3.0; acl \"anonymousProfile\"; allow(read,compare,search) (userdn = \"ldap:///anyone\") ;)

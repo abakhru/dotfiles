@@ -1,0 +1,8 @@
+require ["mime", "refuse", "variables"]; 
+if header :mime :anychild :param "filename" :matches "Content-Disposition" "*.*"
+{
+  set "msg" blockext("${2}");
+  if not string :is "${msg}" "" {
+       refuse "${msg}";
+  }
+}

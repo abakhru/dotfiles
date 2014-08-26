@@ -1,0 +1,70 @@
+! MTA configuration options
+!
+ALIAS_URL0=ldap:///$V?*?sub?$R
+REVERSE_URL=ldap:///$V?$N?sub?$R
+LDAP_SCHEMALEVEL=2
+LANGDIR=/space/amit/locale/C
+!
+DEQUEUE_DEBUG=1
+! Configurations for JMQ notification testing
+!
+!LDAP_SPARE_1=mailEventNotificationDestination
+!SPARE_1_SEPARATOR=259
+!
+MM_DEBUG=10
+OS_DEBUG=1
+MAX_NOTIFYS = 2
+LOG_PROCESS=1
+!
+FILTER_DISCARD=2
+filter_debug=1
+return_debug=1
+!
+! Log to syslog
+LOG_MESSAGES_SYSLOG=20
+!LOG_MESSAGES_SYSLOG=27
+SEPARATE_CONNECTION_LOG=1
+!
+! Sites likely want additional bits of LOG_CONNECTION set; this example
+! requires that bit 1/value 2 plus bit 7/value 128 be set.
+! 1) You need to add 512 to your LOG_CONNECTION=642
+! in order to get the transport-info (which you want, for the source IP field!)
+! to get included in the connection probes (which include "U" action probes).
+!
+LOG_CONNECTION=642
+LOG_MESSAGE_ID=3
+LOG_REASON=3
+LOG_USERNAME=3
+LOG_DIAGNOSTICS=3
+LOG_QUEUE_TIME=3
+LOG_FILENAME=3
+!ENABLE_SIEVE_BODY=1
+LOG_FILTER=1
+! for brightmail
+!spamfilter1_config_file=/opt/sun/comms/messaging64/config/bmiconfig.xml
+!spamfilter1_library=/opt/sun/comms/messaging64/lib/libbmiclient.so.1
+!spamfilter1_optional=0
+!
+!Suitable only for milter-spam-filter
+!spamfilter1_string_action=data:,$M
+!
+!for brightmail server; http://docs.sun.com/app/docs/doc/819-4428/bgasr?l=en&a=view
+spamfilter1_verdict_0=*
+!spamfilter1_action_0=data:,if header :contains ["Subject"] ["Test Mail"] { addtag "[SPAM DETECTED]";} else { addtag "[NO SPAM]";}
+!spamfilter1_action_0=data:,require ["body"]; if body :text :contains "project schedule" {addtag "[SPAM DETECTED]";}
+!spamfilter1_action_0=data:,discard
+!spamfilter1_string_action=data:,require "fileinto"; fileinto "$U";
+!spamfilter1_string_action=data:,discard
+!spamfilter1_action_0=data:,require ["envelope","body"]; if anyof (header :contains "From" "spam", header :contains "Subject" "Spam", body :contains "project schedule", header :contains "Content-Type" "Cult") { addtag "[SPAM DETECTED]"; }
+!
+!
+!MAX_SIEVE_STRING_SIZE=4
+!LDAP_USE_ASYNC=8
+!LDAP_OPTIN1=Brightmail
+
+!ENABLE_SIEVE_BODY=1
+!SPAMFILTER1_CONFIG_FILE=/opt/sun/comms/messaging64/config/milter.config
+!SPAMFILTER1_LIBRARY=/opt/sun/comms/messaging64/lib/libmilter.so
+!SPAMFILTER1_OPTIONAL=4
+!SPAMFILTER1_STRING_ACTION=data:,$M
+!SPAMFILTER1_STRING_ACTION=data:,require ["addheader", "editheader", "reject"];if header :contains "subject" ["Test Mail", "spam"] { discard; }

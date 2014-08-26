@@ -1,0 +1,20 @@
+#to run the module
+java SimpleHttpServer
+
+(this will start the Http server on localhost)
+
+- http://localhost/cpu_usage will give the top output for process_name and cpu_usage.
+Note: this will only work for localhost
+
+- SimpleHttpServerTest.jmx is the JMeter Testplan file for performance testing of this application
+
+- functional_test.pl is the normal functional testcases for this application
+./functional_test.pl (you might need additional CPAN module to execute this perl script)
+
+- png files are the sample performance runs graphs for 5mins run
+
+- USED json-simple library to convert text (top) output to JSON format.
+
+- cpu_usage context output displays both text output and JSON formatted output.
+
+NOTE: I am not a JAVA expert, so pardon my mistakes but i have tried to do the best in very short amount of time i had.

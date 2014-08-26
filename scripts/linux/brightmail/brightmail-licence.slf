@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<licenses xmlns="https://licensing.symantec.com">
+<license signature="sHXu9/fnO9p6/xhb6QF/ijpIcfbndlrMB9nimLVIp/nGuzsuXK5kjMPd4IhIWmfQJub5vwnFdOUrb/6H5DkniyHwbSER/IFTLDjIvnY/uJIMrgNJkf7H3yyefdem7IrhkxkZQVRsI9Sq3IPn99WUNMLDSpdJPG9l0/mxaV5jCeo=">
+<license_format>1</license_format>
+<fulfillment_id>12133208.7</fulfillment_id>
+<serial_id>22468355.7</serial_id>
+<serial_number>M1031672253</serial_number>
+<product_name>Symantec Brightmail Message Filter 6.1 AntiSpam AntiVirus Subscription Not for Resale</product_name>
+<sign_date>2009-07-13</sign_date>
+<key>
+<name>Brightmail AntiSpam Content</name>
+<version>1.0</version>
+<start_date>2009-07-13</start_date>
+<end_date>2010-09-11</end_date>
+<warn_policy>1,120</warn_policy>
+<grace_policy>1,60</grace_policy>
+</key>
+<key>
+<name>AntiVirus Content NFR</name>
+<version>1.0</version>
+<start_date>2009-07-13</start_date>
+<end_date>2010-09-11</end_date>
+<count>1</count>
+<warn_policy>1,120</warn_policy>
+<grace_policy>1,60</grace_policy>
+</key>
+</license>
+</licenses>
+

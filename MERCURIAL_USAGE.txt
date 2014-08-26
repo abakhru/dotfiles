@@ -1,0 +1,96 @@
+- list branches & check which branch we are working on
+hg branch
+hg branch -r
+
+- create branch
+hg branch <amit-foo>
+hg co -b <amit-foo>
+Eg: hg branch amit-test
+
+- to change to a bookmark
+hg checkout amit-foo
+
+- to update the local master bookmark to latest version
+hg rebase -d master@default -b master
+hg pull
+
+- branches nomenclature
+de* named branches are defect related
+us* named branches are user stories related
+others are peoples named rellated
+
+- commit changes
+-- add a new file or change any existing file
+hg add <new_file_name>
+
+-- commit changes to an existing file`
+hg commit -m "message" <filename>
+hg commit -a -m "adding a file and editing another file" -v
+
+- uncommit a local commit
+hg revert
+
+- push a new bookmark
+hg push amit-foo
+
+- to check the actual status of changes
+hg st/status
+
+- diff the changes compared to master
+hg diff --color --oneline
+
+- save uncommit changes
+hg shelve
+hg shelve -l/--list
+hg unshelve
+
+hg shelve -l
+hg stash --cleanup (delete all shelved changes)
+
+- you can created command aliased in ~/.hgrc file
+
+[alias]
+	checkout = co
+	status = st
+	diff = di --color-words
+	pull = up
+
+- to check if ssh auth key is being used through ssh session
+ssh-add -l
+(this should list the auth key if its working fine, if it doesn't display the ssh-key then checkins will FAIL
+
+- to revert particular file to master version
+hg checkout/co -- 5-qa/python/stqa/silvertap/testdata/basic_test.py/universal_conf.py
+
+- get the changelog in onelines
+hg log
+hg log --one-line
+hg log --oneline
+hg log --color --oneline
+
+- always use hg url for push/pull, http is read-only url and ALWAYS work on snr branch NEVER on master
+hg clone hg@hghub.silvertailsystems.com:ana/main3 ana
+
+- check the local changes compared to the remote origin
+hg status
+
+- list the changed files in your repo
+hg ls-files -m (modified files)
+hg ls-files -d (deleted files)
+hg ls -o (non-added files)
+
+- add the changed/modified files in your repo
+hg ls -m|xargs hg add
+hg ls -d|xargs hg rm
+
+- tar all the modified files in your repo (doesn't include new files)
+hg ls -m|xargs tar cvf ~/tmp/t.tar
+
+- always rebase your brach onto master before push
+hg rebase --onto master master
+
+- autosquash the fixups
+hg rebase -i --autosquash
+
+- delete remote branch
+hg push origin :<branch_name>

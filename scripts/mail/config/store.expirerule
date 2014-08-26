@@ -1,0 +1,12 @@
+expiretest1.exclusive:false
+expiretest1.folderpattern:user/test*/INBOX
+expiretest1.messagecount:1
+expiretest2.exclusive:false
+expiretest2.folderpattern:user/test*/Trash
+expiretest2.messagecount:1
+expiretest3.exclusive:false
+expiretest3.folderpattern:user/test*/Spam
+expiretest3.messagecount:1
+expiretest4.exclusive:false
+expiretest4.folderpattern:user/test*/Sent
+expiretest4.messagecount:1
