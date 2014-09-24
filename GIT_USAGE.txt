@@ -1,5 +1,5 @@
 - list branches & check which branch we are working on
-git branch 
+git branch
 git branch -r
 
 - create branch
@@ -28,7 +28,8 @@ git commit -m "message" <filename>
 git commit -a -m "adding a file and editing another file" -v
 
 - uncommit a local commit
-git reset --soft HEAD^
+git reset --soft HEAD^ (if file already in git)
+git reset <filename> (if file not already in git)
 
 - push a new branch onto master repo
 git push -u origin de1625-autotune-consume-stqa-disable-v1
@@ -67,8 +68,8 @@ git log
 git log --one-line
 git log --oneline
 git log --color --oneline
- 
-- always use git url for push/pull, http is read-only url and ALWAYS work on snr branch NEVER on master  
+
+- always use git url for push/pull, http is read-only url and ALWAYS work on snr branch NEVER on master
 git clone git@github.silvertailsystems.com:ana/main3 ana
 
 - check the local changes compared to the remote origin

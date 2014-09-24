@@ -1,7 +1,10 @@
 """
 Asynchronous publisher example
 ==============================
-The following example implements a publisher that will respond to RPC commands sent from RabbitMQ and uses delivery confirmations. It will reconnect if RabbitMQ closes the connection and will shutdown if RabbitMQ closes the channel. While it may look intimidating, each method is very short and represents a individual actions that a publisher can do.
+The following example implements a publisher that will respond to RPC commands sent from RabbitMQ
+and uses delivery confirmations. It will reconnect if RabbitMQ closes the connection and will
+shutdown if RabbitMQ closes the channel. While it may look intimidating, each method is very short
+and represents a individual actions that a publisher can do.
 """
 
 import logging
@@ -13,7 +16,7 @@ LOG_FORMAT = ('%(levelname) -10s %(asctime)s %(name) -30s %(funcName) '
 LOGGER = logging.getLogger(__name__)
 
 
-class AsyncPublisher(object):
+class AsyncRabbitMQPublisher(object):
     """This is a publisher that will handle unexpected interactions
     with RabbitMQ such as channel and connection closures.
 
