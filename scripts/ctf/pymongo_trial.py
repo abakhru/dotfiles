@@ -30,6 +30,15 @@ class MongoDBClientMixins(object):
 
             LOGGER.debug('Authenticated to MongoDb')
 
+    def PrettyDumpJson(self, doc_list, outfile):
+        """ Pretty print and writes JSON output to file name provided."""
+        with open(outfile, 'wb') as _file:
+            json_formatted_doc = json_util.dumps(doc_list, sort_keys=False, indent=4
+                                                 , default=json_util.default)
+            LOGGER.info('Generated Alert in JSON form:\n%s', json_formatted_doc)
+            _file.write(json_formatted_doc)
+            return
+
     def get_alerts(self, collection_name='alert', moduleId=None, sort_field='time'):
         """Extract alerts from mongodb based on moduleId.
 
