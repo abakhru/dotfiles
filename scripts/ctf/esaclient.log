@@ -1,0 +1,25 @@
+]0;ESA Console - 10.5.0.0.b26d830[7m[0m[32m[0m[33mcarlos:offline||jmx:localhost:com.rsa.netwitness.esa:/>[0mcarlos-connect
+carlos-connect
+[7m[0m[32mRemoteJmsDirectEndpoint { jms://localhost:50030?carlos.useSSL=true } ; running = true
+[0m[33mcarlos:localhost||jmx:localhost:com.rsa.netwitness.esa:/>[0mcd pipeline/mess
+cd pipeline/mess
+[7m[0m[32m/Workflow/Pipeline/messageBus
+[0m[33mcarlos:localhost||jmx:localhost:com.rsa.netwitness.esa:/Workflow/Pipeline/messageBus>[0mset Enabled --value true
+set Enabled --value true
+[7m[0m[32mEnabled=true (was true)
+[0m[33mcarlos:localhost||jmx:localhost:com.rsa.netwitness.esa:/Workflow/Pipeline/messageBus>[0minvoke start
+invoke start
+[33mcarlos:localhost||jmx:localhost:com.rsa.netwitness.esa:/Workflow/Pipeline/messageBus>[0mget .
+get .
+[7m[0m[32m{
+  "Dirty" : false,
+  "Enabled" : true,
+  "Name" : "messageBus",
+  "StatisticsUpdateInterval" : 30,
+  "Valid" : true,
+  "WorkUnitProcessingRate" : 0,
+  "WorkUnitsProcessed" : 0,
+  "WorkflowName" : "messageBus"
+}
+[0m[33mcarlos:localhost||jmx:localhost:com.rsa.netwitness.esa:/Workflow/Pipeline/messageBus>[0mquit
+quit

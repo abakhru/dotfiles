@@ -27,11 +27,12 @@ class ESAClientHarness(object):
     """
 
     PROGRAM = 'ESAClient'
-    PROMPT_PATTERN = '>'
+    PROMPT_PATTERN = r'carlos.*jmx.*>'
+    #PROMPT_PATTERN = '>'
     PEXPECT_TIMEOUT = 5
 
     def __init__(self, binary_path=None):
-        binary_path = '/Users/bakhra/source/saeng-5631-forwarding-notification/client/target/appassembler/bin/esa-client'
+        binary_path = '/Users/bakhra/source/server-ready/client/target/appassembler/bin/esa-client'
         cmd = binary_path + ' --profiles carlos'
 
         self.__pexpect = pexpect.spawn(cmd)
@@ -91,28 +92,67 @@ class ESAClientHarness(object):
         """
         LOGGER.debug('Launching esa-client cmd:\n%s', cmd)
         self.__pexpect.sendline(cmd)
-        self.__pexpect.expect(self.PROMPT_PATTERN, timeout)
-        if 'script' not in cmd:
-            output_list_dicts = self._removeColorCodes(self.__pexpect.before, cmd=cmd)
-            LOGGER.debug('Output:\n%s', output_list_dicts)
-            return output_list_dicts
+        if 'carlos-connect' in cmd:
+            self.__pexpect.expect('>', timeout)
+        else:
+            self.__pexpect.expect(self.PROMPT_PATTERN, timeout)
+        output_list_dicts = self._removeColorCodes(self.__pexpect.before, cmd=cmd)
+        LOGGER.debug('Output:\n%s', output_list_dicts)
+        return output_list_dicts
+
+    def AddAmqpSource(self, value=None):
+        """ Adds AMQP source url.
+
+        Args:
+            value: list of amqp url or urls.
+        """
+        if value is None:
+            value = [ "amqp://esa.events?EventType=Event&Source=Test&IdField=id" ]
+
+        if not isinstance(value, list):
+            value = list(value)
+
+        LOGGER.debug('Adding AMQP source uri: %s', value)
+        self.Exec('cd /Workflow/Source/messageBusSource')
+        for url in value:
+            self.Exec('invoke addAmqpSource --param %s' % url)
+        return
+
+    def ControlMessageBusPipeline(self, value=True):
+        """ Enables/Disables messageBus pipeline.
+
+        Args:
+            value: True to enable the pipeline(Default)
+                   False to disable the pipeline.
+        """
+        loc = '/Workflow/Pipeline/messageBus'
+        if value:
+            LOGGER.info('Enabling messageBus pipeline')
+        else:
+            LOGGER.info('Disabling messageBus pipeline')
+
+        self.Exec('cd %s' % loc)
+        self.Exec('set Enabled --value %s' % value)
+        self.Exec('invoke start')
+        return
+
 
 if __name__ == '__main__':
     p = ESAClientHarness()
     p.Exec('carlos-connect')
-    p.Exec('cd source/mess')
-    p.Exec('get .')
-    p.Exec('epl-module-set --eplFile %s --debug true'
-            % '/Users/bakhra/source/server-ready/python/ctf/corelation/testdata/forward_notification_test.py/ForwardNotificationCarlosTest/test_leaf_five_failures_forward/test.epl')
-    p.Exec('epl-module-get')
-    p.Exec('cd ../../../pipeline/mess')
+    #p.Exec('cd source/mess')
+    #p.Exec('get .')
+    #p.Exec('epl-module-set --eplFile %s --debug true'
+    #        % '/Users/bakhra/source/server-ready/python/ctf/corelation/testdata/forward_notification_test.py/ForwardNotificationCarlosTest/test_leaf_five_failures_forward/test.epl')
+    #p.Exec('epl-module-get')
+    p.Exec('cd pipeline/mess')
     p.Exec('set Enabled --value true')
     p.Exec('invoke start')
     p.Exec('get .')
-    p.Exec('cd ../../../alert/notifica')
-    p.Exec('get .')
-    p.Exec('notification-provider-set-forward distribution --exchange esa.csc --defaultHeaders \"esa.event.type=Event\" --type HEADERS --vhost \"/rsa/sa\"')
-    p.Exec('notification-instance-set-forward forwardInstance')
-    p.Exec('notification-provider-get')
-    p.Exec('notification-instance-get')
+    #p.Exec('cd ../../../alert/notifica')
+    #p.Exec('get .')
+    #p.Exec('notification-provider-set-forward distribution --exchange esa.csc --defaultHeaders \"esa.event.type=Event\" --type HEADERS --vhost \"/rsa/sa\"')
+    #p.Exec('notification-instance-set-forward forwardInstance')
+    #p.Exec('notification-provider-get')
+    #p.Exec('notification-instance-get')
     p.Terminate()

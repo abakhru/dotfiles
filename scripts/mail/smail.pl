@@ -21,7 +21,7 @@ print ("$m\n");
 yeah();
 
 sub yeah {
-  $smtp = Net::SMTP->new("$host");
+  $smtp = Net::SMTP->new("$host:1025");
   $smtp->mail("$source");
 # This method is for additional mail from options enabled
 #  $smtp->mail($source, AUTH => "algy8\@sfbay.sun.com");

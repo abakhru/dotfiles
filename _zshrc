@@ -57,7 +57,7 @@ alias reload='. ~/.zshrc'
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(mercurial git ssh-agent)
+plugins=(git ssh-agent)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -83,7 +83,7 @@ export PATH='/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/opt/X11/bin:/usr/loca
 export SSH_KEY_PATH='~/.ssh/id_rsa'
 #export WUI_DEV_DIR='build/us3252-risk-indicator-response-code-v6/apps'
 #export SSH_AUTH_SOCK=$(find /tmp/ssh-* -user `whoami` -name agent\* -printf '%T@ %p\n' 2>/dev/null | sort -k 1nr | sed 's/^[^ ]* //' | head -n 1)
-export PYTHONPATH=/Users/bakhra/source/esa2/python/:../../../python
+export PYTHONPATH=/Users/bakhra/source/server-ready/python/:../../../python
 export JAVA_HOME=$(/usr/libexec/java_home)
 export JDK_HOME=$JAVA_HOME
 #export JAVA_OPTS='-Dcom.rsa.netwitness.carlos.LOG_ENABLE_SYSOUT=true'

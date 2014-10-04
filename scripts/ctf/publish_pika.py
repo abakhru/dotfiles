@@ -8,6 +8,7 @@ import time
 import simplejson as json
 
 from bson import json_util
+from collections import OrderedDict
 from pprint import pprint
 from ctf.framework.logger import LOGGER
 from assertJSONAlmostEquals import AssertJSON
@@ -156,27 +157,31 @@ class ConsumerRabbitMQ(RabbitMQPikaBase):
         self.timestamp = 'carlos.event.timestamp'
         self.message_json_list = []
 
-    def PrettyDumpJson(self, data, outfile):
+    def _prettyDumpJsonToFile(self, data, outfile):
         """ Pretty print and writes JSON output to file name provided."""
         with open(outfile, 'w') as _file:
+            _file.write('[\n')
             _file.write('[\n')
             for i in data:
                 json_formatted_doc = json_util.dumps(json.loads(i), sort_keys=False, indent=4
                                                      , default=json_util.default)
-                LOGGER.info('Generated Alert in JSON form:\n%s', json_formatted_doc)
+                LOGGER.info('RabbitMQ Alert notification in JSON format:\n%s', json_formatted_doc)
                 _file.write(json_formatted_doc)
+                if i is not data[-1]:
+                    _file.write(',\n')
+            _file.write('\n]')
             _file.write('\n]')
         return
 
-    def consume(self, timeout_secs=5, num_events_to_consume=None):
+    def consume(self, timeout_secs=5, num_events_to_consume=None, output_file=None):
         """ Consumes the alerts/events from exchange_header specified.
 
         Args:
-            output_file: file to dump the json output.
             timeout_secs: timeout in seconds, before Consumer stops.
             num_events_to_consume: events/alerts to consume from exchange_header.
+            output_file: file to dump the json output.
         Returns:
-            alerts/events list in JSON format.
+            True if successful, False otherwise.
         """
 
         self.message_json_list = []
@@ -191,50 +196,47 @@ class ConsumerRabbitMQ(RabbitMQPikaBase):
                     # Display the message parts
                     if self.timestamp in properties.headers:
                         properties.headers[self.timestamp] = str(properties.headers[self.timestamp])
-
-                    #body = body.strip()
                     # converting properties.headers to JSON
                     prop_json = json_util.dumps(properties.headers)
                     # creating dict from JSON objects
                     body_dict = json.loads(body)
                     prop_dict = json.loads(prop_json)
-                    alert_dict = dict(body_dict.items() + prop_dict.items())
                     # creating merged alert JSON object
+                    alert_dict = dict(body_dict.items() + prop_dict.items())
                     alert_json = json.dumps(alert_dict)
                     self.message_json_list.append(alert_json)
-                    print '*********'
-                    print 'properties:', json_util.dumps(properties.headers)
-                    print 'body:', body
-                    print 'alert_json: ', alert_json
-                    print 'message_json_list: ', self.message_json_list
-                    print '*********'
                     # Acknowledge the message
                     self.channel.basic_ack(method_frame.delivery_tag)
-                    #LOGGER.debug('RabbitMQ Alert notification in JSON format:\n%s', alert_json)
-                    self.PrettyDumpJson(self.message_json_list, 'consumed.json')
                     # Escape out of the loop after consuming expected number of messages
                     # or if timeout_secs happens
                     LOGGER.debug('num_events_to_consume: %d', self.num_events_to_consume)
                     duration = time.time() - start_time
                     if method_frame.delivery_tag is self._num_events_to_consume\
                        or duration > timeout_secs:
-                        LOGGER.info('Stopping Consumer because either all messages consumed or'
-                                     + ' timeout happened.')
+                        if method_frame.delivery_tag is self._num_events_to_consume:
+                            LOGGER.info('Stopping Consumer because all expected number of messages consumed.')
+                        if duration > timeout_secs:
+                            LOGGER.info('Stopping Consumer because timeout happened.')
                         break
 
+                self._prettyDumpJsonToFile(self.messages_ordered, 'consumed.json')
                 # Cancel the consumer and return any pending messages
                 requeued_messages = self.channel.cancel()
                 LOGGER.debug('Requeued %s messages' % requeued_messages)
                 self.close()
-                #return self.message_json_list
+                return True
             except Exception as e:
                 LOGGER.error(e)
+                return False
 
 
 if __name__ == '__main__':
-    file = '/Users/bakhra/tmp/t/corelation/testdata/forward_notification_test.py'\
-            + '/ForwardNotificationCarlosTest/test_global_five_failures_alert/json_input.txt'
-    file = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/basic_test.py/BasicESATest/test_up_and_down/json_input.txt'
+    #file = '/Users/bakhra/tmp/t/corelation/testdata/forward_notification_test.py'\
+    #        + '/ForwardNotificationCarlosTest/test_global_five_failures_alert/json_input.txt'
+    #file = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/basic_test.py/BasicESATest/test_up_and_down/json_input.txt'
+    #file = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/basic_test.py/BasicESATest/test_5_failures_1_success_alert/json_input.txt'
+    file = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/esa_server_launch_test.py/'\
+           + 'MultipleESAServerLaunchTest/test_multiple_esa_up_and_down/json_input.txt'
     # Publishing
     pub = PublishRabbitMQ()
     listen = ConsumerRabbitMQ(exchange_header='carlos.alerts')
@@ -243,8 +245,9 @@ if __name__ == '__main__':
     pub.publish(file)
     print '======'
     # Consuming
-    listen.consume(num_events_to_consume=pub.num_events_to_consume)
+    #listen.consume(num_events_to_consume=pub.num_events_to_consume)
+    listen.consume(num_events_to_consume=2)
     #listen.PrettyDumpJson(messages, 'consumed.json')
-    a = AssertJSON()
-    a.assertJSONFileAlmostEqualsKnownGood('consumed.json', 'consumed.json'
-                                          , ignorefields=['esa_time', 'carlos.event.signature.id', 'carlos.event.timestamp'])
+    #a = AssertJSON()
+    #a.assertJSONFileAlmostEqualsKnownGood('consumed.json', 'consumed.json'
+    #                                      , ignorefields=['esa_time', 'carlos.event.signature.id', 'carlos.event.timestamp'])

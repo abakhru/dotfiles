@@ -89,8 +89,10 @@ class MongoDBClientMixins(object):
 
 if __name__ == '__main__':
     p = MongoDBClientMixins()
-    for item in p.get_alerts(moduleId='4ec428d8-a7a5-4a69-83ef-975ab1786cc0'):
+    p.cleanup_mongo()
+    for item in p.get_alerts():
         print '===='
         print item
         print '===='
+    print 'Total alerts received:', p.get_alert_count()
     p.close()
