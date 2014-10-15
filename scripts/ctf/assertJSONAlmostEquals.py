@@ -14,8 +14,9 @@ class AssertJSON(unittest.TestCase):
     def setUp(self):
         self.mongo_ignorefields = ['module_id', 'statement', '_id', 'esa_time', 'esa_id', 'time', 'timestamp']
         self.rabbit_ignorefields = ['esa_time', 'carlos.event.signature.id', 'carlos.event.timestamp']
-        self.outfile = 'o/basic_test.py/BasicESATest/test_multiple_alerts_in_rabbitmq/test_multiple_alerts_in_rabbitmq_mongo.json'
-        self.knowngoodfile = 'testdata/basic_test.py/BasicESATest/test_multiple_alerts_in_rabbitmq/knowngood/test_multiple_alerts_in_rabbitmq_mongo.json'
+        self.outfile = 'test_multiple_esa_up_and_down_mongo.json'
+        self.knowngoodfile = 'testdata/esa_server_launch_test.py/TwoESAServersLaunchTest/'\
+                             + 'test_multiple_esa_up_and_down/knowngood/test_multiple_esa_up_and_down_mongo.json'
 
     def assertJSONFileAlmostEqualsKnownGood(self, knowngoodfile, outfile, ignorefields=None):
         """Assert two JSON file provided is almost equal.
@@ -83,8 +84,9 @@ class AssertJSON(unittest.TestCase):
         return False
 
     def test_mongodb_files(self):
-        self.outfile = 'o/basic_test.py/BasicESATest/test_multiple_alerts_generation/test_multiple_alerts_generation_mongo.json'
-        self.knowngoodfile = 'testdata/basic_test.py/BasicESATest/test_multiple_alerts_generation/knowngood/test_multiple_alerts_generation_mongo.json'
+        self.outfile = '/Users/bakhra/source/scripts/ctf/test_multiple_esa_up_and_down_mongo.json'
+        self.knowngoodfile = 'testdata/esa_server_launch_test.py/TwoESAServersLaunchTest/'\
+                             + 'test_multiple_esa_up_and_down/knowngood/test_multiple_esa_up_and_down_mongo.json'
         self.assertJSONFileAlmostEqualsKnownGood(self.knowngoodfile, self.outfile
                                                  , ignorefields=self.mongo_ignorefields)
 
