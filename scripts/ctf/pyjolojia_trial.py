@@ -6,14 +6,14 @@ from ctf.framework.logger import LOGGER
 from pyjolokia import Jolokia
 from thirdparty import simplejson as json
 from pprint import pprint
-import unittest2
+import unittest
 
 LOGGER.setLevel('DEBUG')
 
-class JolokiaMixins(unittest2.TestCase):
+class JolokiaMixins(unittest.TestCase):
     """ Mixin utilities to get values from JVM using jolokia."""
 
-    def __init__(self, host='localhost', port=8778):
+    def __init__(self, host='localhost', port=8779):
         url = ('http://%s:%d/jolokia/' % (host, port))
         try:
             self.j4p = Jolokia(url)
@@ -229,18 +229,25 @@ if __name__ == '__main__':
     #pprint(a)
     #print 'length of a:', len(a)
     #p.epl_module_ops(operation='rm')
-    carlos_url_path = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type'
-                                                         + '=Service,subType=Monitor'
-                                                         + ',id=connections'
-                                                         , attribute='ServerEndpoints')
-    LOGGER.debug('Actual Carlos listner port: %s', carlos_url_path[0].split(':')[2].split('?')[0])
+    #carlos_url_path = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type'
+    #                                                     + '=Service,subType=Monitor'
+    #                                                     + ',id=connections'
+    #                                                     , attribute='ServerEndpoints')
+    #LOGGER.debug('Actual Carlos listner port: %s', carlos_url_path[0].split(':')[2].split('?')[0])
 
-    carlos_url_path = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type'
-                                               + '=Service,subType=Monitor'
-                                               + ',id=transport'
-                                         , attribute='Address'
-                                         , path='uRLPath')
-    print 'carlos_url_path: ', carlos_url_path
-    actual_rmiport = carlos_url_path.split(':')[2].split('/')[0]
-    LOGGER.debug('Actual RMI listner port: %s', actual_rmiport)
+    #carlos_url_path = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type'
+    #                                           + '=Service,subType=Monitor'
+    #                                           + ',id=transport'
+    #                                     , attribute='Address'
+    #                                     , path='uRLPath')
+    #print 'carlos_url_path: ', carlos_url_path
+    #actual_rmiport = carlos_url_path.split(':')[2].split('/')[0]
+    #LOGGER.debug('Actual RMI listner port: %s', actual_rmiport)
     #self.assertEqual(expected_rmi_port, actual_rmiport)
+    data = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type=CEP'
+                              + ',subType=Engine,id=esperEngines'
+                              , attribute='AvailableTypes')
+    #LOGGER.debug(data)
+    for key in data.iteritems():
+        print key[0]    
+        print '==='

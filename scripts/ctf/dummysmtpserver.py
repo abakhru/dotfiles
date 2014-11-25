@@ -14,7 +14,7 @@ LOGGER.setLevel('DEBUG')
 class DummySMTPServer(object):
     """ DummySMTPServer for testing email notifications."""
 
-    def __init__(self, host='localhost', port=22225):
+    def __init__(self, host='localhost', port=2500):
         self.host = host
         self.port = port
         self.pid = None
@@ -27,8 +27,7 @@ class DummySMTPServer(object):
         pid = p.communicate()[0].strip()
 
         if pid:
-            LOGGER.debug('Existing pid of smtpd process: %s', pid)
-            LOGGER.debug('Killing the stale smtp-server process.')
+            LOGGER.debug('Killing Existing stale smtp-server pid: %s.', pid)
             self.ShutDown(pid)
 
     def preexec_function(self):

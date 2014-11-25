@@ -84,9 +84,11 @@ class AssertJSON(unittest.TestCase):
         return False
 
     def test_mongodb_files(self):
-        self.outfile = '/Users/bakhra/source/scripts/ctf/test_multiple_esa_up_and_down_mongo.json'
-        self.knowngoodfile = 'testdata/esa_server_launch_test.py/TwoESAServersLaunchTest/'\
-                             + 'test_multiple_esa_up_and_down/knowngood/test_multiple_esa_up_and_down_mongo.json'
+        self.outfile = '/Users/bakhra/source/esa/python/ctf/esa/o/multi_esper_engines_test.py/'\
+                        + 'MultiEsperEnginesTest/test_global_uri_module_set/test_global_uri_module_set_mongo.json'
+        self.knowngoodfile = '/Users/bakhra/source/esa/python/ctf/esa/testdata/'\
+                            + 'multi_esper_engines_test.py/MultiEsperEnginesTest/'\
+                            + 'test_global_uri_module_set/knowngood/test_global_uri_module_set_mongo.json'
         self.assertJSONFileAlmostEqualsKnownGood(self.knowngoodfile, self.outfile
                                                  , ignorefields=self.mongo_ignorefields)
 
