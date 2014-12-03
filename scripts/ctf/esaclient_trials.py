@@ -32,7 +32,7 @@ class ESAClientHarness(object):
     PEXPECT_TIMEOUT = 5
 
     def __init__(self, binary_path=None):
-        binary_path = '/Users/bakhra/source/server-ready/client/target/appassembler/bin/esa-client'
+        binary_path = '/Users/bakhra/source/esa/client/target/appassembler/bin/esa-client'
         cmd = binary_path + ' --profiles carlos'
 
         self.__pexpect = pexpect.spawn(cmd)
@@ -62,6 +62,11 @@ class ESAClientHarness(object):
             # removes color codes
             r = re.compile("\033\[[0-9;]+m")
             output = r.sub('', output)
+
+            if 'script' in cmd:
+                if 'carlos-connect' in cmd:
+                    data = output[output.index('Remote') : ]
+
             if 'carlos-connect' in cmd:
                 data = output[output.index('Remote') : ]
             elif 'epl-module-get' in cmd:
@@ -92,7 +97,7 @@ class ESAClientHarness(object):
         """
         LOGGER.debug('Launching esa-client cmd:\n%s', cmd)
         self.__pexpect.sendline(cmd)
-        if 'carlos-connect' in cmd:
+        if 'carlos-connect' in cmd or 'script' in cmd:
             self.__pexpect.expect('>', timeout)
         else:
             self.__pexpect.expect(self.PROMPT_PATTERN, timeout)
@@ -136,19 +141,39 @@ class ESAClientHarness(object):
         self.Exec('invoke start')
         return
 
+    def verify_module_exists(self, module_name, output):
+        for k,v in output.iteritems():
+            print 'k: ', k
+            print 'v: ', v
+            if item['module']['identifier'] is module_name:
+                return True
+        return False
+
 
 if __name__ == '__main__':
     p = ESAClientHarness()
-    p.Exec('carlos-connect')
+    p.Exec('script /Users/bakhra/source/esa/python/ctf/esa/testdata/multi_esper_engines_test.py/MultiEsperEnginesTest/test_global_epl_module_rm/setup.cmds')
+    output = p.Exec('epl-module-get')
+    print '===='
+    print output
+    print '====='
+    print p.verify_module_exists('test_global_epl_module_rm', output)
+    output = p.Exec('epl-module-rm test_global_epl_module_rm')
+    output = p.Exec('epl-module-get')
+    print '===='
+    print output
+    print '====='
+    print p.verify_module_exists('test_global_epl_module_rm', output)
+    #p.Exec('carlos-connect')
     #p.Exec('cd source/mess')
     #p.Exec('get .')
     #p.Exec('epl-module-set --eplFile %s --debug true'
     #        % '/Users/bakhra/source/server-ready/python/ctf/corelation/testdata/forward_notification_test.py/ForwardNotificationCarlosTest/test_leaf_five_failures_forward/test.epl')
     #p.Exec('epl-module-get')
-    p.Exec('cd pipeline/mess')
-    p.Exec('set Enabled --value true')
-    p.Exec('invoke start')
-    p.Exec('get .')
+    #p.Exec('cd pipeline/mess')
+    #p.Exec('set Enabled --value true')
+    #p.Exec('invoke start')
+    #p.Exec('get .')
     #p.Exec('cd ../../../alert/notifica')
     #p.Exec('get .')
     #p.Exec('notification-provider-set-forward distribution --exchange esa.csc --defaultHeaders \"esa.event.type=Event\" --type HEADERS --vhost \"/rsa/sa\"')

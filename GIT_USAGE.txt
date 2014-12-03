@@ -88,7 +88,7 @@ git ls -d|xargs git rm
 git ls -m|xargs tar cvf ~/tmp/t.tar
 
 - always rebase your brach onto master before push
-git rebase --onto master master
+git rebase --onto develop develop
 
 - autosquash the fixups
 git rebase -i --autosquash

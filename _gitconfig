@@ -1,6 +1,6 @@
 [user]
-	name = Amit Bakhru
-	email = abakhru@silvertailsystems.com
+	name = bakhra
+	email = amit.bakhru@rsa.com
 [branch]
         autosetuprebase=always
 [push]
@@ -87,5 +87,8 @@
 	changed = green
 	untracked = cyan
 [filter "media"]
-	clean = git-media-clean %f
-	smudge = git-media-smudge %f
+	clean = git media clean %f
+	smudge = git media smudge %f
+	required = true
+[http]
+    sslverify = false
