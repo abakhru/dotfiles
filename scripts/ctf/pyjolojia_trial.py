@@ -245,9 +245,9 @@ if __name__ == '__main__':
     #LOGGER.debug('Actual RMI listner port: %s', actual_rmiport)
     #self.assertEqual(expected_rmi_port, actual_rmiport)
     data = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type=CEP'
-                              + ',subType=Engine,id=esperEngines'
-                              , attribute='AvailableTypes')
-    #LOGGER.debug(data)
-    for key in data.iteritems():
-        print key[0]    
-        print '==='
+                                           + ',subType=Engine,id=globalCepEngine'
+                                           , attribute='NumEventsOffered')
+    LOGGER.debug(data)
+    #for key in data.iteritems():
+    #    print key[0]
+    #    print '==='

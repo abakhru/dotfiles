@@ -67,7 +67,8 @@ class RabbitMQBase(object):
         self.queue_name = None
         self._type = _type
 
-    def connect(self, exchange_type='Event', passive=False, listen=False):
+    def connect(self, binding={'esa.event.type':'Event'}
+                , passive=False, listen=False):
         """ Connects to RabbitMQ server.
 
         Args:
@@ -78,14 +79,14 @@ class RabbitMQBase(object):
                          , self.host, self.port, self.__class__.__name__)
             self.connection = pika.BlockingConnection(self.connParameters)
             LOGGER.debug('%s connected', self.host)
-            self.on_connected(exchange_type, passive=passive, listen=listen)
+            self.on_connected(binding, passive=passive, listen=listen)
         except pika.exceptions.AMQPConnectionError:
             LOGGER.error('Cannot connect to RabbitMQ server on %s', self.host, exc_info=True)
 
-    def on_connected(self, exchange_type, passive, listen):
+    def on_connected(self, binding, passive, listen):
         """ Declare the exchange, queue and do the binding."""
 
-        esa_binding = {'esa.event.type' : exchange_type}
+        esa_binding = binding
         if 'carlos' in self.exchange_header:
             esa_binding = {'carlos.event.device.product': 'Event Stream Analysis'}
             self.exchange_durable = True
@@ -119,7 +120,7 @@ class RabbitMQBase(object):
 
 
     def on_timeout(self):
-          self.connection.close()
+        self.connection.close()
 
     def delete_exchange(self):
         self.channel.exchange_delete(self.exchange_header)
@@ -137,8 +138,9 @@ class PublishRabbitMQ(RabbitMQBase):
     def __init__(self, *args, **kwargs):
         super(PublishRabbitMQ, self).__init__(*args, **kwargs)
 
-    def publish(self, input_file, publish_interval=None
-                , event_type='Event', routing_key='', passive=False, listen=False):
+    def publish(self, input_file, binding={'esa.event.type':'Event'}
+                , publish_interval=None
+                , routing_key='', passive=False, listen=False):
         """ Publishes events from input file on exchange header provided.
 
         Args:
@@ -153,7 +155,8 @@ class PublishRabbitMQ(RabbitMQBase):
         Returns:
             True if Publishing successful, False Otherwise
         """
-        self.connect(exchange_type=event_type, passive=passive, listen=listen)
+        LOGGER.debug('Binding is : %s', binding)
+        self.connect(binding=binding, passive=passive, listen=listen)
         if self.connected:
             try:
                 delivered = False
@@ -178,14 +181,17 @@ class PublishRabbitMQ(RabbitMQBase):
                                          , publish_interval)
                             time.sleep(publish_interval)
                 duration = time.time() - start_time
-                LOGGER.info('Published %i messages in %.4f seconds (%.2f messages per second)'
+                LOGGER.info('[RabbitMQ] Published %i messages in %.4f seconds'
+                            + ' (%.2f messages per second) on exchange \'%s\''
                             , self._num_events_to_consume, duration
-                            , (self._num_events_to_consume/duration))
+                            , (self._num_events_to_consume/duration)
+                            , self.exchange_header)
                 self.close()
                 return delivered
             except Exception as e:
                 LOGGER.error(e)
                 return False
+
 
 class ConsumerRabbitMQ(RabbitMQBase):
     """ Class for consuming notification alerts/events from RabbitMQ using pika library."""
@@ -231,7 +237,8 @@ class ConsumerRabbitMQ(RabbitMQBase):
         self._num_events_to_consume = num_events_to_consume
         self.connection.add_timeout(timeout_secs, self.on_timeout)
 
-        LOGGER.info('Consuming %d events from RabbitMQ', self.num_events_to_consume)
+        LOGGER.info('[RabbitMQ] Consuming %d events from \'%s\' exchange'
+                    , self.num_events_to_consume, self.exchange_header)
         if self.connected:
             try:
                 # Get expected number of messages and break out
@@ -251,7 +258,8 @@ class ConsumerRabbitMQ(RabbitMQBase):
                     # Acknowledge the message
                     self.channel.basic_ack(method_frame.delivery_tag)
                     if method_frame.delivery_tag == self._num_events_to_consume:
-                        LOGGER.info('Stopping Consumer because all expected number of messages consumed.')
+                        LOGGER.info('[RabbitMQ] Stopping Consumer because all expected number'
+                                    + 'of messages consumed.')
                         break
 
                 self._prettyDumpJsonToFile(self.message_json_list, output_file)
@@ -269,24 +277,26 @@ if __name__ == '__main__':
     #file = '/Users/bakhra/tmp/t/corelation/testdata/forward_notification_test.py'\
     #        + '/ForwardNotificationCarlosTest/test_global_five_failures_alert/json_input.txt'
     #file = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/basic_test.py/BasicESATest/test_up_and_down/json_input.txt'
-    #file = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/basic_test.py/BasicESATest/test_5_failures_1_success_alert/json_input.txt'
-    log_dir = '/Users/bakhra/source/esa/python/ctf/esa/testdata/multi_esper_engines_test.py/'\
-              + 'MultiEsperEnginesTest/test_past_events_drop_between_default_global'
+    #log_dir = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/epl_test.py/EPLModulesTest/test_eventtype_integer'
+    log_dir = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/enrichment_test.py/PostgresEnrichmentTest/test_different_enrichment_all_esper'
     # Publishing
     pub1 = PublishRabbitMQ(exchange_header='esa.events')
-    #pub2 = PublishRabbitMQ(exchange_header='esa.events1')
-    #pub3 = PublishRabbitMQ(exchange_header='esa.events2')
+    pub2 = PublishRabbitMQ(exchange_header='esa.events1')
+    pub3 = PublishRabbitMQ(exchange_header='esa.events2')
     listen = ConsumerRabbitMQ(exchange_header='carlos.alerts')
     #listen = ConsumerRabbitMQ(exchange_header='esa.events')
     #pub.publish(file, publish_interval=1)
-    #pub1.publish(input_file=os.path.join(log_dir, 'json_input.txt'))
-    pub1.publish(input_file=os.path.join(log_dir, 'default' + '_json_input.txt'))
+    pub1.publish(input_file=os.path.join(log_dir, 'json_input.txt'))
+    pub2.publish(input_file=os.path.join(log_dir, 'json_input.txt'))
+    pub3.publish(input_file=os.path.join(log_dir, 'json_input.txt'))
+    #pub1.publish(input_file=os.path.join(log_dir, 'default' + '_json_input.txt'))
+    #time.sleep(1)
     #pub2.publish(input_file=os.path.join(log_dir, 'test' + '_json_input.txt'))
     #pub3.publish(input_file=os.path.join(log_dir, 'global' + '_json_input.txt'))
     print '======'
     # Consuming
     #listen.consume(num_events_to_consume=pub.num_events_to_consume)
-    listen.consume(num_events_to_consume=1, output_file='consumed.json')
+    listen.consume(num_events_to_consume=3, output_file='consumed.json')
     #a = AssertJSON()
     #a.assertJSONFileAlmostEqualsKnownGood('consumed.json', 'consumed.json'
     #                                      , ignorefields=['esa_time', 'carlos.event.signature.id', 'carlos.event.timestamp'])

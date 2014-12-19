@@ -30,6 +30,7 @@ git commit -a -m "adding a file and editing another file" -v
 - uncommit a local commit
 git reset --soft HEAD^ (if file already in git)
 git reset <filename> (if file not already in git)
+git reset --soft HEAD~1 (uncommit locally staged commit)
 
 - push a new branch onto master repo
 git push -u origin de1625-autotune-consume-stqa-disable-v1

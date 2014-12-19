@@ -18,27 +18,34 @@ class AssertJSON(unittest.TestCase):
         self.knowngoodfile = 'testdata/esa_server_launch_test.py/TwoESAServersLaunchTest/'\
                              + 'test_multiple_esa_up_and_down/knowngood/test_multiple_esa_up_and_down_mongo.json'
 
-    def assertJSONFileAlmostEqualsKnownGood(self, knowngoodfile, outfile, ignorefields=None):
+    def assertJSONFileAlmostEqualsKnownGood(self, knowngoodfile, outfile, ignorefields=None
+                                            , sort_field='event_source_id'):
         """Assert two JSON file provided is almost equal.
 
         Args:
             knowngoodfile: The path/file name of the known good JSON file(filename)
             outfile: The path/file name of the test output JSON file(filename)
-            ignorefields: A comma seperated list of Variable fields to ignore from comparison.
+            ignorefields: A comma separated list of Variable fields to ignore from comparison.
+            sort_field: sort the output file based on the field provided
+                        By default, events will be sorted based on event_source_id
         """
-
+        # to enable showing maximum diffs.
         self.maxDiff = None
-        flag = False
+
         if ignorefields is None:
             ignorefields = []
-
         json_comparison_list = []
         for _file in [knowngoodfile, outfile]:
             json_raw_data = open(_file, 'rb')
             data = json.load(json_raw_data)
             json_raw_data.close()
             # sorting the JSON Array(list of dicts) with the event_source_id field's value.
-            messages_ordered = sorted(data[0], key=lambda k: k['events'][0]['event_source_id'])
+            if sort_field == 'event_source_id':
+                messages_ordered = sorted(data[0], key=lambda k: k['events'][0]['event_source_id'])
+            elif sort_field == 'engineUri':
+                _data = sorted(data[0], key=lambda k: k['engineUri'])
+                messages_ordered = sorted(_data, key=lambda k: k['events'][0]['event_source_id'])
+                pprint(messages_ordered)
             json_comparison_list.append(messages_ordered)
 
         knowngood_final_list = []
@@ -50,7 +57,8 @@ class AssertJSON(unittest.TestCase):
                 _dict = {}
                 for k, v in j.iteritems():
                     if k in ignorefields:
-                        # making only the Variable value empty, to make sure field is atleast present.
+                        # making only the Variable value empty,
+                        # to make sure field is atleast present.
                         _dict[k] = ''
                     else:
                         if isinstance(v, list):
@@ -71,26 +79,23 @@ class AssertJSON(unittest.TestCase):
                 final_list.append(_dict)
             if len(knowngood_final_list) == 0:
                 knowngood_final_list = final_list
-            elif len(output_final_list) == 0:
+            else:
                 output_final_list = final_list
 
+        # asserting number of expected and actual alerts are same.
+        self.assertEqual(len(knowngood_final_list), len(output_final_list))
         if len(knowngood_final_list) == len(output_final_list):
             for i in xrange(0, len(knowngood_final_list)):
-                LOGGER.debug('')
-                LOGGER.debug('kg item #%i:\n%s', i, knowngood_final_list[i])
-                LOGGER.debug('actual item #%i:\n%s', i, output_final_list[i])
                 self.assertEqual(knowngood_final_list[i], output_final_list[i])
             return True
         return False
 
     def test_mongodb_files(self):
-        self.outfile = '/Users/bakhra/source/esa/python/ctf/esa/o/multi_esper_engines_test.py/'\
-                        + 'MultiEsperEnginesTest/test_global_uri_module_set/test_global_uri_module_set_mongo.json'
-        self.knowngoodfile = '/Users/bakhra/source/esa/python/ctf/esa/testdata/'\
-                            + 'multi_esper_engines_test.py/MultiEsperEnginesTest/'\
-                            + 'test_global_uri_module_set/knowngood/test_global_uri_module_set_mongo.json'
+        self.outfile = '/Users/bakhra/source/server-ready/python/ctf/esa/o/enrichment_test.py/EnrichmentTest/test_same_exchange_same_source_all_espers/test_same_exchange_same_source_all_espers_mongo.json'
+        self.knowngoodfile = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/enrichment_test.py/EnrichmentTest/test_same_exchange_same_source_all_espers/knowngood/test_same_exchange_same_source_all_espers_mongo.json'
         self.assertJSONFileAlmostEqualsKnownGood(self.knowngoodfile, self.outfile
-                                                 , ignorefields=self.mongo_ignorefields)
+                                                 , ignorefields=self.mongo_ignorefields
+                                                 , sort_field='engineUri')
 
     def test_rabbitmq_files(self):
         self.outfile = 'o/basic_test.py/BasicESATest/test_multiple_alerts_generation/test_multiple_alerts_generation_rabbit.json'

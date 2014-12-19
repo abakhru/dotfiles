@@ -41,12 +41,19 @@ def ControlJolokiaAgent(java_process_pid=0, command=None
         #LOGGER.error(output[1])
     return
 
-def mongo_check():
-    p = subprocess.Popen('which mongod', stdout=subprocess.PIPE
-                         , stderr=subprocess.PIPE, shell=True)
-    binary_path = p.communicate()[0]
-    LOGGER.debug('mongod path: %s', binary_path)
+def Status():
+    dbdir = '/usr/local/var/postgres'
+    """ Checks the postgres SQL server running status"""
+    cmd = 'pg_ctl -D ' + dbdir + ' status | head -1'
+    LOGGER.debug('Launching command: %s', cmd)
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    status = p.communicate()[0].strip()
+    LOGGER.debug('posrgres status: %s', status)
+    if 'PID' in status:
+        LOGGER.debug('PostgreSQL server is already running')
+        return True
+    return False
 
-mongo_check()
+print Status()
 #ControlJolokiaAgent(java_process_pid=85478, command='start')
 #ControlJolokiaAgent(java_process_pid=85478, command='stop')

@@ -5,9 +5,12 @@ import pexpect
 import re
 import sys
 import time
-
+from pprint import pprint
+import json
+import unittest as testcase
+#from ctf.framework import testcase
 from ctf.framework.logger import LOGGER
-from thirdparty import simplejson as json
+#from thirdparty import simplejson as json
 from bson import json_util
 
 LOGGER.setLevel('DEBUG')
@@ -31,27 +34,27 @@ class ESAClientHarness(object):
     #PROMPT_PATTERN = '>'
     PEXPECT_TIMEOUT = 5
 
-    def __init__(self, binary_path=None):
-        binary_path = '/Users/bakhra/source/esa/client/target/appassembler/bin/esa-client'
+    def __init__(p, binary_path=None):
+        binary_path = '/Users/bakhra/source/server-ready/client/target/appassembler/bin/esa-client'
         cmd = binary_path + ' --profiles carlos'
 
-        self.__pexpect = pexpect.spawn(cmd)
-        self.__fout = open('esaclient.log','wb')
-        self.__pexpect.logfile = self.__fout
-        self.__pexpect.expect(self.PROMPT_PATTERN, 25)
+        p.__pexpect = pexpect.spawn(cmd)
+        p.__fout = open('esaclient.log','wb')
+        p.__pexpect.logfile = p.__fout
+        p.__pexpect.expect(p.PROMPT_PATTERN, 25)
 
-    def Terminate(self):
+    def Terminate(p):
         """Terminate ESAClient.
 
         Send the quit command to terminate gracefully, wait for the EOF so we know the quit command
         is complete, then make sure the process is terminated.
         """
-        self.__pexpect.sendline('quit')
-        self.__pexpect.expect(pexpect.EOF, self.PEXPECT_TIMEOUT)
-        self.__pexpect.terminate(force=True)
-        self.__fout.close()
+        p.__pexpect.sendline('quit')
+        p.__pexpect.expect(pexpect.EOF, p.PEXPECT_TIMEOUT)
+        p.__pexpect.terminate(force=True)
+        p.__fout.close()
 
-    def _removeColorCodes(self, output, cmd=None):
+    def _removeColorCodes(p, output, cmd=None):
         """ Removes extra lines and constructs proper JSON objects.
 
         Returns list of json objects.
@@ -69,7 +72,7 @@ class ESAClientHarness(object):
 
             if 'carlos-connect' in cmd:
                 data = output[output.index('Remote') : ]
-            elif 'epl-module-get' in cmd:
+            elif 'epl-module-get' in cmd or 'query' in cmd:
                 # constructing JSON objects
                 r = re.compile("\r{")
                 data = r.sub('{', output)
@@ -87,7 +90,7 @@ class ESAClientHarness(object):
             LOGGER.error(e)
             return []
 
-    def Exec(self, cmd, timeout=PEXPECT_TIMEOUT):
+    def Exec(p, cmd, timeout=PEXPECT_TIMEOUT):
         """Send a cmd to the ESAClient and return the response.
 
         Use pexpect to send the specified command, and then wait for ESAClient to present the
@@ -96,16 +99,16 @@ class ESAClientHarness(object):
         Returns: List of JSON objects.
         """
         LOGGER.debug('Launching esa-client cmd:\n%s', cmd)
-        self.__pexpect.sendline(cmd)
+        p.__pexpect.sendline(cmd)
         if 'carlos-connect' in cmd or 'script' in cmd:
-            self.__pexpect.expect('>', timeout)
+            p.__pexpect.expect('>', timeout)
         else:
-            self.__pexpect.expect(self.PROMPT_PATTERN, timeout)
-        output_list_dicts = self._removeColorCodes(self.__pexpect.before, cmd=cmd)
+            p.__pexpect.expect(p.PROMPT_PATTERN, timeout)
+        output_list_dicts = p._removeColorCodes(p.__pexpect.before, cmd=cmd)
         LOGGER.debug('Output:\n%s', output_list_dicts)
         return output_list_dicts
 
-    def AddAmqpSource(self, value=None):
+    def AddAmqpSource(p, value=None):
         """ Adds AMQP source url.
 
         Args:
@@ -118,12 +121,12 @@ class ESAClientHarness(object):
             value = list(value)
 
         LOGGER.debug('Adding AMQP source uri: %s', value)
-        self.Exec('cd /Workflow/Source/messageBusSource')
+        p.Exec('cd /Workflow/Source/messageBusSource')
         for url in value:
-            self.Exec('invoke addAmqpSource --param %s' % url)
+            p.Exec('invoke addAmqpSource --param %s' % url)
         return
 
-    def ControlMessageBusPipeline(self, value=True):
+    def ControlMessageBusPipeline(p, value=True):
         """ Enables/Disables messageBus pipeline.
 
         Args:
@@ -136,12 +139,12 @@ class ESAClientHarness(object):
         else:
             LOGGER.info('Disabling messageBus pipeline')
 
-        self.Exec('cd %s' % loc)
-        self.Exec('set Enabled --value %s' % value)
-        self.Exec('invoke start')
+        p.Exec('cd %s' % loc)
+        p.Exec('set Enabled --value %s' % value)
+        p.Exec('invoke start')
         return
 
-    def verify_module_exists(self, module_name, output):
+    def verify_module_exists(p, module_name, output):
         for k,v in output.iteritems():
             print 'k: ', k
             print 'v: ', v
@@ -152,19 +155,19 @@ class ESAClientHarness(object):
 
 if __name__ == '__main__':
     p = ESAClientHarness()
-    p.Exec('script /Users/bakhra/source/esa/python/ctf/esa/testdata/multi_esper_engines_test.py/MultiEsperEnginesTest/test_global_epl_module_rm/setup.cmds')
-    output = p.Exec('epl-module-get')
-    print '===='
-    print output
-    print '====='
-    print p.verify_module_exists('test_global_epl_module_rm', output)
-    output = p.Exec('epl-module-rm test_global_epl_module_rm')
-    output = p.Exec('epl-module-get')
-    print '===='
-    print output
-    print '====='
-    print p.verify_module_exists('test_global_epl_module_rm', output)
-    #p.Exec('carlos-connect')
+    #p.Exec('script /Users/bakhra/source/esa/python/ctf/esa/testdata/multi_esper_engines_test.py/MultiEsperEnginesTest/test_global_epl_module_rm/setup.cmds')
+    #output = p.Exec('epl-module-get')
+    #print '===='
+    #print output
+    #print '====='
+    #print p.verify_module_exists('test_global_epl_module_rm', output)
+    #output = p.Exec('epl-module-rm test_global_epl_module_rm')
+    #output = p.Exec('epl-module-get')
+    #print '===='
+    #print output
+    #print '====='
+    #print p.verify_module_exists('test_global_epl_module_rm', output)
+    p.Exec('carlos-connect')
     #p.Exec('cd source/mess')
     #p.Exec('get .')
     #p.Exec('epl-module-set --eplFile %s --debug true'
@@ -180,4 +183,25 @@ if __name__ == '__main__':
     #p.Exec('notification-instance-set-forward forwardInstance')
     #p.Exec('notification-provider-get')
     #p.Exec('notification-instance-get')
+
+    output = p.Exec('enrichment-data-query --query \"select * from IPUserMap\" '
+                    + 'ip_user_map')
+    #LOGGER.debug('==== output: %s', output[1])
+    #pprint(output[1])
+    #json_output = json.loads(output[1])
+    json_formatted_doc = json_util.dumps(output, sort_keys=False, indent=4
+                                         , default=json_util.default)
+    LOGGER.debug('==== JSON output: %s', json_formatted_doc)
+    #p.assertIn('query_response', json_output.keys())
+    #pprint(json_formatted_doc)
+    testcase.assertIn('Fred', json_formatted_doc)
+    #LOGGER.debug('==========\n', json_output[0])
+
+    #LOGGER.info(json_output[0]['query_response'])
+    #print type(json_output[0]['query_response'])
+    #p.assertEqual(expected_cnt, actual_cnt)
+
+    #p.Exec('enrichment-data-reset ip_user_map')
+    #p.Exec('enrichment-data-query --query \"select * from IPUserMap\" ip_user_map')
+
     p.Terminate()
