@@ -6,6 +6,7 @@ import pymongo
 import socket
 import subprocess
 import time
+import sys
 from pprint import pprint
 
 from bson import BSON
@@ -187,7 +188,21 @@ class DataScienceUtil(object):
             db_user: db user who will get the read/write access
             db_pass: db user's password
         """
-        cmd = ('mongo admin -u admin -p netwitness --eval \"db.getSiblingDB(\''
+        mongo_cmd = 'mongo'
+        p = subprocess.Popen('which %s' % (mongo_cmd, ), stdout=subprocess.PIPE
+                             , stderr=subprocess.PIPE, shell=True)
+        mongo_path = p.communicate()[0].strip()
+        if not mongo_path:
+            mongo_path = '/usr/bin/mongo'  # Linux path
+            if sys.platform.lower() == 'darwin':  # On a mac
+                mongo_path = '/usr/local/bin/mongo'
+
+        # Mongo never needs sudo from Mac, and only when not root on Linux
+        if ((sys.platform.lower() != 'darwin') and (os.getuid() != 0)):
+            mongo_cmd = 'sudo ' + mongo_path
+        mongo_cmd = mongo_path
+
+        cmd = (mongo_cmd + ' admin -u admin -p netwitness --eval \"db.getSiblingDB(\''
                + db_name + '\').createUser({user: \'' + db_user + '\', pwd: \''
                + db_pass + '\', roles: [\'readWrite\', \'dbAdmin\']})\"')
         LOGGER.debug('Launching command:\n%s', cmd)
@@ -195,13 +210,16 @@ class DataScienceUtil(object):
         status = p.communicate()[0].strip()
         LOGGER.debug('Output: %s', status)
         a = status.split('\n')
-        LOGGER.debug('=========%s', a[2])
+        LOGGER.debug('==== Status in list form:\n%s', a)
+        #self.assertIn('Successfully', a)
+        return
 
     def config_data_science_db(self):
         """Sets up DataScience db in mongo with required permissions and sample data."""
 
         # creating unique DataScience db name
         database_name = self.MakeUniqueName(basename='ds')
+        # creates the ds db if not already present
         self.__mongo_client = MongoDBClientMixins(db_name=database_name)
         self.mongo_client.cleanup_mongo(collection_name='watchlists')
         collection = self.mongo_client.db.watchlists
@@ -210,10 +228,12 @@ class DataScienceUtil(object):
                            "group_name": "domain"})
         output = list(self.mongo_client.db['watchlists'].find())
         json_output = json_util.dumps(output, sort_keys=False, indent=4, default=json_util.default)
-        LOGGER.debug('Inserted data in \'%s\' database:\n%s' % (database_name, json_output))
-        self._enable_db_access(db_name=database_name)
+        LOGGER.debug('Inserted data in \'%s\' database:\n%s', database_name, json_output)
         #self.assertIn('model_id', json_output)
-        #os.system('mongo %s -u esa -p esa' % database_name)
+        # assigns read/write access to esa user for new database.
+        self._enable_db_access(db_name=database_name)
+        os.system('mongo %s -u esa -p esa' % database_name)
+        return
 
     def mongo_client_teardown(self):
         if self.mongo_client is not None:
