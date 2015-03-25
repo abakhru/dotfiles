@@ -2,21 +2,17 @@
 
 # python/ctf/esa/test/postgres_db_test_util.py
 
-"""Alert DB administration tools."""
+"""PostgresSQL Server DB administration tools."""
 
-import datetime
 import os
 import pipes
 import psycopg2 as pg
 
-from psycopg2.extensions import adapt
 import re
 import subprocess
-import socket
 import time
 
 from ctf.framework.logger import LOGGER
-LOGGER.setLevel('DEBUG')
 
 # PostgresSQL Server listen Port
 SERVER_PORT = 5432
@@ -44,7 +40,6 @@ _SQL_CREATE_USER = """
 CREATE USER %(user)s;
 GRANT ALL ON %(tables)s TO %(user)s;
 """
-#CREATE USER %(user)s WITH PASSWORD %(password)s;
 
 class Error(Exception):
     """Base class for exceptions raised by this module."""
@@ -65,7 +60,8 @@ class PostgresDB(object):
     """Administrative interface to the Alert DB.
 
     Properties:
-        conf: Universal conf object
+        dbname: name of the database to be used for test
+        serverport: postgres server port number
     """
 
     @property
@@ -76,22 +72,50 @@ class PostgresDB(object):
     def serverport(self):
         return self.__serverport
 
-    def __init__(self, dbdir):
+    def __init__(self, db_dir, db_name):
         """Initializes an PostgresDB object.
 
         Args:
-            conf: Universal conf object
+            dbdir: postgres db directory
         """
-        self.dbdir = dbdir
-        self.__dbname = self._MakeDbName()
+        self.bindir = ''
+        p = subprocess.Popen('which psql', stdout=subprocess.PIPE
+                             , stderr=subprocess.PIPE, shell=True)
+        binary_dir = p.communicate()[0].strip()
+        if not binary_dir:
+            self.bindir = '/usr/local/bin'  # Linux path
+            if sys.platform == 'darwin':  # On a mac
+                self.bindir = '/usr/local/bin/'
+        else:
+            self.bindir = binary_dir[: binary_dir.index('psql')]
+
+        self.VerifyBinaryExists()
+        self.dbdir = db_dir
+        self.__dbname = db_name
         self.__serverport = SERVER_PORT
         self.Install()
 
+    def VerifyBinaryExists(self):
+        if (os.path.exists(os.path.join(self.bindir, 'pg_ctl')) and
+            os.path.exists(os.path.join(self.bindir, 'initdb')) and
+            os.path.exists(os.path.join(self.bindir, 'createdb')) and
+            os.path.exists(os.path.join(self.bindir, 'dropdb')) and
+            os.path.exists(os.path.join(self.bindir, 'createuser')) and
+            os.path.exists(os.path.join(self.bindir, 'dropuser'))):
+            return True
+        else:
+            return False
+
     def Install(self):
         """Script which performs install of AlertDb, including a new PostgreSQL server."""
-        self.Init()
-        self.Start()
-        self.Status()
+        if not os.path.isdir(self.dbdir):
+            os.makedirs(self.dbdir)
+            self.Init()
+
+        if not self.Status():
+            LOGGER.debug('PostgreSQL server is not running, starting it.')
+            self.Start()
+
         time.sleep(5)
         self.CreateUser()
 
@@ -103,7 +127,7 @@ class PostgresDB(object):
                 self.CreateDb()
                 break
             except Exception, exc:
-                LOGGER.debug_exception(exc)
+                LOGGER.debug(exc)
                 num_tries += 1
                 LOGGER.warn('Retrying CreateDb after %d tries', num_tries)
                 time.sleep(1)
@@ -117,7 +141,7 @@ class PostgresDB(object):
         Returns:
             (major, minor, subminor) as tuple of int
         """
-        pg_ctl = subprocess.Popen(['pg_ctl', '--version']
+        pg_ctl = subprocess.Popen([self.bindir + 'pg_ctl', '--version']
                                   , stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = pg_ctl.communicate()
         if pg_ctl.returncode:
@@ -132,57 +156,57 @@ class PostgresDB(object):
                 print '%d.%d.%d' % version
                 return version
 
+    def Status(self):
+        """ Checks the postgres SQL server running status"""
+        cmd = self.bindir + 'pg_ctl -D ' + self.dbdir + ' status | head -1'
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        status = p.communicate()[0].strip()
+        LOGGER.debug('posrgres status: %s', status)
+        if 'PID' in status:
+            LOGGER.debug('PostgreSQL server is already running')
+            return True
+        return False
+
     def Init(self):
         """Initializes a new PostgreSQL server file system repository."""
-        db_dir = self._GetDbDir()
-        self.ExecShell('initdb', '--pgdata', db_dir)
+        self.ExecShell(self.bindir + 'initdb', '--pgdata', self.dbdir)
 
     def Start(self, log_path=None):
         """Launches the PostgreSQL server processes."""
-        db_dir = self._GetDbDir()
-        log_path = os.path.join(db_dir, 'postgresql.log')
-        self.ExecShell('pg_ctl', '--pgdata', db_dir, '--log', log_path, 'start')
-
-    def Status(self):
-        """Prints status of the PostgreSQL server."""
-        db_dir = self._GetDbDir()
-        self.ExecShell('pg_ctl', '--pgdata', db_dir, 'status')
+        if log_path is None:
+            log_path = os.path.join(self.dbdir, 'postgresql.log')
+        self.ExecShell(self.bindir + 'pg_ctl', '--pgdata', self.dbdir, '--log', log_path, 'start')
 
     def Stop(self):
         """Shuts down the PostgreSQL server processes (pending connections closed)."""
-        db_dir = self._GetDbDir()
-        self.ExecShell('pg_ctl', '--pgdata', db_dir, 'stop')
+        self.ExecShell(self.bindir + 'pg_ctl', '--pgdata', self.dbdir, 'stop')
 
     def CreateDb(self):
         """Creates the PostgreSQL database that will contain the Alert DB."""
-        self.ExecShell('createdb', '--port', self.serverport, '--owner', ADMIN_USER, self.dbname)
+        self.ExecShell(self.bindir + 'createdb', '--port', self.serverport, '--owner', ADMIN_USER, self.dbname)
 
     def ListDb(self):
         """Lists the PostgreSQL databases."""
-        self.ExecShell('psql', '--port', self.serverport, '--list')
+        self.ExecShell(self.bindir + 'psql', '--port', self.serverport, '--list')
 
     def DropDb(self):
         """Drops the database."""
-        self.ExecShell('dropdb', '--port', self.serverport, self.dbname)
+        self.ExecShell(self.bindir + 'dropdb', '--port', self.serverport, self.dbname)
 
     def CreateSchema(self):
         """Creates a new database schema (tables, etc.) based on the connection stats."""
         sql = _SQL_CREATE_SCHEMA % locals()
-        self.ExecShell('psql', '--port', self.serverport, '--command', sql, self.dbname)
+        self.ExecShell(self.bindir + 'psql', '--port', self.serverport, '--command', sql, self.dbname)
 
     def CreateUser(self):
         """Creates the PostgreSQL user as configured in the conf."""
         user = ADMIN_USER
-        #password = adapt(ADMIN_USER)
-        #tables = ', '.join(_TABLE_LIST)
-        #sql = _SQL_CREATE_USER % locals()
-        #self.ExecShell('psql', '--port', self.serverport, '--command', sql, self.dbname)
-        self.ExecShell('createuser', '--port', self.serverport
+        self.ExecShell(self.bindir + 'createuser', '--port', self.serverport
                        , '--createdb', '--superuser', '--echo', user)
 
     def DropUser(self):
         """Drops the PostgreSQL user."""
-        self.ExecShell('dropuser', '--port', self.serverport, ADMIN_USER)
+        self.ExecShell(self.bindir + 'dropuser', '--port', self.serverport, ADMIN_USER)
 
     def Verify(self):
         """Verifies that the database configuration is correct.
@@ -212,28 +236,6 @@ class PostgresDB(object):
             conn.close()
 
     # Protected:
-
-    def _GetDbDir(self):
-        return self.dbdir
-
-    def _MakeDbName(self, basename='testdb'):
-        """Constructs a database name using an heuristic which guarantees uniqueness.
-
-        Args:
-            basename: Prefix of the database name (str)
-
-        Returns:
-            Name of a database (str)
-        """
-        now = datetime.datetime.now()
-        timestamp = now.strftime('%y%m%d%H%M%S')
-        hostname = socket.gethostname()
-        tokens = hostname.split('.', 1)
-        hostname = tokens[0]
-        pid = os.getpid()
-        serial = 1
-        return '%(basename)s_%(timestamp)s_%(hostname)s_%(pid)d_%(serial)d' % locals()
-
     def _Connect(self):
         """Connects to the PostgreSQL database specified in the conf.
 
@@ -257,8 +259,8 @@ class PostgresDB(object):
         Args:
             args: Command-line, as individual arguments (list of str)
             kwargs:
-                quote_args: If True (which is the default), args will be escaped (with pipes.quote); if
-                        False, then caller must ensure that args survive the shell.
+                quote_args: If True (which is the default), args will be escaped (with pipes.quote);
+                            If False, then caller must ensure that args survive the shell.
 
         Raises:
             ShellError if exit code is nonzero
@@ -275,10 +277,8 @@ class PostgresDB(object):
         if popen.returncode:
             raise ShellError('Shell command failed (%d): %s' % (popen.returncode, cmd))
 
-
-"""
 if __name__ == '__main__':
-    p = PostgresDB(dbdir='/usr/local/var/postgres1')
+    p = PostgresDB(dbdir='/usr/local/var/postgres')
     p.PgVersion()
     sql = []
     sql.append("INSERT INTO ORGCHART values ('Bill', 'Sales')")
@@ -289,4 +289,3 @@ if __name__ == '__main__':
     p.ListDb()
     p.DropDb()
     p.ListDb()
-"""

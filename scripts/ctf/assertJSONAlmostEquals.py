@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import unittest
+from ctf.framework import ctf_unittest
 from collections import OrderedDict
+import os
 
 from ctf.framework.logger import LOGGER
 from thirdparty import simplejson as json
@@ -9,14 +10,44 @@ from pprint import pprint
 
 LOGGER.setLevel('DEBUG')
 
-class AssertJSON(unittest.TestCase):
+class AssertJSON(ctf_unittest.TestCase):
 
-    def setUp(self):
-        self.mongo_ignorefields = ['module_id', 'statement', '_id', 'esa_time', 'esa_id', 'time', 'timestamp']
-        self.rabbit_ignorefields = ['esa_time', 'carlos.event.signature.id', 'carlos.event.timestamp']
+    """def setUp(self):
+        LOGGER.debug('==== Inside setUp function ===')
+        self.mongo_ignorefields = ['module_id', 'statement', '_id'
+                                   , 'esa_time', 'esa_id', 'time', 'timestamp']
+        self.rabbit_ignorefields = ['esa_time', 'carlos.event.signature.id'
+                                    , 'carlos.event.timestamp']
         self.outfile = 'test_multiple_esa_up_and_down_mongo.json'
         self.knowngoodfile = 'testdata/esa_server_launch_test.py/TwoESAServersLaunchTest/'\
                              + 'test_multiple_esa_up_and_down/knowngood/test_multiple_esa_up_and_down_mongo.json'
+    """
+
+    # class attributes
+    mongo_ignorefields = ['module_id', 'statement', '_id'
+                          , 'esa_time', 'esa_id', 'time', 'timestamp']
+    rabbit_ignorefields = ['esa_time', 'carlos.event.signature.id'
+                           , 'carlos.event.timestamp']
+    mongo_file = 'test_single_alert_generation_mongo.json'
+    rabbit_file = 'test_single_alert_generation_rabbit.json'
+    out_dir = '/Users/bakhra/source/server-ready/python/ctf/esa/o/basic_test.py/BasicESATest/test_single_alert_generation'
+    kg_dir = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/basic_test.py/BasicESATest/test_single_alert_generation/knowngood/'
+    mongo_knowngoodfile = os.path.join(kg_dir, mongo_file)
+    mongo_outfile = os.path.join(out_dir, mongo_file)
+    rabbit_knowngoodfile = os.path.join(kg_dir, rabbit_file)
+    rabbit_outfile = os.path.join(out_dir, rabbit_file)
+
+    @classmethod
+    def setUpClass(cls):
+        LOGGER.debug('==== Inside setUpClass function ===')
+        super(AssertJSON, cls).setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        LOGGER.debug('=== Inside tearDownClass')
+
+    #def tearDown(self):
+    #    LOGGER.debug('=== Inside tearDown')
 
     def assertJSONFileAlmostEqualsKnownGood(self, knowngoodfile, outfile, ignorefields=None
                                             , sort_field='event_source_id'):
@@ -45,7 +76,7 @@ class AssertJSON(unittest.TestCase):
             elif sort_field == 'engineUri':
                 _data = sorted(data[0], key=lambda k: k['engineUri'])
                 messages_ordered = sorted(_data, key=lambda k: k['events'][0]['event_source_id'])
-                pprint(messages_ordered)
+                #pprint(messages_ordered)
             json_comparison_list.append(messages_ordered)
 
         knowngood_final_list = []
@@ -91,17 +122,27 @@ class AssertJSON(unittest.TestCase):
         return False
 
     def test_mongodb_files(self):
-        self.outfile = '/Users/bakhra/source/server-ready/python/ctf/esa/o/enrichment_test.py/EnrichmentTest/test_same_exchange_same_source_all_espers/test_same_exchange_same_source_all_espers_mongo.json'
-        self.knowngoodfile = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/enrichment_test.py/EnrichmentTest/test_same_exchange_same_source_all_espers/knowngood/test_same_exchange_same_source_all_espers_mongo.json'
-        self.assertJSONFileAlmostEqualsKnownGood(self.knowngoodfile, self.outfile
+        LOGGER.debug('==== Launching test_mongodb_files')
+        self.assertJSONFileAlmostEqualsKnownGood(self.mongo_knowngoodfile, self.mongo_outfile
                                                  , ignorefields=self.mongo_ignorefields
                                                  , sort_field='engineUri')
 
     def test_rabbitmq_files(self):
-        self.outfile = 'o/basic_test.py/BasicESATest/test_multiple_alerts_generation/test_multiple_alerts_generation_rabbit.json'
-        self.knowngoodfile = 'testdata/basic_test.py/BasicESATest/test_multiple_alerts_generation/knowngood/test_multiple_alerts_generation_rabbit.json'
-        self.assertJSONFileAlmostEqualsKnownGood(self.knowngoodfile, self.outfile
+        LOGGER.debug('==== Launching test_rabbitmq_files')
+        self.assertJSONFileAlmostEqualsKnownGood(self.rabbit_knowngoodfile, self.rabbit_outfile
                                                  , ignorefields=self.rabbit_ignorefields)
+
+    def test_Mongodb_files(self):
+        LOGGER.debug('==== Launching test_Mongodb_files')
+        self.assertJSONFileAlmostEqualsKnownGood(self.mongo_knowngoodfile, self.mongo_outfile
+                                                 , ignorefields=self.mongo_ignorefields
+                                                 , sort_field='engineUri')
+
+    def test_Rabbitmq_files(self):
+        LOGGER.debug('==== Launching test_Rabbitmq_files')
+        self.assertJSONFileAlmostEqualsKnownGood(self.rabbit_knowngoodfile, self.rabbit_outfile
+                                                 , ignorefields=self.rabbit_ignorefields)
+
 
 if __name__ == '__main__':
     unittest.main()

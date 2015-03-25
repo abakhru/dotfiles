@@ -13,7 +13,10 @@ LOGGER.setLevel('DEBUG')
 class JolokiaMixins(unittest.TestCase):
     """ Mixin utilities to get values from JVM using jolokia."""
 
-    def __init__(self, host='localhost', port=8779):
+    test_name = 'test_per_esper_module_stats'
+    ENGINES_LIST = ['default', 'test', 'global']
+
+    def setUp(self, host='localhost', port=8779):
         url = ('http://%s:%d/jolokia/' % (host, port))
         try:
             self.j4p = Jolokia(url)
@@ -210,44 +213,76 @@ class JolokiaMixins(unittest.TestCase):
             LOGGER.error('%s EPL Module deployment failed.', epl_json)
             return False
 
+    def test_per_esper_module_stats(self):
+        """Verifies the modules stats in per esper engines MBean.
+
+        Expectation is deployed, enabled, disabled and total modules stats are accurate in,
+        "com.rsa.netwitness.esa:type=CEP,subType=Module,id=*ModuleStats" MBean
+        """
+
+        #self.PublishEventAndWait()
+        #self.assertEventProcessed(expectedNumEvents=3)
+        #self.assertMongoAlertCount(ruleid=[self.test_name], expectedNumAlerts=3)
+        self.moduleIdentifier = self.GetModuleId()
+
+        # asserting all EPL modules, including disabled ones are deployed.
+        mbean = 'com.rsa.netwitness.esa:type=CEP,subType=Module,id=configuration'
+        data = self.GetJolokiaRequest(mbean=mbean, attribute='SerializedModules')
+        expected_epl_identifiers = [self.test_name + '_global'
+                                    , self.test_name + '_test'
+                                    , self.test_name + '_default'
+                                    , self.test_name, 'esa.types.enrichment'
+                                    , self.test_name, 'esa.types.source'
+                                    , self.test_name, 'esa.types.system']
+        actual_epl_identifiers = []
+        for i in data:
+            actual_epl_identifiers.append(json.loads(i)['identifier'])
+        LOGGER.debug('actual_epl_identifiers: %s', actual_epl_identifiers)
+        LOGGER.info('Asserting total EPL modules deployed')
+        self.assertEqual(9, len(actual_epl_identifiers))
+        self.assertEqual(set(actual_epl_identifiers), set(expected_epl_identifiers))
+
+        for _engineId in self.ENGINES_LIST:
+            for attr in ['NumEnabled', 'NumDisabled', 'NumDeployed', 'NumModules']:
+                #self.assertIn((self.test_name, _engineId), self.moduleIdentifier)
+
+                if attr == 'NumDisabled':
+                    expected_value = 1
+                elif attr == 'NumModules':
+                    expected_value = 5
+                elif attr == 'NumDeployed' or attr == 'NumEnabled':
+                    expected_value = 4
+
+                LOGGER.info('Asserting \'%s\' stat value in \'%sModuleStats\' MBean'
+                            , attr, _engineId)
+                if _engineId == 'default':
+                    engine = 'cep'
+                mbean = ('com.rsa.netwitness.esa:type=CEP,subType=Module,id='
+                         + engine + 'ModuleStats')
+                actual_value = self.GetJolokiaRequest(mbean=mbean, attribute=attr)
+                LOGGER.debug('Actual %s: %s', attr, actual_value)
+                self.assertEquals(expected_value, actual_value)
+
+                _attr = attr[0].lower() + attr[1:]
+                LOGGER.info('Asserting \'%s\' stat value for \'%s\' engine in statsByEngine MBean'
+                            , _attr, _engineId)
+                mbean = 'com.rsa.netwitness.esa:type=CEP,subType=Module,id=statsByEngine'
+                path = _engineId + '/' + _attr
+                actual_value = self.GetJolokiaRequest(mbean=mbean, attribute='StatsByEngine'
+                                                      , path=path)
+                LOGGER.debug('Actual %s: %s', _attr, actual_value)
+                self.assertEquals(expected_value, actual_value)
+
+        for _engineId in self.ENGINES_LIST:
+            mbean = 'com.rsa.netwitness.esa:type=CEP,subType=Module,id=statsByEngine'
+            path = _engineId + '/' + 'stats'
+            actual_value = self.GetJolokiaRequest(mbean=mbean, attribute='StatsByEngine'
+                                                          , path=path)
+            for i in actual_value:
+                if i['id'] == self.test_name:
+                    self.assertEqual(1, i['numEventsFired'])
+                    self.assertEqual(1, i['numEventsIStream'])
+
 
 if __name__ == '__main__':
-    p = JolokiaMixins()
-    #p.serverStatus()
-    #p.assertForwardNotificationType()
-    #p.controlMessageBusPipeline()
-    #p.addAmqpSource()
-    #file = '/Users/bakhra/tmp/t/corelation/testdata/forward_notification_test.py/ForwardNotificationCarlosTest/test_leaf_five_failures_forward/test.epl'
-    #file = '/Users/bakhra/tmp/t/corelation/testdata/forward_notification_test.py/ForwardNotificationCarlosTest/test_leaf_deduped_forward/test1.epl'
-    #file = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/basic_test.py/BasicESATest/test_up_and_down/test.epl'
-    #print p.epl_module_set(epl_file=file)
-    #print p.epl_module_get(module_id='default-system-flow')
-    #a = p.epl_module_get(module_id='abc')
-    #a = p.epl_module_get(module_id='abc_1412036487')
-    #a = p.epl_module_get(module_id='default')
-    #a = p.epl_module_get()
-    #pprint(a)
-    #print 'length of a:', len(a)
-    #p.epl_module_ops(operation='rm')
-    #carlos_url_path = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type'
-    #                                                     + '=Service,subType=Monitor'
-    #                                                     + ',id=connections'
-    #                                                     , attribute='ServerEndpoints')
-    #LOGGER.debug('Actual Carlos listner port: %s', carlos_url_path[0].split(':')[2].split('?')[0])
-
-    #carlos_url_path = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type'
-    #                                           + '=Service,subType=Monitor'
-    #                                           + ',id=transport'
-    #                                     , attribute='Address'
-    #                                     , path='uRLPath')
-    #print 'carlos_url_path: ', carlos_url_path
-    #actual_rmiport = carlos_url_path.split(':')[2].split('/')[0]
-    #LOGGER.debug('Actual RMI listner port: %s', actual_rmiport)
-    #self.assertEqual(expected_rmi_port, actual_rmiport)
-    data = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type=CEP'
-                                           + ',subType=Engine,id=globalCepEngine'
-                                           , attribute='NumEventsOffered')
-    LOGGER.debug(data)
-    #for key in data.iteritems():
-    #    print key[0]
-    #    print '==='
+    unittest.main()

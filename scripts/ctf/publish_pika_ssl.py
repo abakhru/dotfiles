@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
+#import logging
 import os
 import pika
 import signal
+import ssl
 import sys
 import time
 import simplejson as json
@@ -11,9 +13,14 @@ from bson import json_util
 from collections import OrderedDict
 from pprint import pprint
 from ctf.framework.logger import LOGGER
+#from assertJSONAlmostEquals import AssertJSON
 
 LOGGER.setLevel('DEBUG')
-
+cert_dict = {'10.101.216.148': 'fbc283ee-f629-491c-9d04-b98d30badc36',
+             '10.101.216.150': 'b8148417-f0b2-467f-8aab-640e967a113e',
+             '10.101.216.223': '19a862f2-5808-4f76-8cda-b155d22193eb',
+             '10.101.216.227': '5ff799a6-e554-48d2-b193-9f9dc88dc4b8'}
+certs_dir = './ssl'
 
 class RabbitMQBase(object):
     """ Base Class which establishes RabbitMQ connection for Publisher and Consumer."""
@@ -26,10 +33,13 @@ class RabbitMQBase(object):
     def  num_events_to_consume(self):
         return self._num_events_to_consume
 
+    # setting pika specific debug level.
+    #logging.getLogger('pika').setLevel(logging.INFO)
+
     def __init__(self, host='localhost', port=5672
                  , exchange_header='esa.events', vhost='/rsa/sa', logdir=None
                  , exchange_user='guest', exchange_pass='guest', exchange_durable=False
-                 , _type='headers'):
+                 , _type='headers', ssl=False, ssl_options=None):
         """ Initializes RabbitMQ connection parameters.
 
         Args:
@@ -53,7 +63,9 @@ class RabbitMQBase(object):
         self.connParameters = pika.ConnectionParameters(host=self.host
                                                         , port=self.port
                                                         , virtual_host=vhost
-                                                        , credentials=self.credentials)
+                                                        , credentials=self.credentials
+                                                        , ssl=ssl
+                                                        , ssl_options=ssl_options)
         self.msgProperties = None
         self.connection = None
         self.channel = None
@@ -268,12 +280,49 @@ class ConsumerRabbitMQ(RabbitMQBase):
                 return False
 
 
+def get_ssl_options(host=None):
+    ssl_options = {'ca_certs': os.path.join(certs_dir, 'ca_crt.pem'),
+                   'keyfile': os.path.join(certs_dir, cert_dict[host] + '_key.pem'),
+                   'certfile': os.path.join(certs_dir, cert_dict[host] + '.pem'),
+                   'cert_reqs': ssl.CERT_REQUIRED,}
+                #    'verify_peer': 'verify_none'}
+    return ssl_options
+
 if __name__ == '__main__':
+    #log_dir = '/Users/bakhra/source/esa/python/ctf/esa/testdata/epl_test.py/EPLModulesTest/test_eventtype_double'
     log_dir = '.'
     # Publishing
-    pub = PublishRabbitMQ(exchange_header='esa.events')
-    listen = ConsumerRabbitMQ(exchange_header='carlos.alerts')
-    pub.publish(input_file=os.path.join(log_dir, 'json_input.txt'))
+    # Paris
+    pub1 = PublishRabbitMQ(host='10.101.216.150', port=5671
+                           , exchange_header='esa.event.input', ssl=True
+                           , ssl_options=get_ssl_options('10.101.216.150')
+                           , exchange_durable=True)
+    # San Francisco
+    # pub2 = PublishRabbitMQ(host='10.101.216.223', port=5671
+    #                        , exchange_header='esa.event.input', ssl=True
+    #                        , ssl_options=get_ssl_options('10.101.216.223')
+    #                        , exchange_durable=True)
+    # #pub3 = PublishRabbitMQ(host='10.101.216.227', exchange_header='esa.events')
+    #pub2 = PublishRabbitMQ(exchange_header='esa.events1')
+    #pub3 = PublishRabbitMQ(exchange_header='esa.events2')
+    # New York
+    # listen = ConsumerRabbitMQ(host='10.101.216.227', port=5671, exchange_header='carlos.alerts'
+    #                           , ssl=True, ssl_options=get_ssl_options('10.101.216.227'))
+    # #listen = ConsumerRabbitMQ(exchange_header='esa.events')
+    #pub.publish(file, publish_interval=1)
+    pub1.publish(input_file=os.path.join(log_dir, '5f.txt'))
+    # pub2.publish(input_file=os.path.join(log_dir, '1s.txt'))
+    #pub2.publish(input_file=os.path.join(log_dir, 'json_input.txt'))
+    #pub3.publish(input_file=os.path.join(log_dir, 'json_input.txt'))
+    #pub1.publish(input_file=os.path.join(log_dir, 'default' + '_json_input.txt'))
+    #time.sleep(1)
+    #pub2.publish(input_file=os.path.join(log_dir, 'test' + '_json_input.txt'))
+    #pub3.publish(input_file=os.path.join(log_dir, 'global' + '_json_input.txt'))
     print '======'
     # Consuming
-    listen.consume(num_events_to_consume=3, output_file='consumed.json')
+    #listen.consume(num_events_to_consume=pub.num_events_to_consume)
+    # listen.consume(num_events_to_consume=1, output_file='consumed.json')
+    #a = AssertJSON()
+    #a.assertJSONFileAlmostEqualsKnownGood('consumed.json', 'consumed.json'
+    #                                      , ignorefields=['esa_time', 'carlos.event.signature.id'
+    #                                      , 'carlos.event.timestamp'])

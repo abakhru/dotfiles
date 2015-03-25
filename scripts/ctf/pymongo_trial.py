@@ -80,18 +80,19 @@ class MongoDBClientMixins(object):
                         __no_of_retries -= 1
                 final_count = alerts_count
             else:
-                for _id in moduleId:
-                    __no_of_retries = no_of_retries
-                    alerts_count = 0
-                    while alerts_count != expectedNumAlerts and __no_of_retries is not 0:
+                __no_of_retries = no_of_retries
+                while final_count != expectedNumAlerts and __no_of_retries is not 0:
+                    for _id in moduleId:
                         alerts_count = self.db[collection_name].find({'module_id' : _id}).count()
-                        if alerts_count != expectedNumAlerts:
-                            LOGGER.debug('[MongoDB] Not Got expected number of alerts'
-                                         + ', trying again.!!')
-                            time.sleep(retry_interval)
-                            __no_of_retries -= 1
-                    final_count += alerts_count
-
+                        LOGGER.debug('[MongoDB] Alert count for \'%s\' moduleid: %s'
+                                     , _id, alerts_count)
+                        final_count += alerts_count
+                    if final_count != expectedNumAlerts:
+                        LOGGER.debug('[MongoDB] Not Got expected number of alerts, trying again.!!')
+                        time.sleep(retry_interval)
+                        __no_of_retries -= 1
+                    else:
+                        break
             LOGGER.debug('[MongoDB] Total Alerts Count: %s', final_count)
             return final_count
         except pymongo.errors.OperationFailure as e:
@@ -128,19 +129,29 @@ class MongoDBClientMixins(object):
                         __no_of_retries -= 1
                 final_doc_list.append(alerts_list)
             else:
-                for _id in moduleId:
-                    __no_of_retries = no_of_retries
-                    alerts_list = []
-                    while len(alerts_list) != expectedNumAlerts and __no_of_retries is not 0:
-                        alerts_list = list(self.db[collection_name].find(\
-                                           {'module_id' : _id}).sort(sort_field, 1))
-                        if len(alerts_list) != expectedNumAlerts:
-                            LOGGER.debug('[MongoDB] Not Got expected number of output'
-                                         + ', trying again.!!')
-                            time.sleep(retry_interval)
-                            __no_of_retries -= 1
-                    final_doc_list.append(alerts_list)
-            return final_doc_list
+                __no_of_retries = no_of_retries
+                final_count = 0
+                while final_count != expectedNumAlerts and __no_of_retries is not 0:
+                    for _id in moduleId:
+                        alerts_list = list(self.db[collection_name].find( \
+                                           {'module_id': _id}).sort(sort_field, 1))
+                        LOGGER.debug('[MongoDB] Alert count for \'%s\' moduleid: %s'
+                                     , _id, len(alerts_list))
+                        if len(alerts_list):
+                            final_doc_list.append(alerts_list)
+                        final_count += len(alerts_list)
+
+                    if final_count != expectedNumAlerts:
+                        LOGGER.debug('[MongoDB] Not Got expected number of alerts, trying again.!!')
+                        time.sleep(retry_interval)
+                        __no_of_retries -= 1
+                        final_doc_list = []
+                    else:
+                        LOGGER.debug('[MongoDB] Found expected number of alerts: %d', final_count)
+                        return final_doc_list
+                        break
+                LOGGER.error('[MongoDB] Not Got expected number of alerts, timed Out.!!')
+                return final_doc_list
         except pymongo.errors.OperationFailure as e:
             LOGGER.error('[MongoDB] Unable to extract alerts')
             LOGGER.error(e)
@@ -239,7 +250,10 @@ class DataScienceUtil(object):
         if self.mongo_client is not None:
             # cleans up any existing document in watchlist collection inside ds db
             self.mongo_client.cleanup_mongo(collection_name='watchlists')
-            self.mongo_client.drop_database()
+            if sys.platform.lower() == 'darwin':
+                self.mongo_client.drop_database()
+            else:
+                os.system('mongo ' + self.database_name + ' --eval "db.dropDatabase();" --verbose')
             self.mongo_client.close()
 
     def MakeUniqueName(self, basename='testdb'):
@@ -263,8 +277,9 @@ class DataScienceUtil(object):
 
 if __name__ == '__main__':
 
-    s = DataScienceUtil()
-    s.config_data_science_db()
+    #s = DataScienceUtil()
+    s = MongoDBClientMixins(host='10.31.205.69')
+    #s.config_data_science_db()
     #p.mongo_client_teardown()
     #p = MongoDBClientMixins(db_name=db_name)
 
@@ -272,7 +287,15 @@ if __name__ == '__main__':
     #a = list(p.db['watchlists'].find())
     #for key in a[0].iterkeys():
     #    print key
-    #p.cleanup_mongo()
+    #s.cleanup_mongo()
     #p.PrettyDumpJson(p.get_alerts(moduleId='test_global_uri_module_set'), 'consumed_mongo.json')
     #print 'Total alerts received:', p.get_alert_count()
     #p.close()
+    moduleId=['esa.types.system', 'esa.types.source', 'esa.types.enrichment'
+                           , 'd28ecf2d-81da-4980-b1e8-fd30f867d93a'
+                           , 'f66c111d-69cd-4354-99ec-023b2cac2f58'
+                           , 'deed0a24-a5d6-412e-bd7a-efa71e8df886']
+    #s.get_alerts_count(moduleId=moduleId, expectedNumAlerts=6)
+    a = s.get_alerts(moduleId=moduleId, expectedNumAlerts=6)
+    #pprint(a)
+    s.close()

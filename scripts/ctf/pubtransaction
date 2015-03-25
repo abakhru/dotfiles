@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import optparse
 import os
 import pika
 import signal
@@ -11,8 +12,15 @@ from bson import json_util
 from collections import OrderedDict
 from pprint import pprint
 from ctf.framework.logger import LOGGER
+from assertJSONAlmostEquals import AssertJSON
 
 LOGGER.setLevel('DEBUG')
+
+DESC = """
+This script run on localhost and does the following:
+- Publish events on local/remote RabbitMQ specified exchange
+- Consume alerts from 'carlos.alerts' RabbitMQ exchange.
+"""
 
 
 class RabbitMQBase(object):
@@ -23,8 +31,37 @@ class RabbitMQBase(object):
         return self._connected
 
     @property
-    def  num_events_to_consume(self):
+    def num_events_to_consume(self):
         return self._num_events_to_consume
+
+    # setting pika specific debug level.
+    # logging.getLogger('pika').setLevel(logging.INFO)
+    def _ParseOpts(self):
+        """ Parses all the commandline options provided and returns the options."""
+
+        parser = optparse.OptionParser(description=DESC, usage='%%prog [options]\n\n%s' % __doc__)
+        parser.add_option('-?', action='help', help=optparse.SUPPRESS_HELP)
+        parser.add_option('-p', '--publish', dest='publish'
+                        , default=''
+                        , help='Start the publishing')
+        parser.add_option('-e', '--exchange', dest='exchange_header'
+                        , default='esa.events', action='store_true'
+                        , help='Delete empty directories. [%default]')
+        parser.add_option('-f', '--keyspace', dest='delete_keyspaces'
+                        , default=False, action='store_true'
+                        , help='Delete keyspaces.[%default].'
+                        + 'Only keyspaces on 127.0.0.1 can be deleted.')
+        parser.add_option('-m', '--machines', dest='machines'
+                        , default='127.0.0.1'
+                        , help='Comma seperated list of machines')
+        parser.add_option('-t', '--time', dest='minutes'
+                        , default='1440'
+                        , help='Time in minutes.[%default] ')
+
+        (self.options, self.args) = parser.parse_args()
+
+        if len(sys.argv[1:]) == 0:
+            parser.print_help()
 
     def __init__(self, host='localhost', port=5672
                  , exchange_header='esa.events', vhost='/rsa/sa', logdir=None
@@ -42,8 +79,12 @@ class RabbitMQBase(object):
             exchange_pass: RabbitMQ user's password that has access to specified vhost
                            and exchange_header
             exchange_durable: if the declared exchange is durable or not.
+            _type: type of the event.
         """
 
+        self.options = None
+        self.args = None
+        self._ParseOpts()
         self.host = host
         self.port = port
         self.exchange_header = exchange_header
@@ -74,9 +115,15 @@ class RabbitMQBase(object):
                          , self.host, self.port, self.__class__.__name__)
             self.connection = pika.BlockingConnection(self.connParameters)
             LOGGER.debug('%s connected', self.host)
-            self.on_connected(binding, passive=passive, listen=listen)
+            if self.connection:
+                self._connected = True
+            if self.connected:
+                self.on_connected(binding, passive=passive, listen=listen)
         except pika.exceptions.AMQPConnectionError:
-            LOGGER.error('Cannot connect to RabbitMQ server on %s', self.host, exc_info=True)
+            LOGGER.error('Cannot connect to RabbitMQ server on \'%s\'. Trying again...',
+                         self.host, exc_info=True)
+            time.sleep(1)
+            self.connect(binding=binding, passive=passive, listen=listen)
 
     def on_connected(self, binding, passive, listen):
         """ Declare the exchange, queue and do the binding."""
@@ -109,7 +156,6 @@ class RabbitMQBase(object):
                 self.channel.queue_bind(exchange=self.exchange_header
                                         , queue=self.queue_name
                                         , arguments=esa_binding)
-            self._connected = True
         except Exception as e:
             LOGGER.error(e)
 
@@ -269,11 +315,4 @@ class ConsumerRabbitMQ(RabbitMQBase):
 
 
 if __name__ == '__main__':
-    log_dir = '.'
-    # Publishing
-    pub = PublishRabbitMQ(exchange_header='esa.events')
-    listen = ConsumerRabbitMQ(exchange_header='carlos.alerts')
-    pub.publish(input_file=os.path.join(log_dir, 'json_input.txt'))
-    print '======'
-    # Consuming
-    listen.consume(num_events_to_consume=3, output_file='consumed.json')
+    publisher = PublishRabbitMQ()
