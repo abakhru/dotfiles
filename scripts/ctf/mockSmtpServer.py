@@ -6,10 +6,7 @@ import smtpd
 import threading
 
 class MockSMTPServer(smtpd.SMTPServer, threading.Thread):
-    '''
-    A mock SMTP server. Runs in a separate thread so can be started from
-    existing test code.
-    '''
+    """ A mock SMTP server. Runs in a separate thread so can be started from existing test code."""
 
     def __init__(self, hostname, port):
         threading.Thread.__init__(self)

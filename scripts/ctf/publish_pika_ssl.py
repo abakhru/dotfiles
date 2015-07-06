@@ -16,10 +16,9 @@ from ctf.framework.logger import LOGGER
 #from assertJSONAlmostEquals import AssertJSON
 
 LOGGER.setLevel('DEBUG')
-cert_dict = {'10.101.216.148': 'fbc283ee-f629-491c-9d04-b98d30badc36',
-             '10.101.216.150': 'b8148417-f0b2-467f-8aab-640e967a113e',
-             '10.101.216.223': '19a862f2-5808-4f76-8cda-b155d22193eb',
-             '10.101.216.227': '5ff799a6-e554-48d2-b193-9f9dc88dc4b8'}
+cert_dict = {'10.101.59.231': '49bb6435-7920-4a34-8e4a-86f72867c24e',
+             '10.101.59.232': 'f835f7cd-344c-40a8-92d2-fa776d001ff8',
+             '10.101.59.236': '5249e632-eafc-48dc-891f-88cf407e70ec'}
 certs_dir = './ssl'
 
 class RabbitMQBase(object):
@@ -177,11 +176,11 @@ class PublishRabbitMQ(RabbitMQBase):
                                                       , body=line
                                                       , mandatory=True):
                             self._num_events_to_consume += 1
-                            LOGGER.debug('Message #%s publish was confirmed'
-                                         , self._num_events_to_consume)
+                            # LOGGER.debug('Message #%s publish was confirmed'
+                            #              , self._num_events_to_consume)
                             delivered = True
                         else:
-                            LOGGER.error('Message could not be confirmed')
+                            # LOGGER.error('Message could not be confirmed')
                             delivered = False
                         if publish_interval is not None:
                             LOGGER.debug('Sleeping for %s seconds before next publish'
@@ -293,21 +292,21 @@ if __name__ == '__main__':
     log_dir = '.'
     # Publishing
     # Paris
-    pub1 = PublishRabbitMQ(host='10.101.216.150', port=5671
+    pub1 = PublishRabbitMQ(host='10.101.59.231', port=5671
                            , exchange_header='esa.event.input', ssl=True
-                           , ssl_options=get_ssl_options('10.101.216.150')
+                           , ssl_options=get_ssl_options('10.101.59.231')
                            , exchange_durable=True)
     # San Francisco
-    # pub2 = PublishRabbitMQ(host='10.101.216.223', port=5671
+    # pub2 = PublishRabbitMQ(host='10.101.59.223', port=5671
     #                        , exchange_header='esa.event.input', ssl=True
-    #                        , ssl_options=get_ssl_options('10.101.216.223')
+    #                        , ssl_options=get_ssl_options('10.101.59.223')
     #                        , exchange_durable=True)
-    # #pub3 = PublishRabbitMQ(host='10.101.216.227', exchange_header='esa.events')
+    # #pub3 = PublishRabbitMQ(host='10.101.59.227', exchange_header='esa.events')
     #pub2 = PublishRabbitMQ(exchange_header='esa.events1')
     #pub3 = PublishRabbitMQ(exchange_header='esa.events2')
     # New York
-    # listen = ConsumerRabbitMQ(host='10.101.216.227', port=5671, exchange_header='carlos.alerts'
-    #                           , ssl=True, ssl_options=get_ssl_options('10.101.216.227'))
+    # listen = ConsumerRabbitMQ(host='10.101.59.227', port=5671, exchange_header='carlos.alerts'
+    #                           , ssl=True, ssl_options=get_ssl_options('10.101.59.227'))
     # #listen = ConsumerRabbitMQ(exchange_header='esa.events')
     #pub.publish(file, publish_interval=1)
     pub1.publish(input_file=os.path.join(log_dir, '5f.txt'))

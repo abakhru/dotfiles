@@ -6,7 +6,7 @@ import smtpd
 import asyncore
 import socket, signal, time, sys
 
-#from smtp_channel import SMTPChannel
+from smtp_channel import SMTPChannel
 from asyncore import ExitNow
 from multiprocessing import Process, Queue
 from Queue import Empty
@@ -69,26 +69,15 @@ class SSLSMTPServer(SMTPServer):
                     newsocket.settimeout(self.maximum_execution_time)
 
                     if self.ssl:
-                        newsocket = ssl.wrap_socket(
-                            newsocket,
-                            server_side=True,
-                            certfile=self.certfile,
-                            keyfile=self.keyfile,
-                            ssl_version=self.ssl_version,
-                        )
-                    channel = SMTPChannel(
-                        self,
-                        newsocket,
-                        fromaddr,
-                        require_authentication=self.require_authentication,
-                        credential_validator=self.credential_validator,
-                        map=map
-                    )
+                        newsocket = ssl.wrap_socket(newsocket, server_side=True
+                                                    , certfile=self.certfile, keyfile=self.keyfile
+                                                    , ssl_version=self.ssl_version,)
+                    channel = SMTPChannel(self, newsocket, fromaddr
+                                          , require_authentication=self.require_authentication
+                                          , credential_validator=self.credential_validator, map=map)
 
                     LOGGER.info('_accept_subprocess(): starting asyncore within subprocess.')
-
                     asyncore.loop(map=map)
-
                     LOGGER.error('_accept_subprocess(): asyncore loop exited.')
             except (ExitNow, SSLError):
                 self._shutdown_socket(newsocket)

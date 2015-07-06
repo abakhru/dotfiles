@@ -96,3 +96,12 @@ git rebase -i --autosquash
 
 - delete remote branch
 git push origin :<branch_name>
+
+- ammend the author of a commit message:
+1. run git rebase -i <sha1 or ref of starting point>
+2. mark all commits that you want to change with edit (or e)
+
+loop the following two commands until you have processed all the commits:
+
+3. git commit --amend --reuse-message=HEAD --author="Amit Bakhru <amit.bakhru@rsa.com>"
+4. git rebase --continue

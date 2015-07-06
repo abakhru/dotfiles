@@ -276,4 +276,4 @@ if __name__ == '__main__':
     pub.publish(input_file=os.path.join(log_dir, 'json_input.txt'))
     print '======'
     # Consuming
-    listen.consume(num_events_to_consume=3, output_file='consumed.json')
+    listen.consume(num_events_to_consume=1, output_file='consumed.json')

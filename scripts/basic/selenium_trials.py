@@ -8,8 +8,8 @@ from selenium.webdriver.common.keys import Keys
 import time
 
 browser = webdriver.Firefox() # Get local session of firefox
-browser.get("http://www.yahoo.com") # Load page
-assert "Yahoo" in browser.title
+browser.get("https://localhost:15672/") # Load page
+assert "RabbitMQ Management" in browser.title
 elem = browser.find_element_by_name("p") # Find the query box
 elem.send_keys("seleniumhq" + Keys.RETURN)
 time.sleep(2) # Let the page load, will be added to the API

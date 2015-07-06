@@ -10,13 +10,14 @@ import unittest
 
 LOGGER.setLevel('DEBUG')
 
-class JolokiaMixins(unittest.TestCase):
+# class JolokiaMixins(unittest.TestCase):
+class JolokiaMixins(object):
     """ Mixin utilities to get values from JVM using jolokia."""
 
     test_name = 'test_per_esper_module_stats'
     ENGINES_LIST = ['default', 'test', 'global']
 
-    def setUp(self, host='localhost', port=8779):
+    def __init__(self, host='localhost', port=8778):
         url = ('http://%s:%d/jolokia/' % (host, port))
         try:
             self.j4p = Jolokia(url)
@@ -285,4 +286,25 @@ class JolokiaMixins(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    # unittest.main()
+    p = JolokiaMixins(host='10.101.59.231')
+    # http://10.31.204.99:8778/jolokia/read/com.rsa.netwitness.esa:type=CEP,subType=Metrics,
+    # id=statistics/EsperEngines/default/modules/epl_module_no_148/total
+    # with open('epl_module_stats', 'a+', buffering=1) as f:
+        # for i in xrange(100):
+            # result = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type=CEP,subType=Metrics,id=statistics'
+            #                              , attribute='EsperEngines'
+            #                              , path='default/modules/epl_module_no_1/total')
+            #         # return result['value']
+            # if result is not None:
+            #     f.write(result['value'] + '\n')
+            # else:
+            #     f.write(str(result) + '\n')
+    # http://10.101.59.231:8778/jolokia/read/com.rsa.netwitness.esa:type=Workflow,subType=Source,id=nextgenAggregationSource/Stats
+    esper_feeder_stats = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type=Workflow'
+                                                   ',subType=Source,id=nextgenAggregationSource'
+                                                   , attribute='Stats')
+    # print (esper_feeder_stats)
+    sessions_behind_list = [i['sessionsBehind'] for i in esper_feeder_stats]
+    if sum(sessions_behind_list) == 0:
+        print (sessions_behind_list)

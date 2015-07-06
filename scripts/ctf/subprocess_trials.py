@@ -36,7 +36,7 @@ def ControlJolokiaAgent(java_process_pid=0, command=None
         #output = p.communicate()
         #LOGGER.debug(output[0])
         #LOGGER.debug(output)
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         LOGGER.error(e)
         #LOGGER.error(output[1])
     return
