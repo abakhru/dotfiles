@@ -19,7 +19,7 @@
         br = branch
         cherry = cherry-pick
         # View abbreviated SHA, description, and history graph of the latest 20 commits
-        l = log --pretty=oneline -n 20 --graph --abbrev-commit
+        l = log --pretty=oneline -n 30 --graph --abbrev-commit
         t = log --oneline --graph --decorate --all
         lol = log --graph --decorate --pretty=oneline --abbrev-commit
         lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
@@ -92,3 +92,5 @@
 	smudge = git media smudge %f
 [http]
     sslverify = false
+[credential]
+	helper = osxkeychain

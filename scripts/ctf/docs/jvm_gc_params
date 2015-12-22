@@ -1,0 +1,46 @@
+# Java Additional Parameters
+#wrapper.java.additional.1=
+wrapper.java.additional.1=-Xmx65536m
+wrapper.java.additional.2=-Xms8192m
+wrapper.java.additional.3=-XX:+UseG1GC
+wrapper.java.additional.4=-Djavax.net.ssl.trustStore=/opt/rsa/esa/esa_truststore.jks
+wrapper.java.additional.5=-Djavax.net.ssl.trustStorePassword=netwitness
+wrapper.java.additional.6=-Djavax.net.ssl.keyStore=/opt/rsa/esa/../carlos/keystore
+wrapper.java.additional.7=-javaagent:/opt/rsa/esa/lib/com/espertech/esper-eeutilagent/5.1.0/esper-eeutilagent-5.1.0.jar
+# non-default GC debug parameters
+wrapper.java.additional.8=-XX:+PrintGCDetails
+wrapper.java.additional.9=-XX:+PrintGCDateStamps
+wrapper.java.additional.10=-Xloggc:/opt/rsa/esa/logs/jvm.log
+wrapper.java.additional.11=-XX:+PrintHeapAtGC
+#wrapper.java.additional.12=-verbose:gc
+wrapper.java.additional.12=-XX:+PrintAdaptiveSizePolicy
+wrapper.java.additional.13=-XX:G1HeapRegionSize=16M
+
+
+Peak Day:
+4.5 billion log events
+Peak: 65k
+Avg: 52k
+
+Week:25.7 billion
+Avg: 42k (weekends bring the avg down)
+
+Total Packet/day ­ average and peak
+
+Week: 1.7 billion
+Avg: 2800
+Peak: 5892k
+
+Total EPL rules with named windows?
+0 (it¹s expected this will change)
+Total EPL rules without named windows?
+11 deployed 24 in development or waiting for correlation
+Full list of rules/use cases if available would be very useful.
+This is going to take a while to compile.
+
+I also wanted to reiterate our understanding that we are not currently questioning or having any issues with the CPU/memory limitations of EPL rules on the ESA box itself. Ideally we would be able to Œchain¹ ESA boxes together (10.5?) if/when we ever hit the CPU/memory limitations on a single ESA box, however today we are focusing on just aggregating the data to a single ESA box and reliably alerting based on the rules in place.
+
+
+/opt/rsa/esa/client/bin/esa-client "cd /Workflow/Source/nextgenAggregationSource; get ."
+
+Try setting the Concentrator aggregating from the LD to aggregate.nice = true and see if this fixes the issue.

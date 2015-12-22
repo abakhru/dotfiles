@@ -1,0 +1,44 @@
+- Restore Systems Under Test to 10.3.5
+- rpm --import /etc/pki/rpm-gpg/*; rpm -q gpg-pubkey --qf '%{name}-%{version}-%{release} --> %{summary}\n'
+- Check that traffic is still flowing and that licenses are good
+- rpm --import http://devrepo.netwitness.local/RSA/RSADevSignPublic.gpg on all nodes manually
+- (cd /etc/yum.repos.d; mv -vf sa.repo sa.repo.bak; wget http://10.101.217.117/smcupdate/sa.repo; yum clean all; yum check–update)
+#- Load the /var/netwitness/srv/www/rsa/updates/RemoteRPMs directory with Q4Bundle14 rpms from http://devrepo.netwitness.local/OS/Quarterly/Q4Bundle14/
+#- /usr/bin/python -tt /usr/bin/reposync --norepopath -r Q4Bundle14 -p /var/netwitness/srv/www/rsa/updates/RemoteRPMs
+#- Run createrepo /var/netwitness/srv/www/rsa/updates # Create valid yum database
+#- Check with yum check-update
+#- Issue the command "yum update –y" on SA node and reboot when it completes, wait for the SA server to come back up
+#- On each device, issue the command "yum update –y" - reboot when complete
+#- yum install -y rsa-sa-gpg-pubkeys
+#- You can check that traffic is still flowing if you like
+- Load the /var/netwitness/srv/www/rsa/updates/RemoteRPMs directory with either the 10.4-SMCUpdate repo http://10.25.55.171/RSA/10.4/10.4-SMCUpdate/
+-- /usr/bin/python -tt /usr/bin/reposync --norepopath -r 10.4-SMCUpdate -p /var/netwitness/srv/www/rsa/updates/RemoteRPMs
+(NOTE: this could take a loooooooong time ~ 2k rpms to download from devrepo)
+-- createrepo /var/netwitness/srv/www/rsa/updates # Create valid yum database
+- Check with yum check-update
+- Issue the command "yum update –y" and reboot when it completes, wait for the SA server to come back up –
+(NOTE: this could take a long time)
+
+When the SA server is up, you should be able to upgrade the ESA servers using the UI
+Once the ESA servers are upgraded, you should reboot
+Once the ESA servers are back up, you should Enable each one of them from the devices page
+Once the ESA servers are enabled, you can “migrate” each one using the Alerts->Configure->Services tab
+Load the /var/netwitness/srv/www/rsa/updates/RemoteRPMs directory with either the 10.5.0.0 repo
+rm –rf /var/netwitness/srv/www/rsa/updates/RemoteRPMs/*
+/usr/bin/python -tt /usr/bin/reposync --norepopath -r 10.5.0.0 -p /var/netwitness/srv/www/rsa/updates/RemoteRPMs
+Run createrepo /var/netwitness/srv/www/rsa/updates # Create valid yum database
+Check with yum check-update
+Issue the command "yum update –y" and reboot when it completes, wait for the SA server to come back up – this could take a long time
+Use the SA UI to upgrade the ESA Servers, and then the LD/Conc nodes
+You will need to enable the LD/Conc nodes
+You should be able to generate alerts using the rules that were migrated and the same traffic you used before.
+
+Column1	Column2	Column3
+Node	IP	Comment
+SA	10.101.217.39
+ESA 1	10.101.217.53	Feed from Conc
+Conc	10.101.217.54	Feed from LD
+LD	10.101.216.250
+ESA 2	10.101.217.113	Feed from Conc 2
+Conc 2	10.101.217.114	Feed from LD 2
+LD 2	10.101.217.115

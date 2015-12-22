@@ -80,7 +80,9 @@ export PROMPT_COMMAND='echo -ne "\033]0;${HOSTNAME%%.*}: ${STY}\007"'
 export PYTHONPATH=../..:../../../../python
 
 # init z! (https://github.com/rupa/z)
-. ~/dotfiles/z.sh
+#. ~/dotfiles/z.sh
+#. ~/.oh-my-zsh/oh-my-zsh.sh
+
 
 # Load the shell dotfiles, and then some:
 # * ~/.path can be used to extend `$PATH`.
@@ -121,3 +123,5 @@ export PATH
 # The orginal version is saved in .bash_profile.pysave
 PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:${PATH}"
 export PATH
+
+zsh

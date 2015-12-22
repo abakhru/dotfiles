@@ -1,0 +1,19 @@
+/*
+AEXP P2P Activity Detected
+*/
+
+module P2PActivityDetected;
+
+@Name('Module_P2PActivityDetected')
+@RSAAlert(identifiers={"ip_src"})
+
+SELECT window(*) FROM
+Event (
+device_type = 'intrushield' AND
+policy_name LIKE '%p2p%' AND
+ip_src IS NOT NULL
+).std:groupwin(ip_src)
+		.std:unique(policy_name)
+		.win:time_length_batch(600 sec, 2)
+		 GROUP BY ip_src HAVING count(*) = 2
+OUTPUT first every 10 minutes;

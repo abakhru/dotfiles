@@ -12,14 +12,18 @@ import simplejson as json
 from bson import json_util
 from collections import OrderedDict
 from pprint import pprint
-from ctf.framework.logger import LOGGER
+from common.framework.logger import LOGGER
 #from assertJSONAlmostEquals import AssertJSON
 
 LOGGER.setLevel('DEBUG')
 cert_dict = {'10.101.59.231': '49bb6435-7920-4a34-8e4a-86f72867c24e',
              '10.101.59.232': 'f835f7cd-344c-40a8-92d2-fa776d001ff8',
-             '10.101.59.236': '5249e632-eafc-48dc-891f-88cf407e70ec'}
-certs_dir = './ssl'
+             '10.101.59.236': '5249e632-eafc-48dc-891f-88cf407e70ec',
+             '10.101.216.148': 'fbc283ee-f629-491c-9d04-b98d30badc36',
+             '10.101.216.150': 'b8148417-f0b2-467f-8aab-640e967a113e',
+             '10.101.216.223': '19a862f2-5808-4f76-8cda-b155d22193eb',
+             '10.101.216.227': '5ff799a6-e554-48d2-b193-9f9dc88dc4b8'}
+certs_dir = './ssl/t/'
 
 class RabbitMQBase(object):
     """ Base Class which establishes RabbitMQ connection for Publisher and Consumer."""
@@ -284,6 +288,7 @@ def get_ssl_options(host=None):
                    'keyfile': os.path.join(certs_dir, cert_dict[host] + '_key.pem'),
                    'certfile': os.path.join(certs_dir, cert_dict[host] + '.pem'),
                    'cert_reqs': ssl.CERT_REQUIRED,}
+                #    'ssl_version': ssl.PROTOCOL_SSLv2}
                 #    'verify_peer': 'verify_none'}
     return ssl_options
 
@@ -292,9 +297,9 @@ if __name__ == '__main__':
     log_dir = '.'
     # Publishing
     # Paris
-    pub1 = PublishRabbitMQ(host='10.101.59.231', port=5671
+    pub1 = PublishRabbitMQ(host='10.101.216.150', port=5671
                            , exchange_header='esa.event.input', ssl=True
-                           , ssl_options=get_ssl_options('10.101.59.231')
+                           , ssl_options=get_ssl_options('10.101.216.150')
                            , exchange_durable=True)
     # San Francisco
     # pub2 = PublishRabbitMQ(host='10.101.59.223', port=5671
@@ -317,7 +322,7 @@ if __name__ == '__main__':
     #time.sleep(1)
     #pub2.publish(input_file=os.path.join(log_dir, 'test' + '_json_input.txt'))
     #pub3.publish(input_file=os.path.join(log_dir, 'global' + '_json_input.txt'))
-    print '======'
+    # print '======'
     # Consuming
     #listen.consume(num_events_to_consume=pub.num_events_to_consume)
     # listen.consume(num_events_to_consume=1, output_file='consumed.json')

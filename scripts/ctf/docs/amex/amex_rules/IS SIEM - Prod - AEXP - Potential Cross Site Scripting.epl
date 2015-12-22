@@ -1,0 +1,18 @@
+/*
+AEXP Potential Cross Site Scripting
+*/
+
+module PotentialCrossSiteScripting;
+
+@Name('Module_PotentialCrossSiteScripting')
+@RSAAlert(identifiers={"ip_src"})
+
+SELECT window(*) FROM
+Event (
+device_type = 'intrushield' AND
+(policy_name LIKE '%cross%' OR policy_name LIKE '%Cross%')
+).std:groupwin(ip_src)
+		.std:unique(policy_name)
+		.win:time_length_batch(60 sec, 1)
+		 GROUP BY ip_src HAVING count(*) = 1
+OUTPUT first every 10 minutes;

@@ -11,97 +11,62 @@ from pprint import pprint
 
 from bson import BSON
 from bson import json_util
-from ctf.framework.logger import LOGGER
+from framework.common.logger import LOGGER
 LOGGER.setLevel('DEBUG')
 
+
+
 class MongoDBClientMixins(object):
-    """ MongoDBClient utilities that allow extracting alerts from mongo using pymongo.
-    """
+    """ MongoDBClient utilities that allow extracting alerts from mongo using pymongo."""
 
-    @property
-    def db(self):
-        return self.__db
-
-    def __init__(self, host='localhost', port=27017
-                 , db_name='esa', db_user='esa', db_pass='esa', source='esa'):
-
+    def __init__(self, host='localhost', port=27017,
+                 db_name='esa', db_user='esa', db_pass='esa', source='esa'):
         LOGGER.debug('Connecting to MongoDb...')
-        self.db_name = db_name
+
         try:
             self.conn = pymongo.MongoClient(host, port)
             LOGGER.debug('Connected to MongoDB successfully!!!')
-        except pymongo.errors.ConnectionFailure, e:
-            LOGGER.error('Could not connect to MongoDB: %s', e)
+        except pymongo.errors.ConnectionFailure as e:
+            LOGGER.error('Could not connect to MongoDB: %s', str(e))
             exit(0)
 
         if self.conn is not None:
-            self.__db = self.conn[self.db_name]
-            if not self.db.authenticate(db_user, db_pass, source=source):
-                LOGGER.error('Unable to authenticate to MongoDB')
-                return
+            self.db = self.conn[db_name]
+            # if not self.db.authenticate(db_user, db_pass, source=source):
+            #     LOGGER.error('Unable to authenticate to MongoDB')
+            #     return
 
-            LOGGER.debug('Authenticated to MongoDb for \'%s\' database', source)
+            LOGGER.debug('Authenticated to MongoDb')
 
-    def PrettyDumpJson(self, doc_list, outfile):
-        """ Pretty print and writes JSON output to file name provided."""
+    def PrettyDumpMongo(self, doc_list, outfile):
+        """ Pretty print and write Mongo output to a file using the bson/json tools."""
+
         with open(outfile, 'wb') as _file:
             json_formatted_doc = json_util.dumps(doc_list, sort_keys=False, indent=4
                                                  , default=json_util.default)
             LOGGER.debug('[MongoDB] Generated Alert notification in JSON form:\n%s'
                          , json_formatted_doc)
-            _file.write(json_formatted_doc)
+            _file.write(bytes(json_formatted_doc, 'UTF-8'))
             return
 
-    def get_alerts_count(self, collection_name='alert', expectedNumAlerts=1
-                         , moduleId=None, retry_interval=1, no_of_retries=3):
-        """Extract alerts count from mongodb based on moduleId.
+    def InsertIntoCollectionFromJSON(self, json_array, collection_name='alert', *args, **kwargs):
+        """Inserts JSON elements into collection
 
         Args:
-            collection_name: name of the mongodb collection. (default=alert)
-            expectedNumAlerts: expected number of alerts.
-            moduleId: list of unique module ids of deployed epl rules.
-            retry_interval: retry get_alerts_count after number of seconds specified.
-            no_of_retries: number of retries to do.
+            json_array: array of json objects to insert(json)
+            collection: collection to insert into (str)
 
         Returns:
-            Total Count of alerts for each moduleId provided.
+            list of _id values corresponding to document(s) inserted
         """
-
-        final_count = 0
-        try:
-            if moduleId is None:
-                alerts_count = 0
-                __no_of_retries = no_of_retries
-                while alerts_count != expectedNumAlerts and __no_of_retries is not 0:
-                    alerts_count = self.db[collection_name].find().count()
-                    if alerts_count != expectedNumAlerts:
-                        LOGGER.debug('[MongoDB] Not Got expected number of alerts, trying again.!!')
-                        time.sleep(retry_interval)
-                        __no_of_retries -= 1
-                final_count = alerts_count
-            else:
-                __no_of_retries = no_of_retries
-                while final_count != expectedNumAlerts and __no_of_retries is not 0:
-                    for _id in moduleId:
-                        alerts_count = self.db[collection_name].find({'module_id' : _id}).count()
-                        LOGGER.debug('[MongoDB] Alert count for \'%s\' moduleid: %s'
-                                     , _id, alerts_count)
-                        final_count += alerts_count
-                    if final_count != expectedNumAlerts:
-                        LOGGER.debug('[MongoDB] Not Got expected number of alerts, trying again.!!')
-                        time.sleep(retry_interval)
-                        __no_of_retries -= 1
-                    else:
-                        break
-            LOGGER.debug('[MongoDB] Total Alerts Count: %s', final_count)
-            return final_count
-        except pymongo.errors.OperationFailure as e:
-            LOGGER.error('[MongoDB] Unable to extract alert count.')
-            LOGGER.error(e)
-            return None
+        log_msg = ('Inserting %d items in collection %s' % (len(json_array), collection_name))
+        LOGGER.debug(log_msg)
+        id_list = self.db[collection_name].insert(json_array, *args, **kwargs)
+        LOGGER.debug('Got %d ids as a result', len(id_list))
+        return id_list
 
     def get_alerts(self, collection_name='alert', expectedNumAlerts=1, moduleId=None
-                   , sort_field='events.esa_time', retry_interval=1, no_of_retries=3):
+                   , sort_field='events.esa_time', timeout=60):
         """Extract alerts from mongodb based on moduleId.
 
         Args:
@@ -109,72 +74,97 @@ class MongoDBClientMixins(object):
             expectedNumAlerts: expected number of alerts.
             moduleId: list of unique module ids of deployed epl rules.
             sort_field: generated alerts will be sorted on this field.
-            retry_interval: retry get_alerts after number of seconds specified.
-            no_of_retries: number of retries to do.
+            timeout: The amount of time to wait for all the alerts to be returned (seconds)
 
         Returns:
             List of alerts_list for each moduleId provided.
         """
 
-        final_doc_list = []
-        try:
-            if moduleId is None:
-                __no_of_retries = no_of_retries
-                alerts_list = []
-                while len(alerts_list) != expectedNumAlerts and __no_of_retries is not 0:
-                    alerts_list = list(self.db[collection_name].find().sort(sort_field, 1))
-                    if len(alerts_list) != expectedNumAlerts:
-                        LOGGER.debug('[MongoDB] Not Got expected number of output, trying again.!!')
-                        time.sleep(retry_interval)
-                        __no_of_retries -= 1
-                final_doc_list.append(alerts_list)
-            else:
-                __no_of_retries = no_of_retries
-                final_count = 0
-                while final_count != expectedNumAlerts and __no_of_retries is not 0:
-                    for _id in moduleId:
-                        alerts_list = list(self.db[collection_name].find( \
-                                           {'module_id': _id}).sort(sort_field, 1))
-                        LOGGER.debug('[MongoDB] Alert count for \'%s\' moduleid: %s'
-                                     , _id, len(alerts_list))
-                        if len(alerts_list):
-                            final_doc_list.append(alerts_list)
-                        final_count += len(alerts_list)
+        alerts_list = []
+        endtime = time.time() + timeout
+        query = {}
+        if moduleId:
+            query = {'module_id': {'$in': moduleId}}
+        while len(alerts_list) < expectedNumAlerts and time.time() < endtime:
+            try:
+                alerts_list = list(self.db[collection_name].find(query).sort(sort_field, 1))
+            except pymongo.errors.OperationFailure as e:
+                LOGGER.error('[MongoDB] Unable to extract alerts')
+                LOGGER.error(e)
+            wake_time = time.time() + 1
+            while wake_time > time.time():
+                pass
+        LOGGER.debug('[MongoDB] Found {0} alerts.'.format(len(alerts_list)))
+        if len(alerts_list) < expectedNumAlerts:
+            LOGGER.error('[MongoDB] Timeout reached when trying to retrieve alerts.')
+        return alerts_list
 
-                    if final_count != expectedNumAlerts:
-                        LOGGER.debug('[MongoDB] Not Got expected number of alerts, trying again.!!')
-                        time.sleep(retry_interval)
-                        __no_of_retries -= 1
-                        final_doc_list = []
-                    else:
-                        LOGGER.debug('[MongoDB] Found expected number of alerts: %d', final_count)
-                        return final_doc_list
-                        break
-                LOGGER.error('[MongoDB] Not Got expected number of alerts, timed Out.!!')
-                return final_doc_list
-        except pymongo.errors.OperationFailure as e:
-            LOGGER.error('[MongoDB] Unable to extract alerts')
-            LOGGER.error(e)
-            return []
+    def get_alerts_count(self, collection_name='alert', expectedNumAlerts=1
+                         , moduleId=None, timeout=60):
+        """Extract alerts count from mongodb based on moduleId.
 
-    def cleanup_mongo(self, collection_name='alert'):
-        """Removes all documents from the provided collection_name."""
-        LOGGER.debug('[MongoDB] Cleaning all documents in \'%s\' collection.', collection_name)
-        try:
-            self.db[collection_name].remove({})
-        except Exception as e:
-            LOGGER.error('[MongoDB] Cleanup Failed.')
-            LOGGER.error(e)
+        Args:
+            collection_name: name of the mongodb collection. (default=alert)
+            expectedNumAlerts: expected number of alerts.
+            moduleId: list of unique module ids of deployed epl rules.
+            timeout: The amount of time to wait for all the alerts to be returned (seconds)
+
+        Returns:
+            Total Count of alerts for each moduleId provided.
+        """
+
+        return len(self.get_alerts(collection_name=collection_name
+                                   , expectedNumAlerts=expectedNumAlerts, moduleId=moduleId
+                                   , timeout=timeout))
+
+    def cleanup_mongo(self, collection_name='alert', id_list=None, **kwargs):
+        """Removes all documents or specified documents by id from the provided collection_name.
+
+        Note:
+            If the record does not exist/wrong document specified removal mongo will still return
+        err: None
+
+        Args:
+            collection: collection from where the documents are to be removed (str)
+            id_list: list of document ids [{"_id": "<id>"}])to remove (dict)
+
+        Returns:
+            whether or not removal of all items was successful (bool)
+        """
+        status_list = []
+        return_status = True
+        if id_list:
+            for json_item in id_list:
+                try:
+                    status = self.db[collection_name].remove(json_item, **kwargs)
+                    status_list.append(status)
+                except Exception as e:
+                    err_msg = ('[MongoDB] Cleanup Failed. status %s' % status_list[-1])
+                    LOGGER.error(err_msg)
+                    LOGGER.error(e)
+                    return_status = False
+                # format: {u'connectionId': 333, u'ok': 1.0, u'err': None, u'n': 1}
+                if status['err'] is not None:
+                    return_status = False
+        else:
+            LOGGER.debug('[MongoDB] Cleaning all documents in \'%s\' collection.', collection_name)
+            try:
+                status = self.db[collection_name].remove({})
+                status_list.append(status)
+            except pymongo.errors.OperationFailure as e:
+                LOGGER.error('[MongoDB] Cleanup Failed.')
+                LOGGER.error(e)
+                return_status = False
+
+        log_msg = ('Removal result: %s' % status_list)
+        LOGGER.debug(log_msg)
+        return return_status
 
     def close(self):
         try:
             self.conn.close()
-        except Exception as e:
+        except pymongo.errors.ConnectionFailure as e:
             LOGGER.error(e)
-
-    def drop_database(self):
-        LOGGER.debug('Dropping database \'%s\'', self.db_name)
-        self.conn.drop_database(self.db_name)
 
 
 class DataScienceUtil(object):
@@ -278,12 +268,12 @@ class DataScienceUtil(object):
 if __name__ == '__main__':
 
     #s = DataScienceUtil()
-    s = MongoDBClientMixins(host='10.31.205.69')
+    s = MongoDBClientMixins(host='10.40.13.142', db_name='im', db_user='im', db_pass='im', source='im')
     #s.config_data_science_db()
     #p.mongo_client_teardown()
     #p = MongoDBClientMixins(db_name=db_name)
 
-    #p.get_alerts(collection_name='watchlists', sort_field='model_name')
+    print(s.get_alerts(collection_name='aggregation_rule'))#, sort_field='model_name')
     #a = list(p.db['watchlists'].find())
     #for key in a[0].iterkeys():
     #    print key
@@ -291,11 +281,11 @@ if __name__ == '__main__':
     #p.PrettyDumpJson(p.get_alerts(moduleId='test_global_uri_module_set'), 'consumed_mongo.json')
     #print 'Total alerts received:', p.get_alert_count()
     #p.close()
-    moduleId=['esa.types.system', 'esa.types.source', 'esa.types.enrichment'
-                           , 'd28ecf2d-81da-4980-b1e8-fd30f867d93a'
-                           , 'f66c111d-69cd-4354-99ec-023b2cac2f58'
-                           , 'deed0a24-a5d6-412e-bd7a-efa71e8df886']
+    # moduleId=['esa.types.system', 'esa.types.source', 'esa.types.enrichment'
+    #                        , 'd28ecf2d-81da-4980-b1e8-fd30f867d93a'
+    #                        , 'f66c111d-69cd-4354-99ec-023b2cac2f58'
+    #                        , 'deed0a24-a5d6-412e-bd7a-efa71e8df886']
     #s.get_alerts_count(moduleId=moduleId, expectedNumAlerts=6)
-    a = s.get_alerts(moduleId=moduleId, expectedNumAlerts=6)
+    # a = s.get_alerts(moduleId=moduleId, expectedNumAlerts=6)
     #pprint(a)
     s.close()

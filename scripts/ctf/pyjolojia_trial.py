@@ -2,11 +2,15 @@
 
 import time
 
-from ctf.framework.logger import LOGGER
+from framework.common.logger import LOGGER
 from pyjolokia import Jolokia
-from thirdparty import simplejson as json
+import simplejson as json
 from pprint import pprint
 import unittest
+import os
+
+from bson import json_util
+
 
 LOGGER.setLevel('DEBUG')
 
@@ -284,6 +288,40 @@ class JolokiaMixins(object):
                     self.assertEqual(1, i['numEventsFired'])
                     self.assertEqual(1, i['numEventsIStream'])
 
+    def GetEsaAttribute(self, mbean_path, attribute=None):
+        """Returns ESA Mbean Attribute value, similar to esa-client 'get .'
+
+        Args:
+            mbean_path: mbean path as displayed in esaclient (str)
+            attribute: any specific attribute from within the mbean tree (str)
+
+        Returns:
+            JSON output from mbean.
+        """
+        base_mbean = 'com.rsa.netwitness.esa'
+        path_list = mbean_path.split('/')[1:]
+        if len(path_list) != 3:
+            raise TypeError('ESA MBean path "%s" is Wrong!' % mbean_path)
+        mbean = ('%s:type=%s,subType=%s,id=%s'
+                 % (base_mbean, path_list[0], path_list[1], path_list[2]))
+        if attribute == '':
+            attribute = None
+        LOGGER.debug('==== mbean = %s', mbean)
+        LOGGER.debug('==== attribute = %s', attribute)
+        return self.GetJolokiaRequest(mbean=mbean, attribute=attribute)
+
+    def CollectAnaStats(self):
+        """ Collects Analytics engine specific stats"""
+
+        ana_stat = '/Topology/statistics/topology'
+        json_value = self.GetEsaAttribute(mbean_path=ana_stat, attribute='')
+        with open(os.path.join('.', 'ana_stat.json'), 'wb') as _file:
+            json_formatted_doc = json_util.dumps(json_value, sort_keys=False, indent=4
+                                                 , default=json_util.default)
+            LOGGER.debug('[CollectAnaStats] Writing JSON data into file:\n%s'
+                         , json_formatted_doc)
+            _file.write(bytes(json_formatted_doc, 'UTF-8'))
+
 
 if __name__ == '__main__':
     # unittest.main()
@@ -301,10 +339,11 @@ if __name__ == '__main__':
             # else:
             #     f.write(str(result) + '\n')
     # http://10.101.59.231:8778/jolokia/read/com.rsa.netwitness.esa:type=Workflow,subType=Source,id=nextgenAggregationSource/Stats
-    esper_feeder_stats = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type=Workflow'
-                                                   ',subType=Source,id=nextgenAggregationSource'
-                                                   , attribute='Stats')
-    # print (esper_feeder_stats)
-    sessions_behind_list = [i['sessionsBehind'] for i in esper_feeder_stats]
-    if sum(sessions_behind_list) == 0:
-        print (sessions_behind_list)
+    # esper_feeder_stats = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type=Workflow'
+    #                                                ',subType=Source,id=nextgenAggregationSource'
+    #                                                , attribute='Stats')
+    # # print (esper_feeder_stats)
+    # sessions_behind_list = [i['sessionsBehind'] for i in esper_feeder_stats]
+    # if sum(sessions_behind_list) == 0:
+    #     print (sessions_behind_list)
+    p.CollectAnaStats()

@@ -1,0 +1,98 @@
+Troubleshooting SA issues:
+
+- mco ping (only on SA host)
+-- this will ping all the hosts thats configured to have this machine as SA host)
+-- if it lists only 1, then something is wrong (NOT SURE HOW to FIX this)
+-- if its lists all the machines, all is good
+
+- make sure following services are running
+service rsa-sms status
+service rsa-im status
+service rabbitmq-server status
+service tokumx status
+service puppetmaster status
+service puppet status
+service mcollective status
+service collectd status
+status nwipdbextractor
+status nwappliance # (On all SA Appliances EXCEPT: ESA)
+status rsasoc_re
+status rsaMalwareDevice
+
+multi_f_then_s_partition = ("module GHmoduleId%d;@Name('GHmoduleName%d') "
+                            "@Description('GHmoduleDesc%d') @RSAAlert(oneInSeconds=0, "
+                            "identifiers={'user_dst'}) SELECT * FROM Event(ec_outcome "
+                            "in ('Success', 'Failure') AND ec_activity='Logon' AND "
+                            "user_dst IS NOT NULL).win:time(5 min) match_recognize ("
+                            "partition by user_dst measures F as f_array, "
+                            "S as s pattern (F F F F F+ S+) define F as F.ec_outcome= "
+                            "'Failure', S as S.ec_outcome= 'Success');" % (a, a, a))
+
+# On SA system:
+for i in tokumx rabbitmq-server mcollective collectd rsa-im rsa-sms logstash ; do service $i restart; done
+
+for i in nwipdbextractor nwappliance rsasoc_re rsaMalwareDevice jettysrv ; do restart $i; done
+
+# On ESA Systems:
+for i in tokumx rabbitmq-server mcollective collectd rsa-esa ; do service $i start; done
+
+# disable firewall and puppet
+for i in puppetmaster puppet iptables ip6tables ; do service $i stop; chkconfig $i off; done
+
+# On LD/Concentrator Appliances:
+for i in nwappliance nwlogdecoder nwconcentrator
+do
+restart $i
+done
+
+mongo admin --eval "db.createUser({user: 'datapuppy', pwd: 'datapuppy', roles: ['clusterAdmin']})"
+
+# All Appliances:
+for i in tokumx rabbitmq-server mcollective collectd rsa-im rsa-sms logstash ; do service $i restart; done
+
+# Sync time:
+service ntpd stop; service ntpdate start; service ntpd start
+# if you get this on SA http url:
+HTTP ERROR: 503
+
+Problem accessing /login. Reason:
+
+    Service Unavailable
+
+- this mean rsa-sms process is not dead/not running, start it
+
+# if rsa-sms process is dying after start:
+mongo esm --eval "db.dropDatabase()"
+mongo sms --eval "db.dropDatabase()"
+service rsa-sms restart
+
+(NOTE: if above doesn't work, restart all services mentioned above, and then do the above three steps again)
+
+
+- for SA rpm update
+stop jettysrv
+yum update <SA-rpm>
+start jettysrv
+
+- make sure none of the mounted disk has 100% usage
+df -h
+(If any has 100% usage, clean it up and make sure all the services mentioned above are running)
+
+- check for any errors/exceptions in following files
+* /var/log/messages
+* /var/log/mcollective.log
+SA:
+* /var/lib/netwitness/uax/logs/sa.log
+* /opt/rsa/jetty9/logs/<today's_date>_stderr.log
+
+Tokumx: /var/log/tokumx/tokumx.log
+ESA: /opt/rsa/esa/logs/esa.log
+
+# All services for all SA components:
+https://wiki.na.rsa.net/display/ASOCFE/SA+Processes+and+Services
+
+# add a node to mco (On SA Host)
+mco rpc -I $(facter -p node_id) provision addNode uuid=f02714cb-4c68-43ff-a0b8-0ce6f970356f address=10.101.216.231
+
+
+yum install zsh git mercurial htop vim -y

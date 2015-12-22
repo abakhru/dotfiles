@@ -1,0 +1,10 @@
+module Module_ext_ips_01;
+@RSAAlert(identifiers={"ip_src"})
+
+SELECT * FROM Event (
+                device_type = 'intrushield' AND
+                event_cat_name NOT IN ('Recon.Sweeps', 'Recon.Scans') AND
+				ip_src IS NOT NULL AND
+                ip_src NOT IN ('127.0.0.1', '244.0.0.252', '0.0.0.0') AND
+                (net_src NOT IN ('amex_internal_src', 'amex_public_src') OR net_src IS NULL)
+	).std:unique(ip_src) OUTPUT first every 12 hours;

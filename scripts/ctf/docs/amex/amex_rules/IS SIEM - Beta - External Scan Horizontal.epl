@@ -1,0 +1,16 @@
+module Module_recon_ext_horizonal_01;
+@RSAAlert(identifiers={"ip_src"})
+
+SELECT window(*) FROM
+	Event (
+                (medium <> 32 OR device_type IN ('ciscoasa', 'ciscopix')) AND
+		ip_src IS NOT NULL AND
+		ip_dst IS NOT NULL AND
+                ip_src NOT IN ('127.0.0.1', '244.0.0.252', '0.0.0.0') AND
+                (net_src NOT IN ('amex_internal_src', 'amex_public_src') OR net_src IS NULL)
+	).std:groupwin(ip_src)
+		.std:unique(ip_dst)
+		.win:time_length_batch(300 sec, 60)
+                GROUP BY ip_src
+		HAVING count(*) = 60
+                OUTPUT first every 5 minutes;

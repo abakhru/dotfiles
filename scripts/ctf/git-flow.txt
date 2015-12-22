@@ -1,0 +1,20 @@
+git createrepo unite-framework
+
+git clone esa-repo
+cd esa-repo; git submodule unite-framework
+cd unify/framework
+git pull -u or git co <branch-name>
+
+....make changes in framework + tests...
+
+cd unify/framework; git co -b asoc-67-change-branch; ; git commit -m "blah";
+git push -u origin asoc-67-change-branch
+
+cd unify/esa; git co -b asoc-67-change-branch; git commit -m "blah";
+git push -u origin asoc-67-change-branch
+
+# same branch name for fmwk-repo & esa-repo to maintain correlation and jenkins job
+# 2 separate PR for same branches and 2 git repos
+# if you are in unify/framework dir, you are in unite-framework repo.
+# Outside unite/framework dir, you are in the product specific repo.
+# git pull -u (esa repo); cd unify/framework; git pull -u

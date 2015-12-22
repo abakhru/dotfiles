@@ -1,0 +1,39 @@
+Jenkins machines IPs:
+ng-10-4  10.101.216.114
+ng-10-5  10.101.216.136
+
+esa-ctf-js-1      10.101.59.103
+sa-fortify-bld01  sa-forfity-bld01.rsa.lab.emc.com
+esa-ctf-js-2      10.101.59.123
+esa-ctf-js-3      10.101.59.125
+esa-ctf-js-4      10.101.59.126
+hg-git            10.101.216.136
+
+esa-ctf-js-101    10.101.59.131
+esa-ctf-js-102    10.101.59.132
+esa-ctf-js-103    10.101.59.133
+esa-ctf-js-104    10.101.59.134
+esa-ctf-js-0      10.101.59.135
+
+asocwclover       10.101.59.124
+esaclover-1       10.101.59.152
+esaclover-2       10.101.59.153
+esaclover-3       10.101.59.154
+
+esa-ctf-js-sandbox 	10.101.59.158
+
+esa-web-test      10.101.217.22
+jenkins_concentrator  10.101.59.77
+jenkins_decoder  10.101.59.86
+jenkins_esa  10.101.59.75
+jenkins_logdecoder 10.101.59.85
+jenkins_sa  10.101.59.146
+
+PSR machines IPs:
+
+Name  rack unit DRAC 			em1
+=======================================
+ESA01 2-1   1    10.101.59.211 10.101.59.231
+ESA02 2-1   2    10.101.59.212 10.101.59.232
+DEC01 2-1   3    10.101.59.213 10.101.59.233
+CONC01 2-1  4    10.101.59.214 10.101.59.234

@@ -1,0 +1,19 @@
+/*
+AEXP Web Vulnerabilities
+*/
+
+module WebVulnerabilities;
+
+@Name('Module_WebVulnerabilities')
+@RSAAlert(identifiers={"ip_src"})
+
+SELECT window(*) FROM
+Event (
+device_type = 'intrushield' AND
+msg_id IN ('0x40220100:01' , '0x4022bf00:01' , '0x4020fb00:01' , '0x40251a00:01' , '0x4020af00:01' , '0x4020bf00:01' , '0x4028fc00:01' , '0x4028fd00:01' , '0x40276300:01' , '0x40274600:01' , '0x40288000:01' , '0x4023dd00:01' , '0x4021b100:01' , '0x4021b100:01' , '0x48402b00:01') AND
+ip_dst <> '148.173.211.50'
+).std:groupwin(ip_src)
+		.std:unique(msg_id)
+		.win:time_length_batch(5 sec, 2)
+		 GROUP BY ip_src HAVING count(*) = 2
+OUTPUT first every 10 minutes;

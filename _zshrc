@@ -57,7 +57,7 @@ alias reload='. ~/.zshrc'
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git mercurial ssh-agent)
+plugins=(git mercurial ssh-agent python screen sudo docker)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -69,11 +69,12 @@ function hg_prompt_info {
 patches: <patches|join( → )|pre_applied(%{$fg[yellow]%})|post_applied(%{$reset_color%})|pre_unapplied(%{$fg_bold[black]%})|post_unapplied(%{$reset_color%})>>" 2>/dev/null
 }
 
-PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)$(hg_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
+#PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)$(hg_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
+PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
 
 # User configuration
 
-export PATH='/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bin'
+export PATH='/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin'
 # export MANPATH='/usr/local/man:$MANPATH'
 
 # You may need to manually set your language environment
@@ -93,10 +94,20 @@ export PATH='/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bi
 export SSH_KEY_PATH='~/.ssh/id_rsa'
 #export WUI_DEV_DIR='build/us3252-risk-indicator-response-code-v6/apps'
 #export SSH_AUTH_SOCK=$(find /tmp/ssh-* -user `whoami` -name agent\* -printf '%T@ %p\n' 2>/dev/null | sort -k 1nr | sed 's/^[^ ]* //' | head -n 1)
-export PYTHONPATH=/Users/bakhra/src/server-ready/python/:../../../python
+export PYTHONPATH=/Users/bakhra/src/esa/unify
 export JAVA_HOME=$(/usr/libexec/java_home)
 export JDK_HOME=$JAVA_HOME
 # pip should only run if there is a virtualenv currently activated
-#export PIP_REQUIRE_VIRTUALENV=true
+export PIP_REQUIRE_VIRTUALENV=true
 # cache pip-installed packages to avoid re-downloading
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
+export HTTPS_PROXY=http://emc-proxy1.rsa.lab.emc.com:82
+export HTTP_PROXY=$HTTPS_PROXY
+export http_proxy=$HTTPS_PROXY
+export https_proxy=$HTTPS_PROXY
+export npm_config_https_proxy=$HTTPS_PROXY
+export npm_config_proxy=$HTTPS_PROXY
+export NO_PROXY=.silvertailsystems.com,.rsa.com,.emc.com,.netwitness.local,localhost,127.0.0.1,127.0.0.2,127.0.0.3,127.0.0.4,127.0.0.5,127.0.0.6,127.0.0.7,127.0.0.8,127.0.0.9,127.0.0.10,10.100.175.200,10.100.175.201,10.100.175.202,10.100.175.203,10.100.175.204,10.100.175.205,10.100.175.206,10.100.175.207,10.100.175.208,10.100.175.209,10.100.175.210,10.100.175.211,10.100.175.212,10.100.175.213,10.100.175.214,10.100.175.215,10.101.59.180,10.101.59.181,10.101.59.182,10.101.59.183,10.101.59.184,10.101.59.185,10.101.59.186,10.101.59.187,10.101.59.188,10.101.59.189,10.101.59.190,10.101.59.191,10.101.59.192,10.101.59.193,10.101.59.194,10.101.59.195,10.101.59.196,10.101.59.197,10.101.59.198,10.101.59.199,10.101.59.200,10.101.216.143,10.101.59.231,10.101.59.232,10.101.59.233,10.101.59.234,10.101.59.235,10.101.59.236,10.101.59.237,10.101.59.238,10.101.59.239,10.101.59.240,10.101.59.241,10.101.59.242
+export no_proxy=$NO_PROXY
+export PEXPECT_START_TIMEOUT=180
+export CTF_DEBUG=1

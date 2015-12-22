@@ -1,0 +1,124 @@
+
+# Machines
+
+10.101.217.60 (troy): Test Runner
+
+SA = 10.101.59.235
+ESA hosts = 10.101.59.231, 10.101.59.232, 10.101.59.236
+LogDecoder = 10.101.59.237, 10.101.59.238, 10.101.59.239
+Concentrator = 10.101.59.240, 10.101.59.241, 10.101.59.242
+Injectors = 10.101.59.233, 10.101.59.234, 10.101.59.235
+
+
+# Execution
+Step 1:
+- setup password login from driver(mac here) to all other machines.
+for i in [list of all nodes]:
+do
+	scp ~/.ssh/authorized_keys root@$i:~/.ssh/
+done
+** scp ~/.ssh/authorized_keys root@10.31.205.69:~/.ssh/
+
+- Unzip the attached file bangalore_esa.zip and copy the folders/folder-contents into the below mentioned locations.
+- Copy the contents of esabox folder to the ESA box's "~ (/root/)" dir.
+- Copy the other three folders, namely: clearnoise, scripts, triggerlogs into the injection box.
+- Edit the /etc/hosts file to reflect settings like shown below.
+NOTE: This is needed for remotes JMX connections and resolution of concentrator hostnames
+	  (Last line in the screenshot below is added for a single concentrator[repeat the same for n
+      number for concentrators], which is needed for cleanrun.py script to function well).
+      Please make sure you add ESA hostname and ip as well.
+Finally, it will look something like this:
+
+# more /etc/hosts (SA Machine)
+# Created by NetWitness Installer on Tue Feb  3 06:02:13 UTC 2015
+127.0.0.1 NWAPPLIANCE16435 localhost localhost.localdomain localhost4 localhost4.localdomain4 puppetmaster.local puppetmaster.local
+::1 NWAPPLIANCE16435 localhost localhost.localdomain localhost6 localhost6.localdomain6
+# Concentrator/LogDecoder/Injectors Hybrid Deployment
+10.31.204.103   NWAPPLIANCE26784
+10.31.204.104   NWAPPLIANCE22471
+10.31.204.107   NWAPPLIANCE8013
+# ESA
+10.31.204.99    NWAPPLIANCE12275
+10.31.205.69    NWAPPLIANCE11232
+
+- Add license if you are going to skip Step 2. Trial license uploaded from SA UI should do.
+- Install bc package on all nodes. This will be needed for parsing.
+- Import all rules(EPL):
+** Import modules attached to this page via SA UI's Alerting>Manage->All Rules->Import feature
+
+
+PSR Observations:
+# Desc: User not null
+# All Failed login events with user_dst not null
+# Publish log: clearNoise @ 30k per LD, threekfail.log @ 3K per LD
+# trigger_log_path = '/root/threekfail.log'
+user_not_null = ("module UserNotNullmoduleId%d;@Name('UserNotNull%d_Alert') "
+				"@Description('UserNotNullmoduleDesc%d') @RSAAlert(oneInSeconds=0) "
+				"SELECT * FROM Event( ec_subject='User' AND ec_activity = 'Logon' AND "
+				"ec_outcome = 'Failure' AND user_dst is not null); " % (a, a, a))
+# Desc: Brute Force Login From Same Destination
+# A brute force login attempt from the same destination with N failed login attempts
+# from the same host have been detected within a specified time window
+# Publish log: clearNoise @ 30k per LD, threekfail.log @ 3K per LD
+# trigger_log_path = '/root/threekfail.log'
+brute_force = ("module GHmoduleId%d;@Name('GHmoduleName%d') @Description("
+			"'GHmoduleDesc%d') @RSAAlert(oneInSeconds=0, identifiers={'ip_dst'}) "
+			"SELECT * FROM Event( ec_activity = 'Logon', ec_theme = "
+			"'Authentication', ec_outcome = 'Failure', ip_dst IS NOT NULL "
+			").std:groupwin(ip_dst).win:time_length_batch(5 min, 10) GROUP BY "
+			"ip_dst HAVING COUNT(*) >= 10;" % (a, a, a))
+# Multiple Failed Logins Followed By a Successful Login No Partition
+# Multiple(here 5 times) Failed Logins for a User Followed By a Successful Login
+# within N minute with No partiion
+# Publish log: clearNoise @ 30k per LD
+#               , tenkfail.log @ 3K per LD + twoksucc.log @ 3K per LD
+# triggerlog_path1 = '/root/tenkfail.log'
+# triggerlog_path2 = '/root/twoksucc.log'
+# sleep 250 seconds between trigger publishing loop
+# 50 EPLs
+# ( trigger_log_path1 + trigger_log_path2 )
+multi_fail_then_sucess = ("module GHmoduleId%d;@Name('GHmoduleName%d') @Description("
+						"'GHmoduleDesc%d') @RSAAlert(oneInSeconds=0, identifiers={"
+						"'user_dst'}) SELECT * FROM Event(ec_outcome in ('Success', "
+						"'Failure') AND ec_activity='Logon').win:time(5 min) "
+						"match_recognize (measures F as f_array, S as s pattern (F "
+						"F F F F+ S+) define F as F.ec_outcome= 'Failure', "
+						"S as S.ec_outcome= 'Success');" % (a, a, a))
+# Multiple Failed Logins Followed By a Successful Login with partition
+# Multiple(here 5 times) Failed Logins for a User Followed By a Successful Login
+# within N minute with partition based on user_dst
+# Publish log: clearNoise @ 30k per LD
+# , tenkfail.log @ 3K per LD + twoksucc.log @ 3K per LD
+# trigger_log_path = '/root/tenkfail.log'
+# triggerlog_path2 = '/root/twoksucc.log'
+trigger_log_path = '/root/3Kusers_5Kfail_then_1Ksucess.log'
+multi_f_then_s_partition = ("module GHmoduleId%d;@Name('GHmoduleName%d') "
+							"@Description('GHmoduleDesc%d') @RSAAlert(oneInSeconds=0, "
+							"identifiers={'user_dst'}) SELECT * FROM Event(ec_outcome "
+							"in ('Success', 'Failure') AND ec_activity='Logon' AND "
+							"user_dst IS NOT NULL).win:time(5 min) match_recognize ("
+							"partition by user_dst measures F as f_array, "
+							"S as s pattern (F F F F F+ S+) define F as F.ec_outcome= "
+							"'Failure', S as S.ec_outcome= 'Success');" % (a, a, a))
+
+
+
+- Run#11
+ testing forwarding for Correlation purposes over message_bus
+ memory metrics disabled
+ PatternMaxSubExpressions = 1000
+ 10 hours, 50 EPL multi_f_then_s_partition (with partition)
+Configuration:
+- LD1 + LD2 -> ESA2 (local); LD_RATE = {Noise: 30k EPS, Trigger: 1000 EPS} * 2 ; Total ESA2 EPS: ~60k EPS
+- (user1-user3000) => LD1
+- (Auser1-Auser3000) => LD2
+- (Buser1-Buser3000) => LD3
+- LD3 -> ESA1 (loFcal); LD_RATE = {Noise: 30k EPS, Trigger: 1000 EPS}
+- ESA1 (local) + ESA2 (local) -> ESA1 (global) {Forwarded Trigger events: 3k EPS}
+- Alerts = 3000 alerts every 18seconds * 3 (500 Alerts Per Second on Global)
+- Total ESA1(local+global) nextgen processing rate EPS: 30k (local) + 2k (ESA2 local) + 1k(ESA1 local) (global) = 33k EPS
+- No Alerts on ESA2
+- Expected 500 alerts per second, for all the events received by ESA1
+###
+
+Potential issues:

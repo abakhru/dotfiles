@@ -1,0 +1,19 @@
+/*
+AEXP Potential SQL Injection-Web Servers
+*/
+
+module PotentialSQLInjectionWebServers;
+
+@Name('Module_PotentialSQLInjectionWebServers')
+@RSAAlert(identifiers={"ip_src"})
+
+SELECT window(*) FROM
+Event (
+ec_activity = 'Logon' AND
+user_dst IN ('user1' , 'user2' , 'user3' , 'user4' , 'user5' , 'user6' , 'user7' , 'user8' , 'user17' , 'user27' , 'user37' , 'user47' , 'user57' , 'user67' , 'user77' , 'user87' , 'user97' , 'user107' , 'user117' , 'user127' , 'user137' , 'user147' , 'user157' , 'user167' , 'user177' , 'user187' , 'user197' , 'user207' , 'user217' , 'user227' , 'user237' , 'user247' , 'user257' , 'user267' , 'user277' , 'user287' , 'user297' , 'user307' , 'user317' , 'user327', 'user337' , 'user347' , 'user357' , 'user367' , 'user377' , 'user387' , 'user397' , 'user407' , 'user417' , 'user427' , 'user437' , 'user447' , 'user457' , 'user467' , 'user477' , 'user487') AND
+ip_dst IN ('^10\.100\.*$' , '^10\.10\.*$')
+).std:groupwin(ip_src)
+		.std:unique(user_dst)
+		.win:time_length_batch(60 sec, 1)
+		 GROUP BY ip_src HAVING count(*) = 1
+OUTPUT first every 10 minutes;

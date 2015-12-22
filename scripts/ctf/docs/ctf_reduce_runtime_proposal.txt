@@ -1,0 +1,39 @@
+Proposal to reduce CTF runtime:
+
+Option 1: (Ideal)
+- Launch ESAServer once, perform all the tests, bring down ESAServer.
+- Will require all the setUp class functions to be converted to setUpClass functions
+  and similarty for tearDown to tearDownClass
+- All self class attributes will need to be converted to cls attributes
+- Too much work involved, basically rewriting the harness/testcase.py Classes
+- Very expensive
+- Will save approx 40secs of ESAServer+ESAClient launch time per testcase.
+
+Option 2:
+- Launch ESAServer and ESAClient simultaneously, and use jmx-connect to do JVM connections
+  and then do carlos-connect
+- Will save time during ESAClient launch on linux machines.
+- Low hanging fruit, few lines of code changes.
+- Have experimented on this idea, lots of flakiness observed, need to investigate more.
+- branch that contains this implementation bakhra-faster-esa-client-connect
+- Will save approx 6-10 seconds per testcase.
+
+Option 3:
+- Faster disks, higher number of CPU cores and memory for jenkins machines.
+- No control over faster disk ??
+- Need to experiment on this idea for its feasibility.
+- Hopefully about 10 seconds per testcase.
+
+Options 4:
+- Reduce ESAClient launch time on linux machines.
+- No dev resources available to work on it, with too many ESA 10.5 user-stories occupying them.
+- user-story: https://bedfordjira.na.rsa.net/browse/ASOC-3035
+- Not possible in short term, unless we make it a P0 user-story.
+- Time save per testcase will depend on user-story implementation.
+
+Option 5:
+- Split message_bus and esper_engines tests into seperate classes
+- Add more jenkins slaves for CTF runs.
+- Short term gain
+- With more tests, CTF runtime will again become high.
+- Time saved will be approx 15 mins for whole 109 current CTF tests run.
