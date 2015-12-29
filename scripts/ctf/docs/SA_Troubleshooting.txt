@@ -29,7 +29,7 @@ multi_f_then_s_partition = ("module GHmoduleId%d;@Name('GHmoduleName%d') "
                             "'Failure', S as S.ec_outcome= 'Success');" % (a, a, a))
 
 # On SA system:
-for i in tokumx rabbitmq-server mcollective collectd rsa-im rsa-sms logstash ; do service $i restart; done
+for i in tokumx rabbitmq-server mcollective collectd rsa-im rsa-sms logstash ; do service $i start; done
 
 for i in nwipdbextractor nwappliance rsasoc_re rsaMalwareDevice jettysrv ; do restart $i; done
 
@@ -40,10 +40,7 @@ for i in tokumx rabbitmq-server mcollective collectd rsa-esa ; do service $i sta
 for i in puppetmaster puppet iptables ip6tables ; do service $i stop; chkconfig $i off; done
 
 # On LD/Concentrator Appliances:
-for i in nwappliance nwlogdecoder nwconcentrator
-do
-restart $i
-done
+for i in nwappliance nwlogdecoder nwconcentrator nwdecoder ;do restart $i; done
 
 mongo admin --eval "db.createUser({user: 'datapuppy', pwd: 'datapuppy', roles: ['clusterAdmin']})"
 

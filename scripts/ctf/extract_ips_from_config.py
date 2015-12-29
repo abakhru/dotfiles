@@ -3,7 +3,7 @@
 import os
 import json
 
-f = open('/Users/bakhra/temp_bang_psr.json')
+f = open('/Users/bakhra/default.json')
 ips_list = list()
 config = json.load(f)
 for k, v in config['servers'].items():
