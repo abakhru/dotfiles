@@ -4,33 +4,12 @@ import os
 import re
 import requests
 import time
-# import threading
 import multiprocessing
 
 from testconfig import config
 from common.framework.logger import LOGGER
 from common.framework.harness import SshCommandClient
 from performance.framework.harness import EsaClientHarness
-
-
-# class ThreadWithReturnValue(threading.Thread):
-#
-#     def __init__(self, group=None, target=None, name=None
-#                  , args=(), kwargs={}):
-#         threading.Thread.__init__(self, group, target, name, args, kwargs)
-#         self._return = None
-#
-#     def run(self):
-#         if self._Thread__target is not None:
-#             self._return = self._Thread__target(*self._Thread__args
-#                                                 , **self._Thread__kwargs)
-#
-#     def join(self):
-#         threading.Thread.join(self)
-#         return self._return
-#
-#     def result(self):
-#         return self._return
 
 
 class TopStat(multiprocessing.Process):

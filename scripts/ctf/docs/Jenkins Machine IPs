@@ -2,25 +2,41 @@ Jenkins machines IPs:
 ng-10-4  10.101.216.114
 ng-10-5  10.101.216.136
 
-esa-ctf-js-1      10.101.59.103
-sa-fortify-bld01  sa-forfity-bld01.rsa.lab.emc.com
-esa-ctf-js-2      10.101.59.123
-esa-ctf-js-3      10.101.59.125
-esa-ctf-js-4      10.101.59.126
-hg-git            10.101.216.136
+esa-ctf-js-101	10.101.59.103
+esa-ctf-js-102	10.101.59.131
+esa-ctf-js-103	10.101.59.174
+esa-ctf-js-201	10.101.59.123
+esa-ctf-js-202	10.101.59.132
+esa-ctf-js-203	10.101.59.178
+esa-ctf-js-301	10.101.59.125
+esa-ctf-js-302	10.101.59.133
+esa-ctf-js-303	10.101.59.179
+esa-ctf-js-401	10.101.59.126
+esa-ctf-js-402	10.101.59.134
+esa-ctf-js-403	10.101.59.149
+esa-ctf-js-501	10.101.59.23
+esa-ctf-js-502	10.101.59.26
+esa-ctf-js-503	10.101.59.63
+esa-ctf-js-601	10.101.59.68
+esa-ctf-js-602	10.101.59.66
+esa-ctf-js-603	10.101.59.65
+esa-ctf-js-701	10.101.59.81
+esa-ctf-js-702	10.101.59.82
+esa-ctf-js-703	10.101.59.69
+esa-ctf-js-801	10.101.59.64
+esa-ctf-js-802	10.101.59.105
+esa-ctf-js-803	10.101.59.62
+esa-ctf-js-901	10.101.59.96
+esa-ctf-js-902	10.101.59.36
+esa-ctf-js-903	10.101.59.19
+esa-ctf-js-sandbox	10.101.59.34
+esa-ctf-misc-01	10.101.59.127
+asocwclover      	10.101.59.124
 
-esa-ctf-js-101    10.101.59.131
-esa-ctf-js-102    10.101.59.132
-esa-ctf-js-103    10.101.59.133
-esa-ctf-js-104    10.101.59.134
-esa-ctf-js-0      10.101.59.135
-
-asocwclover       10.101.59.124
 esaclover-1       10.101.59.152
 esaclover-2       10.101.59.153
 esaclover-3       10.101.59.154
 
-esa-ctf-js-sandbox 	10.101.59.158
 
 esa-web-test      10.101.217.22
 jenkins_concentrator  10.101.59.77

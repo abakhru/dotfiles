@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 
 import time
@@ -40,6 +41,10 @@ class JolokiaMixins(object):
             Returns the value of mbean, attribute, path.
         """
         data = self.j4p.request(type='read', mbean=mbean, attribute=attribute, path=path)
+        # LOGGER.debug('mbean: %s', mbean)
+        # LOGGER.debug('attribute: %s', attribute)
+        # LOGGER.debug('path: %s', path)
+        LOGGER.debug('Data: %s', data)
         if 'value' in data:
             return data['value']
 
@@ -322,6 +327,31 @@ class JolokiaMixins(object):
                          , json_formatted_doc)
             _file.write(bytes(json_formatted_doc, 'UTF-8'))
 
+    def BuildScoreStatDicts(self):
+
+        final_dict = dict()
+        mbean = 'com.rsa.netwitness.esa:type=Topology,subType=statistics,id=topology'
+        attribute = 'ScoreGroupStats'
+        final_dict['beaconing'] = self.GetJolokiaRequest(mbean=mbean, attribute=attribute, path='beaconing/scoreStats/beaconing')
+        final_dict['user_agent'] = self.GetJolokiaRequest(mbean=mbean, attribute=attribute, path='user_agent/scoreStats/rare')
+        final_dict['new_domain'] = self.GetJolokiaRequest(mbean=mbean, attribute=attribute,
+        path='new_domain/scoreStats/age')
+        final_dict['smooth_beaconing'] = self.GetJolokiaRequest(mbean=mbean, attribute=attribute,
+        path='smooth/scoreStats/smooth_beaconing')
+        final_dict['referer'] = self.GetJolokiaRequest(mbean=mbean, attribute=attribute,
+        path='domain/scoreStats/referer')
+        final_dict['ua'] = self.GetJolokiaRequest(mbean=mbean, attribute=attribute,
+        path='domain/scoreStats/ua')
+        LOGGER.debug('final dict: %s', final_dict)
+        return final_dict
+
+    def CalculateMissRate(self):
+        """ Calculating the miss rate ratio for different score types"""
+
+        after_warm_up = self.BuildScoreStatDicts()
+        a = '%'
+        beaconing_miss_rate = (after_warm_up['beaconing']['cacheMissCount']/after_warm_up['beaconing']['cacheAccessCount']) * 1000
+        LOGGER.debug('beaconing_miss_rate: %.2f%s', beaconing_miss_rate, a)
 
 if __name__ == '__main__':
     # unittest.main()
@@ -346,4 +376,5 @@ if __name__ == '__main__':
     # sessions_behind_list = [i['sessionsBehind'] for i in esper_feeder_stats]
     # if sum(sessions_behind_list) == 0:
     #     print (sessions_behind_list)
-    p.CollectAnaStats()
+    # p.CollectAnaStats()
+    p.CalculateMissRate()

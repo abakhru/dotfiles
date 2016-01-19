@@ -52,7 +52,7 @@ mvn -U clean package -Dcom.rsa.netwitness.esa.TEST_SERVER=10.101.216.127 -DskipI
 C-a : (colon) Enter command line mode.
 This way you can type a command once, but you will still have to enter each separate window.
 But there is a better way. As an example we'll send “ls -l” to all the windows.
-at "#" stuff "ls -l^M"
+at "#" stuff "zsh^M"
 
 # start a tunnel from some machine's port 80 to your local post 2001
 ssh -N -L2001:localhost:80 somemachine
@@ -99,3 +99,10 @@ carlos-connect --url jms://localhost:55556?carlos.useSSL=true
 
 lsblk --ascii --output NAME,KNAME,MODEL,RM,RO,SCHED,TYPE,SIZE,STATE,MOUNTPOINT
 lsof -i
+
+
+forever while:
+==============
+while true; do nosetests message_bus_test.py -m 'test_event_format_default' ; if [ $? != 0 ]; then break; fi;  done
+
+python -m http.server

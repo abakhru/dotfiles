@@ -92,7 +92,7 @@ git ls -m|xargs tar cvf ~/tmp/t.tar
 git rebase --onto develop develop
 
 - autosquash the fixups
-git rebase -i --autosquash
+git rebase -i --autosquash <last merged branch commit id>
 
 - delete remote branch
 git push origin :<branch_name>

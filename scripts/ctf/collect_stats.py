@@ -19,12 +19,14 @@ HOST_PASSWORD = 'netwitness'
 REST_USERNAME = 'admin'
 REST_PASSWORD = 'netwitness'
 
+LOGGER.setLevel('DEBUG')
+
 
 class TopStat(threading.Thread):
     """ESA/Mongo/RabbitMQ Process top stats"""
 
     def __init__(self, esa_node, interval=5, count=2, timeout=180, dict_of_pid=None
-                 , group=None, test_out_dir=None, target=None, name=None, args=(), kwargs=None):
+                 , group=None, test_out_dir=None, target=None, name=None, *args, **kwargs):
         """ Creates a thread for top process related metrics collection for esa, rabbitmq & mongodb.
 
         Args:
@@ -32,7 +34,9 @@ class TopStat(threading.Thread):
             interval: metrics collection interval (int)
             count: number of collection count duration/interval (int)
             timeout: timeout value in seconds (int)
-            dict_of_pid: dict of pid to collect metrics of (dict)
+            dict_of_pid: list of pids to collect metrics of (list)
+            trigger_rate: Trigger log publishing rate (int)
+            noise_rate: Noise log publishing rate (int)
             group: thread vars
             target: thread vars
             name: thread vars
@@ -44,7 +48,10 @@ class TopStat(threading.Thread):
         self.stop = threading.Event()
         self.host = esa_node
         self.esa_node = esa_node
-        self.ssh = SshCommandClient(self.host, user=HOST_USERNAME, password=HOST_PASSWORD)
+        self.esa_client = ESAClientRpmHarness(testcase=None, host=self.esa_node
+                                              , user=HOST_USERNAME
+                                              , password=HOST_PASSWORD)
+        self.ssh = self.esa_client.ssh
         self.timeout = timeout
         self.interval = interval
         self.count = count
@@ -56,50 +63,59 @@ class TopStat(threading.Thread):
         self.test_out_dir = test_out_dir
         LOGGER.debug('dict of pid: %s', self.dict_of_pid)
         header_text = 'PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND'
+        esa_header_text = ('used(Bytes) committed(Bytes)   init(Bytes) '
+                           'max(Bytes) ProcessCpuLoad(%) SystemCpuLoad(%)')
         for p_name in list(self.dict_of_pid.keys()):
             f_name = os.path.join(self.test_out_dir, 'top_' + p_name + '_result0')
             with open(f_name, 'a+', buffering=1) as f:
-                f.write('timestamp, ' + ', '.join(header_text.split()) + '\n')
+                if p_name == 'esa':
+                    f.write('timestamp, ' + ', '.join(esa_header_text.split()) + '\n')
+                else:
+                    f.write('timestamp, ' + ', '.join(header_text.split()) + '\n')
             self.pid_out_file_dict[p_name] = f_name
         LOGGER.debug('pid output file dict: %s', self.pid_out_file_dict)
 
     def finish(self):
-        ssh1 = SshCommandClient(self.host, user=HOST_USERNAME, password=HOST_PASSWORD)
-        try:
-            GenericUtilities.kill_process(ssh_obj=ssh1, process_string='top')
-            ssh1.close()
-        except OSError:
-            pass
-        self.ssh.close()
+        self.ssh.Close()
         self.stop.set()
         self.join()
         return
 
     def run(self):
-        cmd = ('top -b -d 1 -n 1 -p%s -p%s -p%s'
-               % (self.dict_of_pid['esa'], self.dict_of_pid['rabbit'], self.dict_of_pid['mongo']))
+        cmd = ('top -b -d 1 -n 1 -p%s -p%s'
+               % (self.dict_of_pid['rabbit'], self.dict_of_pid['mongo']))
         for _ in range(self.count):
-            result = self.ssh.Exec(cmd, timeout=self.timeout)
-            [j_mem, m_mem, r_mem] = self.get_top(result)
-            self.report(self.pid_out_file_dict['esa'], j_mem)
+            e_mem = list()
+            result = self.esa_client.ssh.Exec(cmd, timeout=self.timeout)
+            [m_mem, r_mem] = self.get_top(result)
+            result = self.esa_client.jolokia.GetJolokiaRequest(mbean='java.lang:type=Memory'
+                                                               , attribute='HeapMemoryUsage')
+            LOGGER.debug('[JVM] MemoryUsage: %s', result)
+            e_mem.append(str(result['used']))
+            e_mem.append(str(result['committed']))
+            e_mem.append(str(result['init']))
+            e_mem.append(str(result['max']))
+            result = self.esa_client.jolokia.GetJolokiaRequest(mbean='java.lang:type='
+                                                                     'OperatingSystem')
+            LOGGER.debug('[JVM] CpuUsage: %s', result)
+            e_mem.append(str(result['ProcessCpuLoad']))
+            e_mem.append(str(result['SystemCpuLoad']))
             self.report(self.pid_out_file_dict['mongo'], m_mem)
             self.report(self.pid_out_file_dict['rabbit'], r_mem)
+            self.report(self.pid_out_file_dict['esa'], e_mem)
             time.sleep(self.interval)
 
     def get_top(self, result):
         top_result = result.split('\n')
-        java_mem = list()
         mongo_mem = list()
         rabbit_mem = list()
         for line in top_result:
             line_list = line.split()
-            if len(line_list) and line_list[0] == self.dict_of_pid['esa']:
-                java_mem = line_list
             if len(line_list) and line_list[1] == 'rabbitmq':
                 rabbit_mem = line_list
             if len(line_list) and line_list[1] == 'tokumx':
                 mongo_mem = line_list
-        return [java_mem, mongo_mem, rabbit_mem]
+        return [mongo_mem, rabbit_mem]
 
     @staticmethod
     def report(outfile, mem):
@@ -112,7 +128,7 @@ class MPStat(threading.Thread):
     """System CPU stats using mpstat"""
 
     def __init__(self, esa_node, interval=5, count=None, timeout=120, group=None, target=None
-                 , name=None, args=(), kwargs=None, outfile='cpu_stat_result'):
+                 , name=None, outfile='cpu_stat_result', *args, **kwargs):
 
         threading.Thread.__init__(self, group, target, name, *args, **kwargs)
         self.stop = threading.Event()
@@ -158,7 +174,7 @@ class DfStat(threading.Thread):
     """Disk Usage using df"""
 
     def __init__(self, esa_node, interval, timeout, group=None, target=None, name=None
-                 , args=(), kwargs=None, count=1, outfile='df_result'):
+                 , count=1, outfile='df_result', *args, **kwargs):
 
         threading.Thread.__init__(self, group, target, name, *args, **kwargs)
         self.host = esa_node
@@ -209,8 +225,8 @@ class ESANextgenStat(threading.Thread):
     """ESA Server next-gen stats from JVM using Jolokia"""
 
     def __init__(self, testcase, esa_node, interval, timeout, fw_provider=None, group=None
-                 , target=None, name=None, args=(), kwargs=None, outfile='esa_stat_result'
-                 , noise_rate=0, trigger_rate=0, count=0):
+                 , target=None, name=None, outfile='esa_stat_result'
+                 , noise_rate=0, trigger_rate=0, count=0, *args, **kwargs):
 
         threading.Thread.__init__(self, group, target, name, *args, **kwargs)
         self.stop = threading.Event()
@@ -261,20 +277,26 @@ class ESANextgenStat(threading.Thread):
                         + 'RabbitMQAlerts' + ', '
                         + 'FW-successfulNotifications' + ', '
                         + 'FW-droppedNotifications' + '\n')
+        LOGGER.debug('TOTAL ESA getStat COUNT: %s', self.count)
 
     def run(self):
         for _ in range(self.count):
             data = list()
             esper_feeder_stats = self.esa_client.get_esperfeeder_stats()
+            mbean = 'com.rsa.netwitness.esa:type=CEP,subType=Module,id=cepModuleStats'
+            cep_module_stats = self.esa_client.jolokia.GetJolokiaRequest(mbean=mbean)
+            mbean = ('com.rsa.netwitness.esa:type=Workflow'
+                     ',subType=Source,id=nextgenAggregationSource')
+            next_gen_stats = self.esa_client.jolokia.GetJolokiaRequest(mbean=mbean)
             try:
                 data.append((self.esa_client.get_num_events_offered()
                              , self.esa_client.get_offered_rate()['current']
                              , self.esa_client.get_notifications()['successfulNotifications']
-                             , self.esa_client.get_fire_rate()['current']
-                             , self.esa_client.get_num_events_fired()
-                             , self.esa_client.get_nextgen_rate()
-                             , self.esa_client.get_nextgen_count()
-                             , self.esa_client.get_nextgen_sessions_behind()
+                             , cep_module_stats['FireRate']['current']
+                             , cep_module_stats['NumEventsFired']
+                             , next_gen_stats['WorkUnitProcessingRate']
+                             , next_gen_stats['WorkUnitsProcessed']
+                             , [i['sessionsBehind'] for i in next_gen_stats['Stats']]
                              , esper_feeder_stats['SecondsBetweenFeeds']
                              , esper_feeder_stats['ClockLagInSeconds']
                              , esper_feeder_stats['WorkUnitProcessingRate']
@@ -325,9 +347,9 @@ class ESANextgenStat(threading.Thread):
 class LogDecoderConcentratorStat(threading.Thread):
     """LogDecoder and Concentrator stats using REST API calls"""
 
-    def __init__(self, ld_node, c_node, interval, timeout, inj_node=None, group=None,
-                 target=None, name=None, args=(), kwargs=None, outfile='ld_stat_result'
-                 , noise_rate=0, trigger_rate=0, count=0, c_node_port=50105, ld_node_port=50102):
+    def __init__(self, ld_node, c_node, interval, timeout, inj_node=None, group=None
+                 , target=None, name=None, outfile='ld_stat_result', noise_rate=0, trigger_rate=0
+                 , count=0, c_node_port=50105, ld_node_port=50102, *args, **kwargs):
 
         threading.Thread.__init__(self, group, target, name, *args, **kwargs)
         self.stop = threading.Event()
@@ -395,7 +417,7 @@ class ESAMongoStat(threading.Thread):
     """MongoDB stats using mongostat"""
 
     def __init__(self, esa_node, interval=5, count=2, timeout=120, outfile='mongo_stat_result'
-                 , group=None, target=None, name=None, args=(), kwargs=None):
+                 , group=None, target=None, name=None, *args, **kwargs):
 
         threading.Thread.__init__(self, group, target, name, *args, **kwargs)
         self.stop = threading.Event()
@@ -447,7 +469,7 @@ class IOStat(threading.Thread):
     """System I/O stats using iostat"""
 
     def __init__(self, esa_node, interval=5, count=None, timeout=120, group=None
-                 , target=None, name=None, args=(), kwargs=None, outfile='io_stat_result'):
+                 , target=None, name=None, outfile='io_stat_result', *args, **kwargs):
 
         threading.Thread.__init__(self, group, target, name, *args, **kwargs)
         self.stop = threading.Event()
@@ -497,7 +519,7 @@ class FreeStat(threading.Thread):
     """Memory usage stats using free"""
 
     def __init__(self, esa_node, interval=5, count=2, timeout=120, group=None, target=None
-                 , name=None, args=(), kwargs=None, outfile='free_mem_result'):
+                 , name=None, outfile='free_mem_result', *args, **kwargs):
 
         threading.Thread.__init__(self, group, target, name, *args, **kwargs)
         self.stop = threading.Event()
@@ -542,7 +564,7 @@ class GCStat(threading.Thread):
     """ Java Garbage Collection stats using jstat -gc."""
 
     def __init__(self, esa_node, interval=5, count=None, timeout=120, group=None, target=None
-                 , name=None, args=(), kwargs=None, outfile='gc_stat_result'):
+                 , name=None, outfile='gc_stat_result', *args, **kwargs):
 
         threading.Thread.__init__(self, group, target, name, *args, **kwargs)
         self.stop = threading.Event()
@@ -594,9 +616,8 @@ class GCStat(threading.Thread):
 class AnalyticsEngineStats(threading.Thread):
     """ESA Server Analytics engine stats from JVM using Jolokia"""
 
-    def __init__(self, testcase, esa_node, interval, timeout, test_out_dir, group=None
-                 , target=None, name=None, args=(), kwargs=None, outfile='ana_stat_result'
-                 , trigger_rate=0, count=0):
+    def __init__(self, testcase, esa_node, interval, timeout, test_out_dir, group=None, target=None
+                 , name=None, outfile='ana_stat_result', trigger_rate=0, count=0, *args, **kwargs):
 
         threading.Thread.__init__(self, group, target, name, *args, **kwargs)
         self.stop = threading.Event()
@@ -624,7 +645,7 @@ class AnalyticsEngineStats(threading.Thread):
             _outfile: output file path (str)
         """
 
-        json_value = (self.esa_client.GetEsaAttribute(mbean_path=self.ana_stat_mbean
+        json_value = (self.esa_client.GetEsaAttribute(mbean_path=self.ana_stat_mbean[0]
                                                       , attribute=self.ana_stat_attribute))
         with open(_outfile, 'wb') as _file:
             json_formatted_doc = json_util.dumps(json_value, sort_keys=False, indent=4
@@ -634,8 +655,8 @@ class AnalyticsEngineStats(threading.Thread):
     def run(self):
         for _ in range(self.count):
             _outfile = os.path.join(self.output_dir
-                                    , '{0}_{1}'.format(self.outfile
-                                                       , str(int(time.time()))))
+                                    , '{0}_{1}.json'.format(self.outfile
+                                                            , str(int(time.time()))))
             try:
                 self.collect_ana_stats(_outfile)
             except Exception as e:
@@ -659,44 +680,46 @@ class CollectStats(MPStat, IOStat, TopStat, ESAMongoStat, ESANextgenStat
 
         self.esa_nodes_stats_threads_dict = dict()
         for i in range(len(self.esa_hosts)):
-            esa_stat = ESANextgenStat(testcase=self.testcase, esa_node=self.esa_hosts[i]
-                                      , interval=self.interval
-                                      , timeout=self.timeout, trigger_rate=self.trigger_rate
-                                      , noise_rate=self.noise_rate, count=self.count
-                                      , outfile=os.path.join(self.test_out_dir
-                                                             , 'esa_stat_result%d' % i))
-            mongo_stat = ESAMongoStat(esa_node=self.esa_hosts[i], interval=self.interval
-                                      , count=self.count, timeout=self.timeout
-                                      , outfile=os.path.join(self.test_out_dir
-                                                             , 'mongo_stat_result%d' % i))
+            # esa_stat = ESANextgenStat(testcase=self.testcase, esa_node=self.esa_hosts[i]
+            #                           , interval=self.interval
+            #                           , timeout=self.timeout, trigger_rate=self.trigger_rate
+            #                           , noise_rate=self.noise_rate, count=self.count
+            #                           , outfile=os.path.join(self.test_out_dir
+            #                                                  , 'esa_stat_result%d' % i))
+            # mongo_stat = ESAMongoStat(esa_node=self.esa_hosts[i], interval=self.interval
+            #                           , count=self.count, timeout=self.timeout
+            #                           , outfile=os.path.join(self.test_out_dir
+            #                                                  , 'mongo_stat_result%d' % i))
             top_stat = TopStat(esa_node=self.esa_hosts[i], interval=self.interval
                                , count=self.count, timeout=self.timeout
                                , dict_of_pid=self.dict_of_pid, test_out_dir=self.test_out_dir)
-            mpstat = MPStat(esa_node=self.esa_hosts[i], interval=self.interval
-                            , count=self.count, timeout=self.timeout
-                            , outfile=os.path.join(self.test_out_dir, 'cpu_stat_result%d' % i))
-            df_stat = DfStat(esa_node=self.esa_hosts[i], interval=self.interval
-                             , timeout=self.timeout, count=self.count
-                             , outfile=os.path.join(self.test_out_dir, 'df_stat_result%d' % i))
-            io_stat = IOStat(esa_node=self.esa_hosts[i], interval=self.interval
-                             , count=self.count, timeout=self.timeout
-                             , outfile=os.path.join(self.test_out_dir, 'io_stat_result%d' % i))
-            free_stat = FreeStat(esa_node=self.esa_hosts[i], interval=self.interval
-                                 , count=self.count, timeout=self.timeout
-                                 , outfile=os.path.join(self.test_out_dir, 'free_mem_result%d' % i))
-            gc_stat = GCStat(esa_node=self.esa_hosts[i], interval=self.interval
-                             , count=self.count, timeout=self.timeout
-                             , outfile=os.path.join(self.test_out_dir, 'gc_result%d' % i))
-            ana_stat = AnalyticsEngineStats(testcase=self.testcase, esa_node=self.esa_hosts[i]
-                                            , interval=self.interval, timeout=self.timeout
-                                            , count = self.count, outfile='ana_stat_result'
-                                            , test_out_dir = self.test_out_dir)
+            # mpstat = MPStat(esa_node=self.esa_hosts[i], interval=self.interval
+            #                 , count=self.count, timeout=self.timeout
+            #                 , outfile=os.path.join(self.test_out_dir, 'cpu_stat_result%d' % i))
+            # df_stat = DfStat(esa_node=self.esa_hosts[i], interval=self.interval
+            #                  , timeout=self.timeout, count=self.count
+            #                  , outfile=os.path.join(self.test_out_dir, 'df_stat_result%d' % i))
+            # io_stat = IOStat(esa_node=self.esa_hosts[i], interval=self.interval
+            #                  , count=self.count, timeout=self.timeout
+            #                  , outfile=os.path.join(self.test_out_dir, 'io_stat_result%d' % i))
+            # free_stat = FreeStat(esa_node=self.esa_hosts[i], interval=self.interval
+            #                      , count=self.count, timeout=self.timeout
+            #                      , outfile=os.path.join(self.test_out_dir, 'free_mem_result%d' % i))
+            # gc_stat = GCStat(esa_node=self.esa_hosts[i], interval=self.interval
+            #                  , count=self.count, timeout=self.timeout
+            #                  , outfile=os.path.join(self.test_out_dir, 'gc_result%d' % i))
+            # ana_stat = AnalyticsEngineStats(testcase=self.testcase, esa_node=self.esa_hosts[i]
+            #                                 , interval=self.interval, timeout=self.timeout
+            #                                 , count = self.count, outfile='ana_stat_result'
+            #                                 , test_out_dir = self.test_out_dir)
 
-            self.esa_nodes_stats_threads_dict[self.esa_hosts[i]] = [mongo_stat, top_stat, mpstat
-                                                                    , gc_stat, df_stat, io_stat
-                                                                    , free_stat, esa_stat]
+            # self.esa_nodes_stats_threads_dict[self.esa_hosts[i]] = [mongo_stat, top_stat, mpstat
+            #                                                         , gc_stat, df_stat, io_stat
+            #                                                         , free_stat, esa_stat]
+            self.esa_nodes_stats_threads_dict[self.esa_hosts[i]] = [top_stat]
+
             if config['performance']['collect_ana_stats']:
-                self.esa_nodes_stats_threads_dict[self.esa_hosts[i]].append(ana_stat)
+                # self.esa_nodes_stats_threads_dict[self.esa_hosts[i]].append(ana_stat)
                 LOGGER.debug('==== FINAL ESA threads: %s'
                              , self.esa_nodes_stats_threads_dict[self.esa_hosts[i]])
 
@@ -710,7 +733,7 @@ class CollectStats(MPStat, IOStat, TopStat, ESAMongoStat, ESANextgenStat
                                                     , noise_rate=self.noise_rate
                                                     , trigger_rate=self.trigger_rate
                                                     , count=self.count)
-            self.ld_conc_stats_threads_list.append(ld_c_stats)
+            # self.ld_conc_stats_threads_list.append(ld_c_stats)
 
     def get_threads(self):
         all_threads = list()
@@ -738,9 +761,11 @@ def get_pid(ssh_obj):
     dict_of_pid['rabbit'] = rabbitmq_pid
     # calculating tokumx pid
     output = ssh_obj.get_service_pid('tokumx')
-    mongodb_pid = output.split('\n')[1].split('pid ')[1].split(')')[0].strip()
+    mongodb_pid = output
     LOGGER.debug('TokuMX/MongoDB pid: %s', mongodb_pid)
     dict_of_pid['mongo'] = mongodb_pid
+    LOGGER.info('dict of PIDs: %s', dict_of_pid)
+    return dict_of_pid
 
 
 if __name__ == '__main__':
@@ -748,7 +773,7 @@ if __name__ == '__main__':
     import simplejson as json
     with open('/Users/bakhra/default.json') as config_file:
         config = json.load(config_file)
-        print(config)
+        # print(config)
 
     timeout = 60 * config['performance']['duration']
     noise_rate = config['performance']['noise_rate']

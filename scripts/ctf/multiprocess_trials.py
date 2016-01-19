@@ -21,8 +21,9 @@ def get_session_cnt(host, port=50102):
 
 
 start_time = timeit.default_timer()
+print(start_time)
 # Make the Pool of workers
-pool = ThreadPool(4)
+pool = ThreadPool(6)
 # Open the urls in their own threads and return the results
 ld_rates = pool.starmap(get_session_rate, [('10.101.59.237', 50102), ('10.101.59.238', 50102), ('10.101.59.239', 50102)])
 conc_rates = pool.starmap(get_session_rate, [('10.101.59.240', 50105), ('10.101.59.241', 50105), ('10.101.59.242', 50105)])
