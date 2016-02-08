@@ -12,6 +12,7 @@ REPO_FILE = 'RSA-SA-10-Dev.repo'
 FIX_JAVA = 'fix_java_alternatives_old.sh'
 JENKIN_SLAVES = ['10.101.59.103',
                  '10.101.59.127',
+                 '10.101.216.127',
                  '10.101.59.131',
                  '10.101.59.174',
                  '10.101.59.123',
@@ -75,6 +76,7 @@ PSR_SLAVES = ['10.101.59.231'
               , '10.101.59.248'
               , '10.101.59.202'
               ]
+
 LOGGER.setLevel('DEBUG')
 
 
@@ -82,14 +84,28 @@ class UpdateJenkins(object):
 
     def __init__(self, slave):
         self.ssh_shell = SshCommandClient(host=slave, user='root', password='netwitness')
-        # self.copy()
-        # self.yum_update()
+        # self.CopyRepo()
+        # self.YumUpdate()
+        # self.Put(src_file='Python-3.5.1.tgz', dest_file='/Python-3.5.1.tgz')
         # stop all puppets and firewall
-        self.run_command('for i in puppetmaster puppet iptables ip6tables ; do service $i stop; chkconfig $i off; done')
-        # self.run_command("source /opt/rh/python34/enable; pip install pymongo")
-        self.close()
+        self.RunCommand('for i in puppetmaster puppet iptables ip6tables ; do service $i stop; chkconfig $i off; done')
+        # self.RunCommand('service ntpd stop; service ntpdate start; service ntpd start')
+        # self.RunCommand("source /opt/rh/python35/enable; python -V; pip list|grep psycopg2")
+        self.Close()
 
-    def copy(self, repo_file=None):
+    def Put(self, src_file, dest_file):
+        """Copies src_file to all jenkins slave"""
+
+        src_file = os.path.join('.', src_file)
+        LOGGER.info('[%s] Copying %s file to jenkins slave', self.ssh_shell.host, src_file)
+        self.ssh_shell.remove_file(dest_file)
+        if not self.ssh_shell.assert_remote_file_exists(dest_file):
+            self.ssh_shell.copy_file(src_file, dest_file, operation='to_remote')
+        self.ssh_shell.Exec('ls -larth /%s' % os.path.basename(src_file))
+        self.ssh_shell.Exec('cd /; tar xvzf %s' % dest_file)
+        self.ssh_shell.Exec('ls -l /opt/rh')
+
+    def CopyRepo(self, repo_file=None):
         """Copies 10.6 repo file to all jenkins slave"""
 
         LOGGER.info('Copying RSA 10.6 repo file to all jenkins slaves')
@@ -104,16 +120,16 @@ class UpdateJenkins(object):
         self.ssh_shell.Exec('cd /etc/yum.repos.d; mkdir t; mv *.repo ./t/')
         self.ssh_shell.copy_file(source_file, destination_file, operation='to_remote')
 
-    def yum_update(self):
+    def YumUpdate(self):
         cmd = 'yum clean all; yum update -y --nogpg --skip-broken'
         LOGGER.info('Running \'%s\' on jenkins slave: %s', cmd, self.ssh_shell.host)
         self.ssh_shell.Exec(cmd, prompt=r']#', timeout=6000)
 
-    def run_command(self, cmd):
+    def RunCommand(self, cmd):
         LOGGER.info('[%s] Running \'%s\'', self.ssh_shell.host, cmd)
         self.ssh_shell.Exec(cmd)
 
-    def close(self):
+    def Close(self):
         self.ssh_shell.close()
 
 class FixJava(object):

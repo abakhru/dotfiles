@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 
 import time
@@ -377,4 +376,10 @@ if __name__ == '__main__':
     # if sum(sessions_behind_list) == 0:
     #     print (sessions_behind_list)
     # p.CollectAnaStats()
-    p.CalculateMissRate()
+    # p.CalculateMissRate()
+    # http://10.101.59.231:8778/jolokia/read/com.rsa.netwitness.esa:type=Workflow,subType=Source,id=nextgenAggregationSource/Stats
+    esper_feeder_stats = p.GetJolokiaRequest(mbean='com.rsa.netwitness.esa:type=Workflow'
+                                                   ',subType=Source,id=nextgenAggregationSource'
+                                                   , attribute='Stats')
+    sessions_behind_list = [i['name'] for i in esper_feeder_stats]
+    print(sessions_behind_list)

@@ -3,6 +3,7 @@
 import os
 import re
 import subprocess
+import timeit
 
 from framework.common.logger import LOGGER
 LOGGER.setLevel('DEBUG')
@@ -10,8 +11,10 @@ LOGGER.setLevel('DEBUG')
 
 class SummarizePSRResults(object):
 
-    RESULT_DIR = '/sts/eng/home/joe/psr_results/cache_persist/1281-g3aa911e/test_match_recog_with_partition_12hrs'
+    RESULT_DIR = '/Users/bakhra/src/esa/unify/performance/esa/o/persist_missrate_vs_domains_test.py/PersistMissRateVsDomainsTestCase/test_persist_missrate_5'
     trigger_rate = 30000
+    trigger_event_count = 1000000
+    start_consume = timeit.default_timer()
 
     def ProcessEsaLog(self, host):
         """ Processes esa.log file to get total events processes and avg processing rate.
@@ -137,67 +140,53 @@ class SummarizePSRResults(object):
         LOGGER.debug('Total ESA Events Processed (JVM): %s', self.esa_total_events_processed)
         self.total_esa_notifications = self._get_elements(result_file, 3)[-1]
         average_process_rate = self.ProcessEsaLog('10.101.59.231')
-        LOGGER.debug('Avg ESA Events Processing rate (esa.log): %s', average_process_rate)
+        LOGGER.debug('==== Avg ESA Events Processing rate (esa.log): %s', average_process_rate)
+        # Average EPS calculated from esa_stat_result0.txt file
         a_list = self._get_elements(_file=result_file, column_no=2)
         # ignoring first 3 and last 4 lines for average calculations
-        average_process_rate = sum(a_list[3:-4]) / len(a_list[3:-4])
-        LOGGER.debug('Avg ESA Events Processing rate (esa_stat_result): %s'
+        average_process_rate = sum(a_list[2:]) / len(a_list[2:])
+        LOGGER.debug('==== Avg ESA Events Processing rate (esa_stat_result0.txt): %s'
                      , average_process_rate)
-
-        # Average EPS calculated from esa_stat_result0 file
-        a_list = self._get_elements(_file=os.path.join(self.test_case_o_dir
-                                                       , 'esa_stat_result0')
-                                    , column_no=2)
-        # ignoring first 3 and last 4 lines for average calculations
-        average_process_rate = sum(a_list[3:-4]) / len(a_list[3:-4])
-        LOGGER.debug('==== Avg ESA Events Processing rate (esa_stat_result0): %s'
-                     , average_process_rate)
-
-        # Average EPS calculated from esa.log file
-        average_process_rate = self.ProcessEsaLog(self.esa_host_ips[0])
-        LOGGER.debug('==== Avg ESA Events Processing rate (esa.log): %s', average_process_rate)
-
-        with open(os.path.join(self.test_case_o_dir, 'summary_result'), 'a+') as f:
-            f.write('Trigger Log Ingest rate, ' + str(self.trigger_rate * 3) + '\n')
-            f.write('Average LD Ingest rate, ' + str(avg_ld_rate) + '\n')
-            f.write('Total Concentrator sessions ingested, ' + str(total_session_ingested) + '\n')
-            f.write('Total meta ingested, ' + str(total_meta_ingested) + '\n')
-            f.write('Meta Ratio = Total Meta / Event Count, '
-                    + str(float(total_meta_ingested / total_session_ingested)) + '\n')
-            f.write('Total ESA events processed, ' + str(self.esa_total_events_processed) + '\n')
+        with open(os.path.join(self.RESULT_DIR, 'summary_result'), 'w+') as f:
+            f.write('Trigger Log Ingest rate, %s\n' % '90000')
+            f.write('Average LD Ingest rate, %s\n' % avg_ld_rate)
+            f.write('Total Concentrator sessions ingested, %s\n' % total_session_ingested)
+            f.write('Total meta ingested, %s\n' % total_meta_ingested)
+            f.write('Meta Ratio = Total Meta / Event Count, %.2f\n'
+                    % float(total_meta_ingested / total_session_ingested))
+            f.write('Total ESA events processed, %s\n' % self.esa_total_events_processed)
             f.write('ESA Average Events Process Rate, %.2f\n' % average_process_rate)
-            f.write('Published trigger events, ' + str(self.trigger_event_count) + '\n')
-            f.write('Fired events, ' + str(self.total_esa_notifications) + '\n')
-            f.write('Mongo events, ' + str(self.total_mongo_alerts) + '\n')
-            f.write('CPU (System) - AVG, '
-                    + str(self.GetAverage(os.path.join(self.test_case_o_dir
-                                                       , 'cpu_stat_result0'), 2)) + '\n')
-            f.write('CPU (System) - MAX, '
-                    + str(self.GetMax(os.path.join(self.test_case_o_dir, 'cpu_stat_result0')
-                                      , 2)) + '\n')
-            f.write('MEM (System) - AVG, '
-                    + str(self.GetAverage(os.path.join(self.test_case_o_dir, 'free_mem_result0')
-                                          , 2) / 1024) + 'GB\n')
-            f.write('MEM (System) - MAX, '
-                    + str(self.GetMax(os.path.join(self.test_case_o_dir, 'free_mem_result0')
-                                      , 2) / 1024) + 'GB\n')
+            f.write('Published trigger events, %s\n' % self.trigger_event_count)
+            # f.write('Fired events, %s\n' % str(self.total_esa_notifications))
+            # f.write('Mongo events, %s\n' % str(self.total_mongo_alerts))
+            f.write('CPU (System) - AVG, %s\n'
+                    % str(self.GetAverage(os.path.join(self.RESULT_DIR
+                                                       , 'cpu_stat_result0.txt'), 2)))
+            f.write('CPU (System) - MAX, %s\n'
+                    % str(self.GetMax(os.path.join(self.RESULT_DIR, 'cpu_stat_result0.txt'), 2)))
+            f.write('MEM (System GB) - AVG, %.2f\n'
+                    % (self.GetAverage(os.path.join(self.RESULT_DIR, 'free_mem_result0.txt')
+                                      , 2) / 1024))
+            f.write('MEM (System GB) - MAX, %.2f\n'
+                    % (self.GetMax(os.path.join(self.RESULT_DIR, 'free_mem_result0.txt')
+                                  , 2) / 1024))
             f.write('CPU (Process) - AVG, %.2f\n'
-                    % (self.GetAverage(os.path.join(self.test_case_o_dir, 'top_esa_result0')
+                    % (self.GetAverage(os.path.join(self.RESULT_DIR, 'top_esa_result0.txt')
                                        , 5) * 100))
             f.write('CPU (Process) - MAX, %.2f\n'
-                    % (self.GetMax(os.path.join(self.test_case_o_dir, 'top_esa_result0')
+                    % (self.GetMax(os.path.join(self.RESULT_DIR, 'top_esa_result0.txt')
                                    , 5) * 100))
             f.write('MEM (Process GB) - AVG, %.2f\n'
-                    % (self.GetAverage(os.path.join(self.test_case_o_dir
-                                                    , 'top_esa_result0'), 1) / (1024 * 1024
+                    % (self.GetAverage(os.path.join(self.RESULT_DIR
+                                                    , 'top_esa_result0.txt'), 1) / (1024 * 1024
                                                                                 * 1024)))
             f.write('MEM (Process GB) - MAX, %.2f\n'
-                    % (self.GetMax(os.path.join(self.test_case_o_dir
-                                                , 'top_esa_result0'), 1) / (1024 * 1024 * 1024)))
-            # f.write('I/O - AVG, ' + str(self.GetAverage('ld_c_result0', 3)) + '\n')
+                    % (self.GetMax(os.path.join(self.RESULT_DIR
+                                                , 'top_esa_result0.txt'), 1) / (1024 * 1024 * 1024)))
+            # f.write('I/O - AVG, ' + str(self.GetAverage('ld_c_result0.txt', 3)) + '\n')
             # f.write('I/O - MAX, ' + str(mongo_events) + '\n')
-            f.write('Total Run Duration, ' + str(consume_duration) + '\n')
-        subprocess.call('sudo mv %s %s' % (summary_file, self.RESULT_DIR), shell=True)
+            f.write('Total Run Duration, %s' % str(timeit.default_timer() - self.start_consume))
+        # subprocess.call('sudo mv %s %s' % (summary_file, self.RESULT_DIR), shell=True)
 
 if __name__ == '__main__':
 

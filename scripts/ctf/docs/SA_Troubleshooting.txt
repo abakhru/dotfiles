@@ -31,7 +31,7 @@ multi_f_then_s_partition = ("module GHmoduleId%d;@Name('GHmoduleName%d') "
 # On SA system:
 for i in tokumx rabbitmq-server mcollective collectd rsa-im rsa-sms logstash ; do service $i start; done
 
-for i in nwipdbextractor nwappliance rsasoc_re rsaMalwareDevice jettysrv ; do stop $i; done
+for i in nwipdbextractor nwappliance rsasoc_re rsaMalwareDevice jettysrv ; do start $i; done
 
 for i in {1..10000}; do NwLogPlayer -s 10.101.59.237 -f ./fill_cache_10_clients_100k_servers.log; done
 for i in {1..10000}; do NwLogPlayer -s 10.101.59.238 -f ./fill_cache_10_clients_100k_servers.log; done
@@ -45,6 +45,8 @@ for i in tokumx rabbitmq-server rsa-context mcollective collectd rsa-esa ; do se
 
 # disable firewall and puppet
 for i in puppetmaster puppet iptables ip6tables ; do service $i stop; chkconfig $i off; done
+
+for i in `ps -ef|grep '/usr/bin/ssh'|awk '{print $2}'` ; do kill -9 $i; done
 
 # On LD/Concentrator Appliances:
 for i in nwappliance nwlogdecoder nwconcentrator nwdecoder ;do restart $i; done

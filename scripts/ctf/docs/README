@@ -106,3 +106,16 @@ forever while:
 while true; do nosetests message_bus_test.py -m 'test_event_format_default' ; if [ $? != 0 ]; then break; fi;  done
 
 python -m http.server
+
+JMC ESA url
+===========
+service:jmx:rmi://10.25.50.160:50036/jndi/rmi://10.25.50.160:50035/carlos
+
+TO GET JAVA STATS using esa-client
+===========
+/opt/rsa/esa/client/bin/esa-client --profiles carlos
+carlos-connect
+jmx-connect --domain java.lang
+dump
+cd /Memory
+dump
