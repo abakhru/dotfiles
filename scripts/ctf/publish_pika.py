@@ -45,7 +45,7 @@ class RabbitMQBase(object):
                  , exchange_header='esa.events', vhost='/rsa/sa'
                  , exchange_user='guest', exchange_pass='guest', exchange_durable=False
                  , _type='headers', use_ssl=False, cert_dir=None, msgpack=False
-                 , auto_delete=True):
+                 , auto_delete=False):
         """ Initializes RabbitMQ connection parameters.
 
         Args:
@@ -234,7 +234,9 @@ class PublishRabbitMQ(RabbitMQBase):
                 with open(input_file) as f:
                     for line in f:
                         if self.msgpack:
-                            line = msgpack.packb(line)
+                            line = {'topology': 'HttpPacket', 'event': json.loads(line)}
+                            line = msgpack.dumps(line)
+                            LOGGER.debug('[Payload] {}'.format(line))
                         if self.channel.basic_publish(exchange=self.exchange_header
                                                       , routing_key=routing_key
                                                       , properties=self.msgProperties
@@ -332,9 +334,8 @@ class ConsumerRabbitMQ(RabbitMQBase):
                     prop_json = json_util.dumps(properties.headers)
                     # creating dict from JSON objects
                     if self.msgpack:
-                        body_dict = msgpack.dump(json.loads(body.decode()))
-                    else:
-                        body_dict = json.loads(body.decode())
+                        body = msgpack.loads(body)
+                    body_dict = json.loads(body.decode())
                     prop_dict = json.loads(prop_json)
                     # creating merged alert JSON object
                     alert_dict = dict(list(body_dict.items()) + list(prop_dict.items()))
@@ -387,7 +388,7 @@ if __name__ == '__main__':
     # New York
     #listen = ConsumerRabbitMQ(host='10.101.216.227', port=5671, exchange_header='carlos.alerts'
     #                          , ssl=True, ssl_options=get_ssl_options('10.101.216.227'))
-    #listen = ConsumerRabbitMQ(exchange_header='esa.events')
+    listen = ConsumerRabbitMQ(exchange_header='carlos.alerts')
     #pub.publish(file, publish_interval=1)
     pub1.publish(input_file=os.path.join(log_dir, 'json_input.txt')
                  , routing_key='esa-analytics-server.any./rsa/analytics/topology/temp-inject')
@@ -401,7 +402,7 @@ if __name__ == '__main__':
     print('======')
     # Consuming
     #listen.consume(num_events_to_consume=pub.num_events_to_consume)
-    #listen.consume(num_events_to_consume=1, output_file='consumed.json')
+    listen.consume(num_events_to_consume=1, output_file='consumed.json')
     #a = AssertJSON()
     #a.assertJSONFileAlmostEqualsKnownGood('consumed.json', 'consumed.json'
     #                                      , ignorefields=['esa_time', 'carlos.event.signature.id'
