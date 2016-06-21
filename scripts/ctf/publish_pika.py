@@ -3,6 +3,7 @@
 
 """RabbitMQ utilities for ASOC automation."""
 
+import msgpack
 import decimal
 import logging
 import os
@@ -43,7 +44,8 @@ class RabbitMQBase(object):
     def __init__(self, host='localhost', port=5672
                  , exchange_header='esa.events', vhost='/rsa/sa'
                  , exchange_user='guest', exchange_pass='guest', exchange_durable=False
-                 , _type='headers', use_ssl=False, cert_dir=None):
+                 , _type='headers', use_ssl=False, cert_dir=None, msgpack=False
+                 , auto_delete=True):
         """ Initializes RabbitMQ connection parameters.
 
         Args:
@@ -86,6 +88,8 @@ class RabbitMQBase(object):
         self._connected = False
         self.queue_name = None
         self._type = _type
+        self.msgpack = msgpack
+        self.auto_delete = auto_delete
 
     def connect(self, binding=None, passive=False, listen=False):
         """ Connects to RabbitMQ server.
@@ -132,7 +136,8 @@ class RabbitMQBase(object):
             self.channel.exchange_declare(exchange=self.exchange_header
                                           , type=self._type
                                           , passive=passive
-                                          , durable=self.exchange_durable)
+                                          , durable=self.exchange_durable
+                                          , auto_delete=self.auto_delete)
             if listen:
                 # Declare our queue for this process
                 result = self.channel.queue_declare(exclusive=True)
@@ -142,6 +147,10 @@ class RabbitMQBase(object):
                 self.channel.queue_bind(exchange=self.exchange_header
                                         , queue=self.queue_name
                                         , arguments=esa_binding)
+            if self.msgpack:
+                self.msgProperties = pika.BasicProperties(delivery_mode=1
+                                                          , content_type='application/msgpack'
+                                                          , reply_to=self.queue_name)
         except pika.exceptions.AMQPChannelError as e:
             LOGGER.error(e)
 
@@ -224,6 +233,8 @@ class PublishRabbitMQ(RabbitMQBase):
                 start_time = time.time()
                 with open(input_file) as f:
                     for line in f:
+                        if self.msgpack:
+                            line = msgpack.packb(line)
                         if self.channel.basic_publish(exchange=self.exchange_header
                                                       , routing_key=routing_key
                                                       , properties=self.msgProperties
@@ -287,7 +298,8 @@ class ConsumerRabbitMQ(RabbitMQBase):
             _file.write(bytes(']\n', 'UTF-8'))
         return
 
-    def consume(self, timeout_secs=5, num_events_to_consume=None, output_file=None):
+    def consume(self, timeout_secs=5, num_events_to_consume=None, output_file=None
+                , msgpack=False):
         """ Consumes the alerts/events from exchange_header specified.
 
         Args:
@@ -319,7 +331,10 @@ class ConsumerRabbitMQ(RabbitMQBase):
                     # converting properties.headers to JSON
                     prop_json = json_util.dumps(properties.headers)
                     # creating dict from JSON objects
-                    body_dict = json.loads(body.decode())
+                    if self.msgpack:
+                        body_dict = msgpack.dump(json.loads(body.decode()))
+                    else:
+                        body_dict = json.loads(body.decode())
                     prop_dict = json.loads(prop_json)
                     # creating merged alert JSON object
                     alert_dict = dict(list(body_dict.items()) + list(prop_dict.items()))
@@ -348,15 +363,19 @@ if __name__ == '__main__':
     log_dir = '.'
     # Publishing
     certs_dir = './ssl_dir'
-    sa_host = '10.40.13.191'
+    # sa_host = '10.40.13.191'
+    sa_host = 'localhost'
     # 5672 is default non-ssl port
     # 5671 is default SSL port
     # openssl s_client -connect 10.40.13.191:5671 -cert ./ssl_dir/10.40.13.191_cert.pem -key ./ssl_dir/10.40.13.191_key.pem -CAfile ./ssl_dir/ca_cert.pem
-    pub1 = PublishRabbitMQ(host=sa_host, port=5671
-                           , exchange_header='carlos.alerts'
-                           , use_ssl=True
+    pub1 = PublishRabbitMQ(host=sa_host, port=5672
+                           , exchange_header='esa-analytics-server'
+                           , use_ssl=False
                            , cert_dir=certs_dir
-                           , exchange_durable=True)
+                           , exchange_durable=False
+                           , msgpack=True
+                           , _type='topic'
+                           , auto_delete=True)
     # San Francisco
     #pub2 = PublishRabbitMQ(host='10.101.216.223', port=5671
     #                       , exchange_header='esa.event.input', ssl=True
@@ -370,7 +389,8 @@ if __name__ == '__main__':
     #                          , ssl=True, ssl_options=get_ssl_options('10.101.216.227'))
     #listen = ConsumerRabbitMQ(exchange_header='esa.events')
     #pub.publish(file, publish_interval=1)
-    pub1.publish(input_file=os.path.join(log_dir, '5f.txt'))
+    pub1.publish(input_file=os.path.join(log_dir, 'json_input.txt')
+                 , routing_key='esa-analytics-server.any./rsa/analytics/topology/temp-inject')
     #pub2.publish(input_file=os.path.join(log_dir, '1s.txt'))
     #pub2.publish(input_file=os.path.join(log_dir, 'json_input.txt'))
     #pub3.publish(input_file=os.path.join(log_dir, 'json_input.txt'))
