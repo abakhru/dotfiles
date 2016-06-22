@@ -45,7 +45,7 @@ class RabbitMQBase(object):
                  , exchange_header='esa.events', vhost='/rsa/sa'
                  , exchange_user='guest', exchange_pass='guest', exchange_durable=False
                  , _type='headers', use_ssl=False, cert_dir=None, msgpack=False
-                 , auto_delete=False):
+                 , auto_delete=False, internal=False, nowait=False):
         """ Initializes RabbitMQ connection parameters.
 
         Args:
@@ -90,6 +90,8 @@ class RabbitMQBase(object):
         self._type = _type
         self.msgpack = msgpack
         self.auto_delete = auto_delete
+        self.internal = internal
+        self.nowait = nowait
 
     def connect(self, binding=None, passive=False, listen=False):
         """ Connects to RabbitMQ server.
@@ -134,10 +136,12 @@ class RabbitMQBase(object):
             # Declare our exchange
             LOGGER.debug('Declaring the %s exchange.', self.exchange_header)
             self.channel.exchange_declare(exchange=self.exchange_header
-                                          , type=self._type
+                                          , exchange_type=self._type
                                           , passive=passive
                                           , durable=self.exchange_durable
-                                          , auto_delete=self.auto_delete)
+                                          , auto_delete=self.auto_delete
+                                          , internal=self.internal
+                                          , nowait=self.nowait)
             if listen:
                 # Declare our queue for this process
                 result = self.channel.queue_declare(exclusive=True)
@@ -236,7 +240,6 @@ class PublishRabbitMQ(RabbitMQBase):
                         if self.msgpack:
                             line = {'topology': 'HttpPacket', 'event': json.loads(line)}
                             line = msgpack.dumps(line)
-                            LOGGER.debug('[Payload] {}'.format(line))
                         if self.channel.basic_publish(exchange=self.exchange_header
                                                       , routing_key=routing_key
                                                       , properties=self.msgProperties
@@ -402,7 +405,7 @@ if __name__ == '__main__':
     print('======')
     # Consuming
     #listen.consume(num_events_to_consume=pub.num_events_to_consume)
-    listen.consume(num_events_to_consume=1, output_file='consumed.json')
+    listen.consume(num_events_to_consume=4, output_file='consumed.json')
     #a = AssertJSON()
     #a.assertJSONFileAlmostEqualsKnownGood('consumed.json', 'consumed.json'
     #                                      , ignorefields=['esa_time', 'carlos.event.signature.id'

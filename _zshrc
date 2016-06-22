@@ -113,4 +113,4 @@ export CTF_DEBUG=1
 source /Users/bakhra/src/dotfiles/aliases.zsh
 
 # docker things
-export DOCKER_HOST=tcp://sandbox:2375
+#export DOCKER_HOST=tcp://sandbox:2375
