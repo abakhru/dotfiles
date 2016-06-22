@@ -44,8 +44,9 @@ class RabbitMQBase(object):
     def __init__(self, host='localhost', port=5672
                  , exchange_header='esa.events', vhost='/rsa/sa'
                  , exchange_user='guest', exchange_pass='guest', exchange_durable=False
-                 , _type='headers', use_ssl=False, cert_dir=None, msgpack=False
-                 , auto_delete=False, internal=False, nowait=False):
+                 , _type='headers', use_ssl=False, cert_dir='/tmp/rabbitmq'
+                 , create_new_exchange=True, create_null_binding=False, custom_binding=None
+                 , msgpack=False, auto_delete=False, internal=False, nowait=False):
         """ Initializes RabbitMQ connection parameters.
 
         Args:
@@ -61,6 +62,10 @@ class RabbitMQBase(object):
             _type: type of the event. (str)
             use_ssl: enabled SSL connection to RabbitMQ server (bool)
             cert_dir: dir to store CA & server certs (str)
+            create_new_exchange: If True a new exchange is created by the client (bool)
+            create_null_binding: Replaces the default binding with null. Useful when we want to read
+                                 from rabbitmq Queue (bool)
+            custom_binding: Enables the use of custom headers when publishing messages (dict)
         """
 
         self.host = host
@@ -70,6 +75,8 @@ class RabbitMQBase(object):
         self.vhost = vhost
         self.ssl = use_ssl
         self.certs_dir = cert_dir
+        if not os.path.exists(self.certs_dir):
+            os.makedirs(self.certs_dir)
         self.ssl_options = dict()
         self.credentials = PlainCredentials(username=exchange_user, password=exchange_pass)
         if self.ssl:
@@ -88,6 +95,9 @@ class RabbitMQBase(object):
         self._connected = False
         self.queue_name = None
         self._type = _type
+        self.create_new_exchange = create_new_exchange
+        self.create_null_binding = create_null_binding
+        self.custom_binding = custom_binding
         self.msgpack = msgpack
         self.auto_delete = auto_delete
         self.internal = internal
@@ -97,56 +107,68 @@ class RabbitMQBase(object):
         """ Connects to RabbitMQ server.
 
         Args:
-            binding: rabbitmq exchange binding (dict)
-            exchange_type: exchange header type (str)
-            listen: pika rabbitmq connect listen value (bool)
+            binding: binding type (dict)
+            passive: rabbitmq connection passive value (bool)
+            listen: rabbitmq connection listen value (bool)
         """
 
         if binding is None:
             binding = {'esa.event.type': 'Event'}
         try:
-            LOGGER.debug('Connecting to AMQP Broker %s:%d for %s'
+            LOGGER.debug('[RabbitMQBase] Connecting to AMQP Broker %s:%d for %s'
                          , self.host, self.port, self.__class__.__name__)
             self.connection = pika.BlockingConnection(self.connParameters)
-            LOGGER.debug('%s connected', self.host)
+            LOGGER.debug('[RabbitMQBase] %s connected', self.host)
             if self.connection:
                 self._connected = True
             if self.connected:
                 self.on_connected(binding, passive=passive, listen=listen)
-        except pika.exceptions.AMQPConnectionError:
-            LOGGER.error('Cannot connect to RabbitMQ server on \'%s\'. Trying again...',
-                         self.host, exc_info=True)
+        except ProbableAuthenticationError:
+            raise ProbableAuthenticationError('RabbitMQ Guest auth failed')
+        except AMQPConnectionError:
+            LOGGER.error("[RabbitMQBase] Cannot connect to RabbitMQ server on '%s:%s'. Trying "
+                         "again...", self.host, self.port, exc_info=True)
             time.sleep(1)
             self.connect(binding=binding, passive=passive, listen=listen)
 
     def on_connected(self, binding, passive, listen):
-        """ Declare the exchange, queue and do the binding."""
+        """ Declare the exchange, queue and do the binding.
+
+        Args:
+            binding: binding type (dict)
+            passive: rabbitmq connection passive value (bool)
+            listen: rabbitmq connection listen value (bool)
+        """
 
         esa_binding = binding
         if 'carlos' in self.exchange_header:
             esa_binding = {'carlos.event.device.product': 'Event Stream Analysis'}
             self.exchange_durable = True
+        if self.custom_binding is not None:
+            esa_binding = self.custom_binding
+        if self.create_null_binding:
+            esa_binding = None
         self.msgProperties = pika.BasicProperties(headers=esa_binding, delivery_mode=1)
         try:
             # Open the channel
-            LOGGER.debug("Opening a channel")
+            LOGGER.debug('[RabbitMQBase] Opening a channel')
             self.channel = self.connection.channel()
             if self.channel:
-                LOGGER.debug('Channel opened successfully.')
-            # Declare our exchange
-            LOGGER.debug('Declaring the %s exchange.', self.exchange_header)
-            self.channel.exchange_declare(exchange=self.exchange_header
-                                          , exchange_type=self._type
-                                          , passive=passive
-                                          , durable=self.exchange_durable
-                                          , auto_delete=self.auto_delete
-                                          , internal=self.internal
-                                          , nowait=self.nowait)
+                LOGGER.debug('[RabbitMQBase] Channel opened successfully.')
+            if self.create_new_exchange:
+                LOGGER.debug('[RabbitMQBase] Declaring the %s exchange.', self.exchange_header)
+                self.channel.exchange_declare(exchange=self.exchange_header
+                                              , exchange_type=self._type
+                                              , passive=passive
+                                              , durable=self.exchange_durable
+                                              , auto_delete=self.auto_delete
+                                              , internal=self.internal
+                                              , nowait=self.nowait)
             if listen:
                 # Declare our queue for this process
                 result = self.channel.queue_declare(exclusive=True)
                 self.queue_name = result.method.queue
-                LOGGER.debug('Declaring the %s queue', self.queue_name)
+                LOGGER.debug('[RabbitMQBase] Declaring the %s queue', self.queue_name)
                 # Bind to the exchange
                 self.channel.queue_bind(exchange=self.exchange_header
                                         , queue=self.queue_name
@@ -155,7 +177,7 @@ class RabbitMQBase(object):
                 self.msgProperties = pika.BasicProperties(delivery_mode=1
                                                           , content_type='application/msgpack'
                                                           , reply_to=self.queue_name)
-        except pika.exceptions.AMQPChannelError as e:
+        except AMQPChannelError as e:
             LOGGER.error(e)
 
     def on_timeout(self):
@@ -167,7 +189,8 @@ class RabbitMQBase(object):
     def close(self):
         """ Close the channel and client connection"""
 
-        LOGGER.debug('Closing RabbitMQ pika connections for %s.', self.__class__.__name__)
+        LOGGER.debug('[RabbitMQBase] Closing RabbitMQ pika connections for %s.'
+                     , self.__class__.__name__)
         self.channel.close()
         self.connection.close()
 
@@ -180,7 +203,9 @@ class RabbitMQBase(object):
                                                                     , self.host + '_key.pem')),
                             'certfile': os.path.abspath(os.path.join(self.certs_dir
                                                                      , self.host + '_cert.pem')),
-                            'cert_reqs': CERT_REQUIRED}
+                            'cert_reqs': ssl.CERT_NONE,
+                            'ssl_version': ssl.PROTOCOL_TLSv1,
+                            }
 
     def copy_ssl_certs(self):
         """ Copies SSL certs for RabbitMQ remote host """
@@ -194,13 +219,13 @@ class RabbitMQBase(object):
             _ssh = SshCommandClient(host=self.host, user='root', password='netwitness')
             rabbitmq_path = '/etc/rabbitmq/ssl/server'
             LOGGER.debug('Copying host SSL Key from "%s" RabbitMQ server host', self.host)
-            _ssh.get(source_file=os.path.join(rabbitmq_path, 'key.pem'), destination_file=key_file)
+            _ssh.Get(source_file=os.path.join(rabbitmq_path, 'key.pem'), destination_file=key_file)
             LOGGER.debug('Copying host SSL cert from "%s" RabbitMQ server host', self.host)
-            _ssh.get(source_file=os.path.join(rabbitmq_path, 'cert.pem')
+            _ssh.Get(source_file=os.path.join(rabbitmq_path, 'cert.pem')
                      , destination_file=cert_file)
             LOGGER.debug('Copying CA SSL cert from "%s" RabbitMQ server host', self.host)
             parent_rabbitmq_path = str(Path(rabbitmq_path).parent)
-            _ssh.get(source_file=os.path.join(parent_rabbitmq_path, 'truststore.pem')
+            _ssh.Get(source_file=os.path.join(parent_rabbitmq_path, 'truststore.pem')
                      , destination_file=ca_cert_file)
 
 
@@ -210,16 +235,15 @@ class PublishRabbitMQ(RabbitMQBase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def publish(self, input_file, binding={'esa.event.type': 'Event'}
-                , publish_interval=None
+    def publish(self, input_file, binding=None, publish_interval=None
                 , routing_key='', passive=False, listen=False):
         """ Publishes events from input file on exchange header provided.
 
         Args:
             input_file: file to read events from and publish (JSON)
+            binding: rabbitmq exchange binding (str)
             publish_interval: publish interval in seconds.
                               Default is publishing as fast as possible.
-            event_type: the type of the published event (str)
             routing_key: the routing key (str)
             passive: if True the exchange is created on connect if it des not exist (bool)
             listen: if False a queue is not declared (bool)
@@ -228,7 +252,10 @@ class PublishRabbitMQ(RabbitMQBase):
             True if Publishing successful, False Otherwise
         """
 
-        LOGGER.debug('Binding is : %s', binding)
+        LOGGER.debug('Passing binding %s', binding)
+        if binding is None:
+            binding = {'esa.event.type': 'Event'}
+        LOGGER.debug('[PublishRabbitMQ] Binding is : %s', binding)
         self.connect(binding=binding, passive=passive, listen=listen)
         if self.connected:
             try:
@@ -246,25 +273,25 @@ class PublishRabbitMQ(RabbitMQBase):
                                                       , body=line
                                                       , mandatory=True):
                             self._num_events_to_consume += 1
-                            LOGGER.debug('Message #%s publish was confirmed'
+                            LOGGER.debug('[PublishRabbitMQ] Message #%s publish was confirmed'
                                          , self._num_events_to_consume)
                             delivered = True
                         else:
-                            LOGGER.error('Message could not be confirmed')
+                            LOGGER.error('[PublishRabbitMQ] Message could not be confirmed')
                             delivered = False
                         if publish_interval is not None:
-                            LOGGER.debug('Sleeping for %s seconds before next publish'
-                                         , publish_interval)
+                            LOGGER.debug('[PublishRabbitMQ] Sleeping for %s seconds '
+                                         'before next publish', publish_interval)
                             time.sleep(publish_interval)
                 duration = time.time() - start_time
-                LOGGER.info('[RabbitMQ] Published %i messages in %.4f seconds'
-                            + ' (%.2f messages per second) on exchange \'%s\''
+                LOGGER.info('[PublishRabbitMQ] Published %i messages in %.4f seconds'
+                            ' (%.2f messages per second) on exchange \'%s\''
                             , self._num_events_to_consume, duration
-                            , (self._num_events_to_consume/duration)
+                            , (self._num_events_to_consume / duration)
                             , self.exchange_header)
                 self.close()
                 return delivered
-            except pika.exceptions.AMQPError as e:
+            except AMQPError as e:
                 LOGGER.error(e)
                 return False
 
@@ -272,21 +299,28 @@ class PublishRabbitMQ(RabbitMQBase):
 class ConsumerRabbitMQ(RabbitMQBase):
     """ Class for consuming notification alerts/events from RabbitMQ using pika library."""
 
-    def __init__(self, exchange_header='carlos.alerts', *args, **kwargs):
+    def __init__(self, exchange_header='carlos.alerts', binding=None, *args, **kwargs):
         """ Initializes RabbitMQ connection properties.
 
         Args:
             exchange_header: exchange header to consume the events from.
+            binding: Enables consumer to attach to an exchange with custom binding (dict).
         """
 
         super().__init__(exchange_header=exchange_header, *args, **kwargs)
         LOGGER.info('Connecting consumer to RabbitMQ')
-        self.connect(listen=True)
+        self.connect(listen=True, binding=binding)
         self.timestamp = 'carlos.event.timestamp'
         self.message_json_list = list()
 
-    def _prettyDumpJsonToFile(self, data, outfile):
-        """ Pretty print and writes JSON output to file name provided."""
+    @staticmethod
+    def _pretty_dump_json_to_file(data, outfile):
+        """ Pretty print and writes JSON output to file name provided.
+
+        Args:
+            data: JSON data to print (json)
+            outfile: output file to write JSON data into (str)
+        """
 
         with open(outfile, 'wb') as _file:
             _file.write(bytes('[\n', 'UTF-8'))
@@ -294,12 +328,12 @@ class ConsumerRabbitMQ(RabbitMQBase):
             for i in data:
                 json_formatted_doc = json_util.dumps(json.loads(i), sort_keys=False, indent=4
                                                      , default=json_util.default)
-                LOGGER.debug('[RabbitMQ] Alert notification in JSON format:\n%s',
-                             json_formatted_doc)
+                LOGGER.debug('[RabbitMQ] Alert notification in JSON format:\n%s'
+                             , json_formatted_doc)
                 _file.write(bytes(json_formatted_doc, 'UTF-8'))
                 if i is not data[-1]:
                     _file.write(bytes(',\n', 'UTF-8'))
-            _file.write(bytes(']\n', 'UTF-8'))
+            _file.write(bytes('\n]\n', 'UTF-8'))
             _file.write(bytes(']\n', 'UTF-8'))
         return
 
@@ -311,13 +345,15 @@ class ConsumerRabbitMQ(RabbitMQBase):
             timeout_secs: timeout in seconds, before Consumer stops.
             num_events_to_consume: events/alerts to consume from exchange_header.
             output_file: file to dump the json output.
+            msgpack: to consume alert from msgpack format (bool)
+
         Returns:
             True if successful, False otherwise.
         """
 
         self._num_events_to_consume = num_events_to_consume
         self.connection.add_timeout(timeout_secs, self.on_timeout)
-        LOGGER.info('[RabbitMQ] Consuming %d events from \'%s\' exchange'
+        LOGGER.info("[RabbitMQ] Consuming %d events from '%s' exchange"
                     , self.num_events_to_consume, self.exchange_header)
         if self.connected:
             try:
@@ -348,15 +384,15 @@ class ConsumerRabbitMQ(RabbitMQBase):
                     self.channel.basic_ack(method_frame.delivery_tag)
                     if method_frame.delivery_tag == self._num_events_to_consume:
                         LOGGER.info('[RabbitMQ] Stopping Consumer because all expected number'
-                                    + 'of messages consumed.')
+                                    'of messages consumed.')
                         break
-                self._prettyDumpJsonToFile(self.message_json_list, output_file)
+                self._pretty_dump_json_to_file(self.message_json_list, output_file)
                 # Cancel the consumer and return any pending messages
                 requeued_messages = self.channel.cancel()
-                LOGGER.debug('Requeued %s messages' % requeued_messages)
+                LOGGER.debug('Re-queued %s messages', requeued_messages)
                 self.close()
                 return True
-            except pika.exceptions.AMQPError as e:
+            except AMQPError as e:
                 LOGGER.error('[RabbitMQ] Expected number of alerts not found. Consumer Timed Out!!')
                 LOGGER.error(str(e))
                 return False

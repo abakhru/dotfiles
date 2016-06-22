@@ -93,6 +93,7 @@ export PATH='/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bi
 # ssh
 export SSH_KEY_PATH='~/.ssh/id_rsa'
 #export SSH_AUTH_SOCK=$(find /tmp/ssh-* -user `whoami` -name agent\* -printf '%T@ %p\n' 2>/dev/null | sort -k 1nr | sed 's/^[^ ]* //' | head -n 1)
+export REPO_PATH=/Users/bakhra/src/launch-esa
 export PYTHONPATH=/Users/bakhra/src/automation/unite
 export JAVA_HOME=$(/usr/libexec/java_home)
 export JDK_HOME=$JAVA_HOME
