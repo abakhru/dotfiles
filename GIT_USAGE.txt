@@ -30,7 +30,7 @@ git commit -a -m "adding a file and editing another file" -v
 - uncommit a local commit
 git reset --soft HEAD^ (if file already in git)
 git reset <filename> (if file not already in git)
-git reset --soft HEAD~1 (uncommit locally staged commit)
+git reset --soft HEAD~11 (uncommit locally staged commit)
 
 - push a new branch onto master repo
 git push -u origin de1625-autotune-consume-stqa-disable-v1
@@ -105,3 +105,37 @@ loop the following two commands until you have processed all the commits:
 
 3. git commit --amend --reuse-message=HEAD --author="Amit Bakhru <amit.bakhru@rsa.com>"
 4. git rebase --continue
+
+
+fork/pull
+=========
+- create a fork of the repo
+use github ui
+
+# clone the forked repo
+git clone https://github.rsa.lab.emc.com/bakhra/launch-esa.git
+
+# configure remotes
+git remote add asoc https://github.rsa.lab.emc.com/asoc/launch-esa.git
+git remotes -v
+
+# update forked master with MAIN master
+git pull --rebase asoc master
+git pull
+
+# create branch
+git checkout -b <asoc-1234>
+git commit -m "blah"
+git push -u origin <asoc-1234>
+
+# Team-members create PR based off feature forked branch and forked-master
+bakhra/launch-esa/master and bakhra/launch-esa/<asoc-1234>
+
+# feature lead creates a PR based off forked master and MAIN master
+asoc/launch-esa/master and bakhra/launch-esa/master
+
+# NOTE:
+- each fork owner needs to assign write permission to rsabld user(capthook)
+- cross-repo fixup squash/rebase won't be possible, not available right now, maybe later
+- same-repo fixup squash/rebase would work
+- All jenkin jobs will support running jobs using any fork/asoc repo/branch

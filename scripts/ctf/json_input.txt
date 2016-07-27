@@ -1,4 +1,1 @@
-{"event_source_id":"a", "ec_activity": "benign", "user_dst": "anon", "ec_outcome": "who_cares", "domain": "emc.com", "service": 80, "alias_host":"google.com", "ip_src": "1.1.1.1", "time": 102545666, "ip_dst": "2.3.3.4"}
-{"event_source_id":"b", "ec_activity": "benign", "user_dst": "anon", "ec_outcome": "who_cares", "domain": "emc.com", "service": 80, "alias_host":"google.com", "ip_src": "1.1.1.1", "time": 102545666, "ip_dst": "2.3.3.4"}
-{"event_source_id":"c", "ec_activity": "benign", "user_dst": "anon", "ec_outcome": "who_cares", "domain": "emc.com", "service": 80, "alias_host":"google.com", "ip_src": "1.1.1.1", "time": 102545666, "ip_dst": "2.3.3.4"}
-{"event_source_id":"d", "ec_activity": "benign", "user_dst": "anon", "ec_outcome": "who_cares", "domain": "emc.com", "service": 80, "alias_host":"google.com", "ip_src": "1.1.1.1", "time": 102545666, "ip_dst": "2.3.3.4"}
+{"event_source_id": "1001", "time": 1464739201, "user_dst": "user01", "service": 80, "alias_host": "google.com", "ip_src": "20.22.15.10", "ip_dst": "2.3.3.4"}

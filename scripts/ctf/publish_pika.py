@@ -10,6 +10,7 @@ import os
 import pika
 import requests
 import simplejson as json
+import ssl
 import time
 import urllib.request
 import urllib.parse
@@ -19,7 +20,10 @@ from bson import json_util
 from pathlib import Path
 from pika.credentials import PlainCredentials
 from pika.credentials import ExternalCredentials
-from ssl import CERT_REQUIRED
+from pika.exceptions import AMQPConnectionError
+from pika.exceptions import AMQPChannelError
+from pika.exceptions import AMQPError
+from pika.exceptions import ProbableAuthenticationError
 
 from framework.common.harness import SshCommandClient
 from framework.common.logger import LOGGER
@@ -128,6 +132,7 @@ class RabbitMQBase(object):
         except AMQPConnectionError:
             LOGGER.error("[RabbitMQBase] Cannot connect to RabbitMQ server on '%s:%s'. Trying "
                          "again...", self.host, self.port, exc_info=True)
+            exit()
             time.sleep(1)
             self.connect(binding=binding, passive=passive, listen=listen)
 
@@ -203,7 +208,7 @@ class RabbitMQBase(object):
                                                                     , self.host + '_key.pem')),
                             'certfile': os.path.abspath(os.path.join(self.certs_dir
                                                                      , self.host + '_cert.pem')),
-                            'cert_reqs': ssl.CERT_NONE,
+                            'cert_reqs': ssl.CERT_REQUIRED,
                             'ssl_version': ssl.PROTOCOL_TLSv1,
                             }
 
@@ -404,7 +409,7 @@ if __name__ == '__main__':
     # Publishing
     certs_dir = './ssl_dir'
     # sa_host = '10.40.13.191'
-    sa_host = 'localhost'
+    sa_host = '127.0.0.1'
     # 5672 is default non-ssl port
     # 5671 is default SSL port
     # openssl s_client -connect 10.40.13.191:5671 -cert ./ssl_dir/10.40.13.191_cert.pem -key ./ssl_dir/10.40.13.191_key.pem -CAfile ./ssl_dir/ca_cert.pem
@@ -427,7 +432,7 @@ if __name__ == '__main__':
     # New York
     #listen = ConsumerRabbitMQ(host='10.101.216.227', port=5671, exchange_header='carlos.alerts'
     #                          , ssl=True, ssl_options=get_ssl_options('10.101.216.227'))
-    listen = ConsumerRabbitMQ(exchange_header='carlos.alerts')
+    listen = ConsumerRabbitMQ(exchange_header='carlos.alerts', host=sa_host, port=5672, msgpack=True)
     #pub.publish(file, publish_interval=1)
     pub1.publish(input_file=os.path.join(log_dir, 'json_input.txt')
                  , routing_key='esa-analytics-server.any./rsa/analytics/topology/temp-inject')
@@ -441,7 +446,7 @@ if __name__ == '__main__':
     print('======')
     # Consuming
     #listen.consume(num_events_to_consume=pub.num_events_to_consume)
-    listen.consume(num_events_to_consume=4, output_file='consumed.json')
+    listen.consume(num_events_to_consume=1, output_file='consumed.json')
     #a = AssertJSON()
     #a.assertJSONFileAlmostEqualsKnownGood('consumed.json', 'consumed.json'
     #                                      , ignorefields=['esa_time', 'carlos.event.signature.id'

@@ -1,0 +1,30 @@
+
+0.7.6.201602180812
+
+# for launch-esa
+###################
+
+jacoco_version = 0.7.1.201405082137
+
+mvn -U -B clean package -DskipTests spring-boot:repackage
+mvn org.jacoco:jacoco-maven-plugin:0.7.1.201405082137:instrument package -DskipTests
+
+# run all UniTE tests
+cd unite; nosetests tests/backend/analytics/test/*.py
+
+cd ..;
+for i in `find . -type d -name 'target'`
+do
+cp unite/jacoco.exec $i
+done
+
+mvn -P unite org.jacoco:jacoco-maven-plugin:0.7.1.201405082137:restore-instrumented-classes org.jacoco:jacoco-maven-plugin:0.7.1.201405082137:report
+
+# launch http server on ur localhost
+python -m http.server 2>~/tmp/http.out >~/tmp/http.out &
+
+# access jacoco reports using following urls:
+http://127.0.0.1:8000/analytics/server/target/site/jacoco/index.html
+http://127.0.0.1:8000/common/target/site/jacoco/index.html
+http://127.0.0.1:8000/correlation/server/target/site/jacoco/index.html
+http://127.0.0.1:8000/analytics/api/target/site/jacoco/index.html

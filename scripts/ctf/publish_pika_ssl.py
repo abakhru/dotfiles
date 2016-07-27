@@ -287,8 +287,8 @@ def get_ssl_options(host=None):
     ssl_options = {'ca_certs': os.path.join(certs_dir, 'ca_crt.pem'),
                    'keyfile': os.path.join(certs_dir, cert_dict[host] + '_key.pem'),
                    'certfile': os.path.join(certs_dir, cert_dict[host] + '.pem'),
-                   'cert_reqs': ssl.CERT_REQUIRED,}
-                #    'ssl_version': ssl.PROTOCOL_SSLv2}
+                   'cert_reqs': ssl.CERT_REQUIRED,
+                   'ssl_version': ssl.PROTOCOL_TLSv1}
                 #    'verify_peer': 'verify_none'}
     return ssl_options
 
@@ -297,9 +297,9 @@ if __name__ == '__main__':
     log_dir = '.'
     # Publishing
     # Paris
-    pub1 = PublishRabbitMQ(host='10.101.216.150', port=5671
+    pub1 = PublishRabbitMQ(host='10.101.59.2313', port=5671
                            , exchange_header='esa.event.input', ssl=True
-                           , ssl_options=get_ssl_options('10.101.216.150')
+                           , ssl_options=get_ssl_options('10.101.59.231')
                            , exchange_durable=True)
     # San Francisco
     # pub2 = PublishRabbitMQ(host='10.101.59.223', port=5671
