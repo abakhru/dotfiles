@@ -18,11 +18,12 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
 
     def __init__(self):
         self.ana_server_host = '127.0.0.1'
-        self.rest_port = 8080
+        self.rest_port = 7007
         self.ana_server_url = 'https://{}:{}'.format(self.ana_server_host
                                                      , self.rest_port)
         self.topologyname = 'HttpPacket'
         self.InitRestHandlers()
+        self.flow_name = 'C2'
 
     def InitRestHandlers(self):
         """ Init all Rest API Handlers"""
@@ -37,13 +38,23 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
 
     def DefaultConfig(self):
         # define activities
-        self.SetActivity(activity='normalized')
-        self.SetActivity(activity='alert')
-        self.SetFlow(activities=['normalized', 'whois', 'alert'])
+        self.SetTopology(name=self.topologyname, rootFlow=self.flow_name)
+        self.SetWhoisclient(insecureConnection=True, waitForHttpRequest=True
+                           , whoisUserId='rsaWhoisESAUser'
+                           , refreshIntervalSeconds=1000000
+                           , whoisHttpsProxy='http://emc-proxy1.rsa.lab.emc.com:82'
+                           , whoisPassword='netwitness!!!whois')
+        self.RemoveAllFlows()
+        self.SetFlow(activities=['normalized',
+                                 'newdomain',
+                                 'rare',
+                                 'ua',
+                                 'beaconing',
+                                 'whois',
+                                 'alert']
+                     , name=self.flow_name)
 
-        # set source and stream
-        # self.SetSource(id='nw', host='localhost')
-        self.SetSource(id='Event', host='localhost', port=50005, password='netwitness')
+        self.SetSource(id='nw', host='10.101.216.247', port=50005, password='netwitness')
         self.SetStream(id='Event', linkedSources='{[id:"nw"]}')
         self.SetWhoisclient(insecureConnection=False, waitForHttpRequest=True
                              , whoisUserId='rsaWhoisESAUser'
@@ -52,14 +63,13 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
                              , whoisPassword='netwitness!!!whois')
 
         # set topology
-        self.SetTopology(name=self.topologyname)
         self.RestartTopology(topology_id=self.topologyname)
 
 
 if __name__ == '__main__':
   p = RestHandlers()
   p.DefaultConfig()
-  p.RestartTopology(p.topologyname)
+  # p.RestartTopology(p.topologyname)
   # p.assertProcessedCounterWait(expected=6)
   # p.GetRootTree(path='/rsa/analytics')
   # a = m.GetCount()

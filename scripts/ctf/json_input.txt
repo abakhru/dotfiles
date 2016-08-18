@@ -1,1 +1,0 @@
-{"event_source_id": "1001", "time": 1464739201, "user_dst": "user01", "service": 80, "alias_host": "google.com", "ip_src": "20.22.15.10", "ip_dst": "2.3.3.4"}

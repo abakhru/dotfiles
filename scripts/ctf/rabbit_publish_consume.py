@@ -44,4 +44,4 @@ if __name__ == '__main__':
     publisher.publish(input_file=log_path
                        , routing_key='esa-analytics-server.any./rsa/analytics/topology/temp-inject'
                        , topology_name='HttpPacket')
-    consumer.consume(num_events_to_consume=1, output_file='consumed.json', timeout_secs=60, sort=True)
+    consumer.consume(num_events_to_consume=15, output_file='consumed.json', timeout_secs=60, sort=True)

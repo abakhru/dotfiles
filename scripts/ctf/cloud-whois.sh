@@ -7,8 +7,8 @@ if [[ $# -eq 0 ]] ; then
 fi
 
 domain=$1
-username=${2:-"authenticatedliveuser"}
-password=${3:-"NetwitnessAndRSA123!!"}
+username=${2:-"rsaWhoisESAUser"}
+password=${3:-"netwitness!!!whois"}
 # Authorize your access using a POST of the login parameters
 auth_data="{\"X-Auth-Username\":\"${username}\",\"X-Auth-Password\":\"${password}\"}"
 echo "auth_data = ${auth_data}"
