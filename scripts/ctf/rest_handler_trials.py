@@ -17,13 +17,14 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
                    , FlowRestHandler, StreamRestHandler, TopologyRestHandler, WhoisRestHandler):
 
     def __init__(self):
-        self.ana_server_host = '127.0.0.1'
+        self.ana_server_host = '10.101.217.122'
         self.rest_port = 7007
         self.ana_server_url = 'https://{}:{}'.format(self.ana_server_host
                                                      , self.rest_port)
         self.topologyname = 'HttpPacket'
         self.InitRestHandlers()
         self.flow_name = 'C2'
+        self.conc_ip = '10.101.216.247'
 
     def InitRestHandlers(self):
         """ Init all Rest API Handlers"""
@@ -36,9 +37,106 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
         TopologyRestHandler.__init__(self, server=self.ana_server_url)
         WhoisRestHandler.__init__(self, server=self.ana_server_url)
 
-    def DefaultConfig(self):
-        # define activities
+    def SetupConf_test_all_ueba_scores(self, averaging_window=5184000000
+                                       , analysis_window=86400000
+                                       , time_gap=3600000
+                                       , condition='#event[result] == \'Failure Audit\''
+                                       , max_lifetime_window=5184000000):
+        """ To configure test case level activities and flow. """
+
+        # self.flow_name = self.test_case_name
+        # cleanup cached files and old analytic configs
+        # self.AnalyticsConfigCleanUp()
+        # self.ConfigCleanUps()
+
+        # set topology, activity, source and stream
         self.SetTopology(name=self.topologyname, rootFlow=self.flow_name)
+        self.SetActivity(activity='normalized', **{'flowName': self.flow_name})
+        self.SetActivity(activity='alert', **{'flowName': self.flow_name})
+
+        self.SetActivity(activity='failedaccess',
+                         **{'precondition': condition,
+                            'primary-key': 'server',
+                            'averaging-window': averaging_window,
+                            'analysis-window': analysis_window,
+                            'flowName': self.flow_name})
+
+        self.SetActivity(activity='slidingwindowcardinality'
+                         , **{'precondition': '#event[enrichment]['
+                                              '\'rsa.analytics.http-packet.{}'
+                                              '.failedaccess\'][cardinality] > 2'
+                                              .format(self.flow_name),
+                              'primary-key': 'server',
+                              'averaging-window': averaging_window,
+                              'analysis-window': analysis_window,
+                              'flowName': self.flow_name})
+
+        self.SetActivity(activity='newdevice'
+                         , **{'precondition': '#event[enrichment]['
+                                              '\'rsa.analytics.http-packet.{}'
+                                              '.failedaccess\'][cardinality] > 2'
+                                              .format(self.flow_name),
+                              'primary-key': 'device',
+                              'averaging-window': averaging_window,
+                              'analysis-window': analysis_window,
+                              'max-life-time-window': max_lifetime_window,
+                              'flowName': self.flow_name})
+
+        self.SetActivity(activity='newserver'
+                         , **{'precondition': '#event[enrichment]['
+                                              '\'rsa.analytics.http-packet.{}'
+                                              '.failedaccess\'][cardinality] > 2'
+                                              .format(self.flow_name),
+                              'primary-key': 'server',
+                              'averaging-window': averaging_window,
+                              'analysis-window': analysis_window,
+                              'max-life-time-window': max_lifetime_window,
+                              'flowName': self.flow_name})
+
+        self.SetActivity(activity='new_device_service'
+                         , **{'precondition': '#event[enrichment]['
+                                              '\'rsa.analytics.http-packet.{}'
+                                              '.failedaccess\'][cardinality] > 2'
+                                              .format(self.flow_name),
+                              'primary-key': 'device',
+                              'is-device-key': 'isdevice',
+                              'averaging-window': averaging_window,
+                              'analysis-window': analysis_window,
+                              'time-gap': time_gap,
+                              'flowName': self.flow_name})
+
+        self.SetWhoisclient(insecureConnection=False, waitForHttpRequest=True
+                             , whoisUserId='rsaWhoisESAUser'
+                             , refreshIntervalSeconds=1000000
+                             , whoisHttpsProxy='http://emc-proxy1.rsa.lab.emc.com:82'
+                             , whoisPassword='netwitness!!!whois')
+
+        self.SetSource(id='nw', host=self.conc_ip)
+        self.SetStream(id='Event', linkedSources='{[id:"nw"]}')
+
+        # set flow and start topology
+        flow_time_source = ('enrichment/rsa.analytics.http-packet.{}.normalized/timestamp'
+                            .format(self.flow_name))
+        self.SetFlow(activities=['normalized'
+                                 , 'failedaccess'
+                                 , 'slidingwindowcardinality'
+                                 , 'newdevice'
+                                 , 'newserver'
+                                 , 'new_device_service'
+                                 , 'whois'
+                                 , 'alert']
+                     , name=self.flow_name, timeSource=flow_time_source)
+        self.StartTopology(topology_id=self.topologyname)
+
+    def DefaultConfig(self):
+        self.RemoveAllActivities()
+        self.RemoveAllFlows()
+        self.RemoveStream()
+        self.RemoveSource()
+        self.RemoveAllTopologies()
+
+        # self.ConfigCleanUps()
+        # define activities
         self.SetWhoisclient(insecureConnection=True, waitForHttpRequest=True
                            , whoisUserId='rsaWhoisESAUser'
                            , refreshIntervalSeconds=1000000
@@ -61,14 +159,17 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
                              , refreshIntervalSeconds=1000000
                              , whoisHttpsProxy='http://emc-proxy1.rsa.lab.emc.com:82'
                              , whoisPassword='netwitness!!!whois')
-
+        self.SetTopology(name=self.topologyname, rootFlow=self.flow_name)
         # set topology
         self.RestartTopology(topology_id=self.topologyname)
 
 
 if __name__ == '__main__':
   p = RestHandlers()
-  p.DefaultConfig()
+  # p.DefaultConfig()
+  # p.StartTopology(topology_id='HttpPacket')
+  p.SetupConf_test_all_ueba_scores()
+  p.GetActivity()
   # p.RestartTopology(p.topologyname)
   # p.assertProcessedCounterWait(expected=6)
   # p.GetRootTree(path='/rsa/analytics')

@@ -36,12 +36,12 @@ if __name__ == '__main__':
                                  , _type='topic'
                                  , auto_delete=True
                                  , vhost='/rsa/sa'
-                                 , host='localhost')
+                                 , host='zion')
     consumer = ConsumerRabbitMQ(exchange_header='carlos.alerts'
                                  , exchange_durable=True
-                                 , use_msgpack=False, host='localhost'
+                                 , use_msgpack=False, host='zion'
                                  , use_ssl=False, port=5672, retry=False)
     publisher.publish(input_file=log_path
                        , routing_key='esa-analytics-server.any./rsa/analytics/topology/temp-inject'
                        , topology_name='HttpPacket')
-    consumer.consume(num_events_to_consume=15, output_file='consumed.json', timeout_secs=60, sort=True)
+    consumer.consume(num_events_to_consume=45, output_file='consumed.json', timeout_secs=90, sort=False)

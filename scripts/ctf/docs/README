@@ -56,6 +56,9 @@ at "#" stuff "zsh^M"
 
 # start a tunnel from some machine's port 80 to your local post 2001
 ssh -N -L2001:localhost:80 somemachine
+ssh -N -L8888:localhost:15672 10.101.59.231
+ssh -f root@10.101.59.231 -L 2000:10.101.59.231:15671 -N
+http://127.0.0.1:15672/#/exchanges/%2Frsa%2Fsa/response
 
 # Creating Yum repo for faster upgrade:
 - make sure baseurl of /etc/yum.repods.d/sa.repo points to:
