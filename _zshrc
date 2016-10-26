@@ -116,3 +116,4 @@ source /Users/bakhra/src/dotfiles/aliases.zsh
 # docker things
 export DOCKER_HOST=tcp://sandbox:2375
 export COMPOSE_API_VERSION=auto
+alias nosetests='nosetests --tc-file=/Users/bakhra/services.json --tc-file=/Users/bakhra/test_config.json'

@@ -1,0 +1,152 @@
+[
+[
+{
+    "carlos.event.signature_id": "Suspected UBA",
+    "instance_id": "8fd5a549b5c86eb8b177260fd1113e6d",
+    "carlos.event.severity": 8,
+    "carlos.event.device.vendor": "RSA",
+    "carlos.event.timestamp": "2016-09-23 17:42:03",
+    "carlos.event.device.version": "11.0.FIXME",
+    "carlos.event.device.product": "Event Stream Analysis",
+    "events": [
+        {
+            "device_type": "winevent_nic",
+            "hostname": "",
+            "event.src": "10.254.219.156",
+            "event_type": "Success Audit",
+            "event_source_id": "DEV1-IM-Concentrator.grcrtp.local:1457977918000",
+            "enrichment": {
+                "rsa.analytics.uba.winauth.normalized": {
+                    "hostname": "USITBRUTSDM1",
+                    "timestamp": 1457977918000,
+                    "regexoutput": "USITBRUTSDM1"
+                },
+                "rsa.analytics.uba.winauth.newdevicescore": {
+                    "score": 63.212055882855765,
+                    "ratio": 1.0
+                },
+                "rsa.analytics.uba.winauth.lookupclassifier": {
+                    "_id": {
+                        "timeSecond": 1474488682,
+                        "inc": -2056059992,
+                        "machine": 1771363327,
+                        "new": false,
+                        "time": 1474488682000,
+                        "timestamp": 1474488682,
+                        "date": 1474488682000
+                    },
+                    "OU": "US Clients.Laptops",
+                    "operatingSystem": "Mac OS X",
+                    "isDevice": 1,
+                    "event_computer": "USITBRUTSDM1",
+                    "Server/Client": "C"
+                },
+                "rsa.analytics.uba.winauth.newdeviceservice": {
+                    "score": 0.0
+                },
+                "rsa.analytics.uba.winauth.newdevice": {
+                    "cardinality": 1.0,
+                    "average_cardinality": 1.0
+                },
+                "rsa.analytics.uba.winauth.pthscore": {
+                    "score": 0.0
+                },
+                "rsa.analytics.uba.winauth.aggregation": {
+                    "aggregate": 25.284822353142307,
+                    "confidence": 50.0,
+                    "weighted_rsa.analytics.uba.winauth.newdevicescore_score": 12.642411176571153,
+                    "weighted_rsa.analytics.uba.winauth.pthscore_score": 0.0
+                }
+            },
+            "event_time": 1457977918000,
+            "alias_host": "",
+            "ip_source": "10.254.219.156",
+            "host_src": "",
+            "user_dst": "UMA-BATCHU$@CORP.EMC.COM",
+            "reference_id": "4769",
+            "service_name": "USITBRUTSDM1"
+        }
+    ],
+    "carlos.event.name": "Suspected UBA"
+},
+{
+    "carlos.event.signature_id": "Suspected UBA",
+    "instance_id": "da710ce19e50b2afa29897383b525251",
+    "carlos.event.severity": 8,
+    "carlos.event.device.vendor": "RSA",
+    "carlos.event.timestamp": "2016-09-23 17:42:03",
+    "carlos.event.device.version": "11.0.FIXME",
+    "carlos.event.device.product": "Event Stream Analysis",
+    "events": [
+        {
+            "device_type": "winevent_nic",
+            "hostname": "",
+            "event.src": "10.254.219.156",
+            "event_type": "Success Audit",
+            "event_source_id": "DEV1-IM-Concentrator.grcrtp.local:1457977932000",
+            "enrichment": {
+                "rsa.analytics.uba.winauth.normalized": {
+                    "hostname": "CORPMAHOV19",
+                    "timestamp": 1457977932000,
+                    "regexoutput": "CORPMAHOV19"
+                },
+                "rsa.analytics.uba.winauth.newserverscore": {
+                    "score": 63.212055882855765,
+                    "ratio": 1.0
+                },
+                "rsa.analytics.uba.winauth.newserver": {
+                    "cardinality": 1.0,
+                    "average_cardinality": 1.0
+                },
+                "rsa.analytics.uba.winauth.highserverscore": {
+                    "score": 63.212055882855765,
+                    "ratio": 1.0
+                },
+                "rsa.analytics.uba.winauth.lookupclassifier": {
+                    "_id": {
+                        "timeSecond": 1474488685,
+                        "inc": -2055850447,
+                        "machine": 1771363327,
+                        "new": false,
+                        "time": 1474488685000,
+                        "timestamp": 1474488685,
+                        "date": 1474488685000
+                    },
+                    "OU": "Domain Controllers",
+                    "operatingSystem": "Windows Server 2008 R2 Standard",
+                    "isDevice": 0,
+                    "event_computer": "CORPMAHOV19",
+                    "Server/Client": "S"
+                },
+                "rsa.analytics.uba.winauth.failedserversscore": {},
+                "rsa.analytics.uba.winauth.newdeviceservice": {
+                    "score": 0.0
+                },
+                "rsa.analytics.uba.winauth.highservers": {
+                    "cardinality": 1.0,
+                    "average_cardinality": 1.0
+                },
+                "rsa.analytics.uba.winauth.pthscore": {
+                    "score": 0.0
+                },
+                "rsa.analytics.uba.winauth.aggregation": {
+                    "weighted_rsa.analytics.uba.winauth.newserverscore_score": 6.321205588285577,
+                    "aggregate": 31.60602794142788,
+                    "weighted_rsa.analytics.uba.winauth.highserverscore_score": 12.642411176571153,
+                    "weighted_rsa.analytics.uba.winauth.pthscore_score": 0.0,
+                    "confidence": 60.00000000000001
+                }
+            },
+            "event_time": 1457977932000,
+            "alias_host": "",
+            "ip_source": "10.254.219.156",
+            "host_src": "",
+            "user_dst": "UMA-BATCHU$@CORP.EMC.COM",
+            "reference_id": "4769",
+            "service_name": "CORPMAHOV19$"
+        }
+    ],
+    "carlos.event.name": "Suspected UBA"
+}
+]
+]

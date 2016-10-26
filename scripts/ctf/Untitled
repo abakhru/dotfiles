@@ -1,0 +1,28 @@
+curl https://localhost:7002/oauth/token -d grant_type=password -d client_id=nw_ui -d username=anny -d password=netwitness -k -v
+curl https://localhost:7002/rsa/security/authenticate -d grant_type=password -d client_id=nw_ui -d username=anny -d password=netwitness -k -v
+3139  curl https://localhost:7002/oauth/token -d grant_type=refresh_token -d client_id=nw_ui -d refresh_token=... -k -v
+3140  curl https://localhost:7002/oauth/token -d grant_type=password -d client_id=nw_ui -d username=anny -d password=netwitness -k -v
+3141  curl https://localhost:7002/oauth/token -d grant_type=password -d client_id=nw_ui -d username=admin -d password=netwitness -k -v
+3142  curl https://localhost:7002/rsa/security/role/set -k -H "content-type:application/json" -d '{"name":"admin","description":"Analysts Role"}'
+3143  curl https://localhost:7002/rsa/security/user/set -k -H "content-type:application/json" -d '{"login":"admin","password":"netwitness","name":"Anny Lyst","roles":[{"id":"57be128af280d5115ccd10f6"}]}'
+3144  curl https://localhost:7002/rsa/security/user/set -k -H "content-type:application/json" -d '{"login":"amit","password":"netwitness","name":"Anny Lyst","roles":[{"id":"57be128af280d5115ccd10f6"}]}'
+3145  curl https://localhost:7002/rsa/security/user/set -k -H "content-type:application/json" -d '{"login":"amit","passwd":"netwitness","name":"Anny Lyst","roles":[{"id":"57be128af280d5115ccd10f6"}]}'
+3146  curl https://localhost:7002/rsa/security/user/set -k -H "content-type:application/json" -d '{"login":"admin","passwd":"netwitness","name":"Anny Lyst","roles":[{"id":"57be128af280d5115ccd10f6"}]}'
+3268  curl -k https://localhost:7002/oauth/token_key
+3270  curl -k https://localhost:7002/oauth/token_key
+3284  curl -k https://localhost:7002/oauth/token_key
+curl -k https://localhost:7002/rsa/security/authenticate
+3395  history|grep curl
+3396  curl https://localhost:7002/oauth/token -d grant_type=refresh_token -d client_id=nw_ui -d refresh_token=... -k -v
+3397  history|grep curl
+3398  curl https://localhost:7002/rsa/security/user/set -k -H "content-type:application/json" -d '{"login":"admin","passwd":"netwitness","name":"Anny Lyst","roles":[{"id":"57be128af280d5115ccd10f6"}]}'
+3400  curl https://localhost:7002/oauth/token -d grant_type=password -d client_id=nw_ui -d username=admin -d password=netwitness -k -v
+3401  history|grep curl
+3402  curl https://localhost:7002/oauth/token -d grant_type=password -d client_id=nw_ui -d username=admin -d password=netwitness -k -v
+3403  history|grep curl
+3404  curl https://localhost:7002/rsa/security/role/set -k -H "content-type:application/json" -d '{"name":"admin","description":"Analysts Role"}'
+3405  curl https://localhost:7002/oauth/token -d grant_type=password -d client_id=nw_ui -d username=admin -d password=netwitness -k -v
+
+
+
+10.253.48.13  autodiscover.emc.com

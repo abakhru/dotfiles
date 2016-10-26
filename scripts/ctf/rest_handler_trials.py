@@ -11,26 +11,28 @@ from productlib.component.analytics.handler.rest_stream import StreamRestHandler
 from productlib.component.analytics.handler.rest_topology import TopologyRestHandler
 from productlib.component.analytics.handler.rest_whois import WhoisRestHandler
 from framework.common.logger import LOGGER
-LOGGER.setLevel('DEBUG')
+# LOGGER.setLevel('DEBUG')
 
 class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
                    , FlowRestHandler, StreamRestHandler, TopologyRestHandler, WhoisRestHandler):
 
     def __init__(self):
-        self.ana_server_host = '10.101.217.122'
+#        self.ana_server_host = 'localhost'
+        self.ana_server_host = '10.101.59.231'
+        # self.ana_server_host = '10.101.34.184'
         self.rest_port = 7007
         self.ana_server_url = 'https://{}:{}'.format(self.ana_server_host
                                                      , self.rest_port)
         self.topologyname = 'HttpPacket'
         self.InitRestHandlers()
         self.flow_name = 'C2'
-        self.conc_ip = '10.101.216.247'
+        self.conc_ip = '10.101.59.241'
 
     def InitRestHandlers(self):
         """ Init all Rest API Handlers"""
 
         ActivityRestHandler.__init__(self, server=self.ana_server_url)
-        MetricsRestHandler.__init__(self, host=self.ana_server_host, port=self.rest_port)
+        MetricsRestHandler.__init__(self, server=self.ana_server_url)
         AnalyticsRestHandler.__init__(self, server=self.ana_server_url)
         FlowRestHandler.__init__(self, server=self.ana_server_url)
         StreamRestHandler.__init__(self, server=self.ana_server_url)
@@ -128,21 +130,21 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
                      , name=self.flow_name, timeSource=flow_time_source)
         self.StartTopology(topology_id=self.topologyname)
 
-    def DefaultConfig(self):
+    def DeleteAllConfigs(self):
         self.RemoveAllActivities()
         self.RemoveAllFlows()
         self.RemoveStream()
         self.RemoveSource()
         self.RemoveAllTopologies()
+        self.ConfigCleanUps()
 
-        # self.ConfigCleanUps()
+    def DefaultConfig(self):
         # define activities
         self.SetWhoisclient(insecureConnection=True, waitForHttpRequest=True
                            , whoisUserId='rsaWhoisESAUser'
                            , refreshIntervalSeconds=1000000
                            , whoisHttpsProxy='http://emc-proxy1.rsa.lab.emc.com:82'
                            , whoisPassword='netwitness!!!whois')
-        self.RemoveAllFlows()
         self.SetFlow(activities=['normalized',
                                  'newdomain',
                                  'rare',
@@ -163,15 +165,66 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
         # set topology
         self.RestartTopology(topology_id=self.topologyname)
 
+    def SetUeba(self):
+        # self.SetActivity(activity='aggregation'
+        #              , **{'type': 'com.rsa.asoc.esa.analytics.topology.framework.activity.enrichment.AggregationEnrichment',
+        #                   'shardKey':'username',
+        #                   'enabled': True,
+        #                   'format': False,
+        #                   'properties': {'optional-fields': {
+        #                                        'enrichment/rsa.analytics.uba.sinbad.highserverscore/score': 0.2,
+        #                                        'enrichment/rsa.analytics.uba.sinbad.failedserversscore/score': 0.2,
+        #                                        'enrichment/rsa.analytics.uba.sinbad.newserverscore/score': 0.2,
+        #                                        'enrichment/rsa.analytics.uba.sinbad.newdevicescore/score': 0.2,
+        #                                     }
+        #                                  },
+        #                   'flowName': 'sinbad'})
+        self.SetActivity(activity='aggregation'
+                     , **{'type': 'com.rsa.asoc.esa.analytics.topology.framework.activity.enrichment.AggregationEnrichment',
+                          'shardKey':'user_dst',
+                          'enabled': True,
+                          'format': False,
+                          'properties': {'optional-fields': {
+                                               'enrichment/rsa.analytics.uba.winauth.highserverscore/score': 0.2,
+                                               'enrichment/rsa.analytics.uba.winauth.failedserversscore/score': 0.2,
+                                               'enrichment/rsa.analytics.uba.winauth.newserverscore/score': 0.1,
+                                               'enrichment/rsa.analytics.uba.winauth.newdevicescore/score': 0.2,
+                                               'enrichment/rsa.analytics.uba.winauth.pthscore/score': 0.3
+                                            }
+                                         },
+                          'flowName': 'winauth'})
+        self.StopTopology(topology_id='uba')
+        self.StartTopology(topology_id='uba')
+
 
 if __name__ == '__main__':
-  p = RestHandlers()
+  # p = RestHandlers()
+  p = MetricsRestHandler(server)
+  # p.RemoveSource(['nw', 'temp'])
+  # p.SetSource(id='nw', host='10.101.59.233', port=50004)
+  # p.RestartTopology(topology_id='HttpPacket')
+  # p.GetSource()
+ # p.SetUeba()
+  # p.GetFlow()
+  #p.GetActivity(name='aggregation')
   # p.DefaultConfig()
-  # p.StartTopology(topology_id='HttpPacket')
-  p.SetupConf_test_all_ueba_scores()
-  p.GetActivity()
+
+  # p.SetupConf_test_all_ueba_scores()
+  # p.DeleteAllConfigs()
+  # p.GetActivity()
   # p.RestartTopology(p.topologyname)
   # p.assertProcessedCounterWait(expected=6)
   # p.GetRootTree(path='/rsa/analytics')
-  # a = m.GetCount()
-  # print(a)
+
+  print('httppacket-eventcount: {}'.format(p.GetCount(path='rsa.analytics.http-packet.event-count')))
+  print('normalized-event-seen-count: {}'.format(p.GetCount(path='rsa.analytics.http-packet.c2.normalized.event-seen-count')))
+  print('normalized-acted-event-count: {}'.format(p.GetCount(path='rsa.analytics.http-packet.c2.normalized.event-acted-count')))
+  print('c2-1: {}'.format(p.GetCount(path='rsa.analytics.http-packet.c2.c2-1.processed-count')))
+  print('c2-2: {}'.format(p.GetCount(path='rsa.analytics.http-packet.c2.c2-2.processed-count')))
+  print('c2-3: {}'.format(p.GetCount(path='rsa.analytics.http-packet.c2.c2-3.processed-count')))
+  print('whois-seen-eventcount: {}'.format(p.GetCount(path='rsa.analytics.http-packet.c2.whois.event-seen-count')))
+  print('whois-acted-eventcount: {}'.format(p.GetCount(path='rsa.analytics.http-packet.c2.whois.event-acted-count')))
+  print('command_control-seen-eventcount: {}'.format(p.GetCount(path='rsa.analytics.http-packet.c2.command_control.event-seen-count')))
+  print('command_control-acted-eventcount: {}'.format(p.GetCount(path='rsa.analytics.http-packet.c2.command_control.event-acted-count')))
+  print('alert-seen-eventcount: {}'.format(p.GetCount(path='rsa.analytics.http-packet.c2.alert.event-seen-count')))
+  print('alert-acted-eventcount: {}'.format(p.GetCount(path='rsa.analytics.http-packet.c2.alert.event-acted-count')))

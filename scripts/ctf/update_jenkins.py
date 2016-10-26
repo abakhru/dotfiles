@@ -40,7 +40,7 @@ JENKIN_SLAVES = ['10.101.59.103',
                  '10.101.59.36',
                  '10.101.59.19',
                  '10.101.59.53',
-                 '10.101.59.109',
+                #  '10.101.59.109',
                  '10.101.59.124',
                  '10.101.59.34'
                  ]
@@ -88,7 +88,8 @@ class UpdateJenkins(object):
         # self.YumUpdate()
         # self.Put(src_file='Python-3.5.1.tgz', dest_file='/Python-3.5.1.tgz')
         # stop all puppets and firewall
-        self.RunCommand('for i in puppetmaster puppet iptables ip6tables ; do service $i stop; chkconfig $i off; done')
+        # self.RunCommand('for i in puppetmaster puppet iptables ip6tables ; do service $i stop; chkconfig $i off; done')
+        self.RunCommand('rpm -qa|grep mongodb')
         # self.RunCommand('service ntpd stop; service ntpdate start; service ntpd start')
         # self.RunCommand("source /opt/rh/python35/enable; python -V; pip list|grep psycopg2")
         self.Close()
@@ -170,9 +171,9 @@ if __name__ == '__main__':
     # Make the Pool of workers
     pool = ThreadPool(8)
     # Open the urls in their own threads and return the results
-    pool.map(UpdateJenkins, PSR_SLAVES)
+    # pool.map(UpdateJenkins, PSR_SLAVES)
     # pool.map(UpdateJenkins, REF_SLAVES)
-    # pool.map(UpdateJenkins, JENKIN_SLAVES)
+    pool.map(UpdateJenkins, JENKIN_SLAVES)
     # pool.map(FixJavaRun, REF_SLAVES)
     # close the pool and wait for the work to finish
     pool.close()

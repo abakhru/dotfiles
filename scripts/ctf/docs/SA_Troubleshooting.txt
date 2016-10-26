@@ -29,9 +29,9 @@ multi_f_then_s_partition = ("module GHmoduleId%d;@Name('GHmoduleName%d') "
                             "'Failure', S as S.ec_outcome= 'Success');" % (a, a, a))
 
 # On SA system:
-for i in tokumx rabbitmq-server mcollective collectd rsa-im rsa-sms logstash ; do service $i start; done
-for i in rsa-security-server nginx rsa-invesgitation ; do service $i start; done
-for i in nwipdbextractor nwappliance rsasoc_re rsaMalwareDevice jettysrv; do restart $i; done
+for i in tokumx rabbitmq-server mcollective collectd rsa-sms logstash ; do service $i status; done
+for i in rsa-security-server nginx rsa-investigate rsa-admin-server ; do service $i restart; done
+for i in nwipdbextractor nwappliance rsasoc_re rsaMalwareDevice jettysrv; do status $i; done
 
 for i in {1..10000}; do NwLogPlayer -s 10.101.59.237 -f ./fill_cache_10_clients_100k_servers.log; done
 for i in {1..10000}; do NwLogPlayer -s 10.101.59.238 -f ./fill_cache_10_clients_100k_servers.log; done
@@ -41,7 +41,7 @@ source-set-nextgen --host 10.101.59.241 --port 50005 --user admin --password net
 source-set-nextgen --host 10.101.59.242 --port 50005 --user admin --password netwitness --id 10.101.59.242
 
 # On ESA Systems:
-for i in tokumx rabbitmq-server rsa-context mcollective collectd rsa-esa ; do service $i restart; done
+for i in tokumx rabbitmq-server rsa-context mcollective collectd rsa-esa rsa-esa-analytics-server rsa-response ; do service $i restart; done
 
 # disable firewall and puppet
 for i in puppetmaster puppet iptables ip6tables ; do service $i stop; chkconfig $i off; done
