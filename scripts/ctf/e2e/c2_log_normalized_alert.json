@@ -1,0 +1,275 @@
+{
+    "_id" : ObjectId("5820e6f7e4b0a5ff7dca3607"),
+    "_class" : "com.rsa.asoc.im.commons.domain.Alert",
+    "receivedTime" : ISODate("2016-11-07T20:41:27.191Z"),
+    "status" : "NORMALIZED",
+    "originalHeaders" : {
+        "severity" : 8,
+        "device_version" : "11.0.FIXME",
+        "x-received-from" : [
+            {
+                "exchange" : "carlos.alerts",
+                "uri" : "amqps://10.101.217.56",
+                "redelivered" : false,
+                "cluster-name" : "sa@esa11-114-56"
+            }
+        ],
+        "device_product" : "Event Stream Analysis",
+        "signature_id" : "Suspected C&C",
+        "name" : "Suspected C&C",
+        "device_vendor" : "RSA",
+        "version" : 0,
+        "timestamp" : ISODate("2016-11-07T20:42:32.000Z")
+    },
+    "originalRawAlert" : "{\"events\": [{\"event_byte_size\":292,\"header_id\":\"0008\",\"event_cat_name\":\"Content.Web Traffic\",\"ip_src\":\"10.10.0.0\",\"device_type\":\"ciscoiportwsa\",\"sessionid\":114507,\"medium\":32,\"rid\":606,\"ip_dstport\":80,\"enrichment\":{\"rsa.analytics.http-log.c2.normalized.timestamp\":1464696015000,\"rsa.analytics.http-log.c2.newdomain.score\":100.0,\"rsa.analytics.http-log.c2.normalized.user_agent\":\"Mozilla/5.0 (Linux) Gecko Iceweasel (Debian) Mnenhy\",\"rsa.analytics.http-log.c2.normalized.full_domain\":\"mail.iyi.tt\",\"rsa.analytics.http-log.c2.newdomain.num_events\":287,\"rsa.analytics.http-log.c2.referer.num_events\":282,\"rsa.analytics.http-log.c2.command_control.confidence\":69.0,\"rsa.analytics.http-log.c2.referer.score\":80.25187979624785,\"rsa.analytics.http-log.c2.whois.domain_not_found_by_whois\":true,\"rsa.analytics.http-log.c2.beaconing.period\":26600,\"rsa.analytics.http-log.c2.useragent.num_events\":288,\"rsa.analytics.http-log.c2.referer.cardinality\":2,\"rsa.analytics.http-log.c2.ua.num_events\":282,\"rsa.analytics.http-log.c2.whois.scaled_age\":10.0,\"rsa.analytics.http-log.c2.command_control.weighted_rsa.analytics.http-log.c2.referer.ratio_score\":22.0,\"rsa.analytics.http-log.c2.normalized.srcip_full_domain\":\"10.10.0.0_mail.iyi.tt\",\"rsa.analytics.http-log.c2.ua.score\":81.87307530779819,\"rsa.analytics.http-log.c2.whois.estimated_domain_age_days\":182,\"rsa.analytics.http-log.c2.ua.cond_cardinality\":2,\"rsa.analytics.http-log.c2.command_control.weighted_rsa.analytics.http-log.c2.whois.validity_score\":2.505092691650931,\"rsa.analytics.http-log.c2.whois.scaled_validity\":10.0,\"rsa.analytics.http-log.c2.command_control.weighted_rsa.analytics.http-log.c2.whois.age_score\":38.12116417863027,\"rsa.analytics.http-log.c2.useragent.cardinality\":2,\"rsa.analytics.http-log.c2.whois.estimated_domain_validity_days\":182,\"rsa.analytics.http-log.c2.referer.ratio_score\":100.0,\"rsa.analytics.http-log.c2.smooth.score\":98.14757320835567,\"rsa.analytics.http-log.c2.whois.validity_score\":83.5030897216977,\"rsa.analytics.http-log.c2.ua.ratio_score\":100.0,\"rsa.analytics.http-log.c2.command_control.aggregate\":90.76269111634956,\"rsa.analytics.http-log.c2.newdomain.age\":0,\"rsa.analytics.http-log.c2.referer.ratio\":100.0,\"rsa.analytics.http-log.c2.ua.ratio\":100.0,\"rsa.analytics.http-log.c2.whois.age_score\":86.63900949688698,\"rsa.analytics.http-log.c2.beaconing.score\":24.69122203098726,\"rsa.analytics.http-log.c2.referer.cond_cardinality\":2,\"rsa.analytics.http-log.c2.normalized.domain\":\"iyi.tt\",\"rsa.analytics.http-log.c2.useragent.score\":95.1229424500714,\"rsa.analytics.http-log.c2.ua.cardinality\":2},\"action\":[\"TCP_MISS\",\"GET\"],\"msg_id\":\"GET:04\",\"bytes_src\":30871,\"user_agent\":\"Mozilla/5.0 (Linux) Gecko Iceweasel (Debian) Mnenhy\",\"event_source_id\":\"10.101.217.47:50005:114507\",\"fqdn\":\"mail.iyi.tt\",\"level\":6,\"policy_name\":\"DEFAULT_CASE_11-TestPolicy-DefaultGroup-DefaultGroup-NONE-NONE-DefaultGroup\",\"ip_dst\":\"192.168.66.60\",\"device_ip\":\"127.0.0.1\",\"filter\":\"Advertisements\",\"size\":643,\"device_class\":\"Web Logs\",\"result_code\":\"200\",\"time\":1478551301000,\"category\":\"-\",\"event_time\":1464696015,\"did\":\"logd11-114-42\"}], \"instance_id\": \"ac83ce594ce4d10f9d7e35d33faa42b7\"}",
+    "originalAlert" : {
+        "instance_id" : "ac83ce594ce4d10f9d7e35d33faa42b7",
+        "events" : [
+            {
+                "event_byte_size" : 292,
+                "header_id" : "0008",
+                "event_cat_name" : "Content.Web Traffic",
+                "ip_src" : "10.10.0.0",
+                "device_type" : "ciscoiportwsa",
+                "sessionid" : 114507,
+                "medium" : 32,
+                "rid" : 606,
+                "ip_dstport" : 80,
+                "enrichment" : {
+                    "rsa_analytics_http-log_c2_command_control_weighted_rsa_analytics_http-log_c2_referer_ratio_score" : 22.0,
+                    "rsa_analytics_http-log_c2_normalized_timestamp" : NumberLong(1464696015000),
+                    "rsa_analytics_http-log_c2_whois_estimated_domain_age_days" : 182,
+                    "rsa_analytics_http-log_c2_whois_estimated_domain_validity_days" : 182,
+                    "rsa_analytics_http-log_c2_referer_ratio_score" : 100.0,
+                    "rsa_analytics_http-log_c2_newdomain_age" : 0,
+                    "rsa_analytics_http-log_c2_command_control_aggregate" : 90.7626911163496,
+                    "rsa_analytics_http-log_c2_normalized_user_agent" : "Mozilla/5.0 (Linux) Gecko Iceweasel (Debian) Mnenhy",
+                    "rsa_analytics_http-log_c2_ua_ratio_score" : 100.0,
+                    "rsa_analytics_http-log_c2_ua_ratio" : 100.0,
+                    "rsa_analytics_http-log_c2_referer_ratio" : 100.0,
+                    "rsa_analytics_http-log_c2_normalized_srcip_full_domain" : "10.10.0.0_mail.iyi.tt",
+                    "rsa_analytics_http-log_c2_ua_cond_cardinality" : 2,
+                    "rsa_analytics_http-log_c2_newdomain_score" : 100.0,
+                    "rsa_analytics_http-log_c2_whois_validity_score" : 83.5030897216977,
+                    "rsa_analytics_http-log_c2_useragent_score" : 95.1229424500714,
+                    "rsa_analytics_http-log_c2_newdomain_num_events" : 287,
+                    "rsa_analytics_http-log_c2_referer_num_events" : 282,
+                    "rsa_analytics_http-log_c2_useragent_cardinality" : 2,
+                    "rsa_analytics_http-log_c2_ua_score" : 81.8730753077982,
+                    "rsa_analytics_http-log_c2_smooth_score" : 98.1475732083557,
+                    "rsa_analytics_http-log_c2_referer_cardinality" : 2,
+                    "rsa_analytics_http-log_c2_whois_domain_not_found_by_whois" : true,
+                    "rsa_analytics_http-log_c2_referer_cond_cardinality" : 2,
+                    "rsa_analytics_http-log_c2_whois_scaled_age" : 10.0,
+                    "rsa_analytics_http-log_c2_command_control_confidence" : 69.0,
+                    "rsa_analytics_http-log_c2_command_control_weighted_rsa_analytics_http-log_c2_whois_age_score" : 38.1211641786303,
+                    "rsa_analytics_http-log_c2_beaconing_score" : 24.6912220309873,
+                    "rsa_analytics_http-log_c2_normalized_full_domain" : "mail.iyi.tt",
+                    "rsa_analytics_http-log_c2_command_control_weighted_rsa_analytics_http-log_c2_whois_validity_score" : 2.50509269165093,
+                    "rsa_analytics_http-log_c2_whois_age_score" : 86.639009496887,
+                    "rsa_analytics_http-log_c2_beaconing_period" : 26600,
+                    "rsa_analytics_http-log_c2_referer_score" : 80.2518797962478,
+                    "rsa_analytics_http-log_c2_ua_num_events" : 282,
+                    "rsa_analytics_http-log_c2_useragent_num_events" : 288,
+                    "rsa_analytics_http-log_c2_whois_scaled_validity" : 10.0,
+                    "rsa_analytics_http-log_c2_ua_cardinality" : 2,
+                    "rsa_analytics_http-log_c2_normalized_domain" : "iyi.tt"
+                },
+                "action" : [
+                    "TCP_MISS",
+                    "GET"
+                ],
+                "msg_id" : "GET:04",
+                "bytes_src" : 30871,
+                "user_agent" : "Mozilla/5.0 (Linux) Gecko Iceweasel (Debian) Mnenhy",
+                "event_source_id" : "10.101.217.47:50005:114507",
+                "fqdn" : "mail.iyi.tt",
+                "level" : 6,
+                "policy_name" : "DEFAULT_CASE_11-TestPolicy-DefaultGroup-DefaultGroup-NONE-NONE-DefaultGroup",
+                "ip_dst" : "192.168.66.60",
+                "device_ip" : "127.0.0.1",
+                "filter" : "Advertisements",
+                "size" : 643,
+                "device_class" : "Web Logs",
+                "result_code" : "200",
+                "time" : NumberLong(1478551301000),
+                "category" : "-",
+                "event_time" : 1464696015,
+                "did" : "logd11-114-42"
+            }
+        ]
+    },
+    "alert" : {
+        "severity" : 80,
+        "groupby_type" : "",
+        "related_links" : [
+            {
+                "type" : "investigate_session",
+                "url" : "/investigation/10.101.217.47:50005/navigate/query/sessionid%3D114507"
+            },
+            {
+                "type" : "investigate_device_ip",
+                "url" : "/investigation/10.101.217.47:50005/navigate/query/device.ip%3D127.0.0.1%2Fdate%2F2016-11-07T20%3A31%3A27.190Z%2F2016-11-07T20%3A51%3A27.190Z"
+            },
+            {
+                "type" : "investigate_src_ip",
+                "url" : "/investigation/10.101.217.47:50005/navigate/query/ip.src%3D%2Fdate%2F2016-11-07T20%3A31%3A27.190Z%2F2016-11-07T20%3A51%3A27.190Z"
+            },
+            {
+                "type" : "investigate_dst_ip",
+                "url" : "/investigation/10.101.217.47:50005/navigate/query/ip.dst%3D%2Fdate%2F2016-11-07T20%3A31%3A27.190Z%2F2016-11-07T20%3A51%3A27.190Z"
+            },
+            {
+                "type" : "investigate_destination_domain",
+                "url" : "/investigation/10.101.217.47:50005/navigate/query/alias.host%3D%22%22%2Fdate%2F2016-11-07T20%3A31%3A27.190Z%2F2016-11-07T20%3A51%3A27.190Z"
+            }
+        ],
+        "host_summary" : ":80",
+        "user_summary" : [],
+        "risk_score" : 80,
+        "groupby_domain" : "",
+        "source" : "Event Stream Analysis",
+        "groupby_destination_port" : "80",
+        "groupby_source_country" : "",
+        "groupby_destination_country" : "",
+        "relationships" : [
+            [
+                "",
+                "",
+                "",
+                "",
+                "192.168.66.60",
+                ""
+            ]
+        ],
+        "signature_id" : "Suspected C&C",
+        "groupby_filename" : "",
+        "groupby_data_hash" : "",
+        "groupby_destination_ip" : "",
+        "name" : "Suspected C&C",
+        "numEvents" : 1,
+        "groupby_source_ip" : "",
+        "groupby_source_username" : "",
+        "groupby_detector_ip" : "127.0.0.1",
+        "events" : [
+            {
+                "event_byte_size" : 292,
+                "header_id" : "0008",
+                "data" : [
+                    {
+                        "filename" : "",
+                        "size" : 643,
+                        "hash" : ""
+                    }
+                ],
+                "event_cat_name" : "Content.Web Traffic",
+                "ip_src" : "10.10.0.0",
+                "destination" : {
+                    "device" : {
+                        "port" : 80,
+                        "geolocation" : {}
+                    },
+                    "user" : {}
+                },
+                "description" : "Content.Web Traffic",
+                "device_type" : "ciscoiportwsa",
+                "sessionid" : 114507,
+                "medium" : 32,
+                "source" : {
+                    "device" : {
+                        "geolocation" : {}
+                    },
+                    "user" : {}
+                },
+                "rid" : 606,
+                "type" : "Network",
+                "ip_dstport" : 80,
+                "enrichment" : {
+                    "rsa_analytics_http-log_c2_command_control_weighted_rsa_analytics_http-log_c2_referer_ratio_score" : 22,
+                    "rsa_analytics_http-log_c2_normalized_timestamp" : NumberLong(1464696015000),
+                    "rsa_analytics_http-log_c2_whois_estimated_domain_age_days" : 182,
+                    "rsa_analytics_http-log_c2_whois_estimated_domain_validity_days" : 182,
+                    "rsa_analytics_http-log_c2_referer_ratio_score" : 100,
+                    "rsa_analytics_http-log_c2_newdomain_age" : 0,
+                    "rsa_analytics_http-log_c2_command_control_aggregate" : 90.7626911163496,
+                    "rsa_analytics_http-log_c2_normalized_user_agent" : "Mozilla/5.0 (Linux) Gecko Iceweasel (Debian) Mnenhy",
+                    "rsa_analytics_http-log_c2_ua_ratio_score" : 100,
+                    "rsa_analytics_http-log_c2_ua_ratio" : 100,
+                    "rsa_analytics_http-log_c2_referer_ratio" : 100,
+                    "rsa_analytics_http-log_c2_normalized_srcip_full_domain" : "10.10.0.0_mail.iyi.tt",
+                    "rsa_analytics_http-log_c2_ua_cond_cardinality" : 2,
+                    "rsa_analytics_http-log_c2_newdomain_score" : 100,
+                    "rsa_analytics_http-log_c2_whois_validity_score" : 83.5030897216977,
+                    "rsa_analytics_http-log_c2_useragent_score" : 95.1229424500714,
+                    "rsa_analytics_http-log_c2_newdomain_num_events" : 287,
+                    "rsa_analytics_http-log_c2_referer_num_events" : 282,
+                    "rsa_analytics_http-log_c2_useragent_cardinality" : 2,
+                    "rsa_analytics_http-log_c2_ua_score" : 81.8730753077982,
+                    "rsa_analytics_http-log_c2_smooth_score" : 98.1475732083557,
+                    "rsa_analytics_http-log_c2_referer_cardinality" : 2,
+                    "rsa_analytics_http-log_c2_whois_domain_not_found_by_whois" : true,
+                    "rsa_analytics_http-log_c2_referer_cond_cardinality" : 2,
+                    "rsa_analytics_http-log_c2_whois_scaled_age" : 10,
+                    "rsa_analytics_http-log_c2_command_control_confidence" : 69,
+                    "rsa_analytics_http-log_c2_command_control_weighted_rsa_analytics_http-log_c2_whois_age_score" : 38.1211641786303,
+                    "rsa_analytics_http-log_c2_beaconing_score" : 24.6912220309873,
+                    "rsa_analytics_http-log_c2_normalized_full_domain" : "mail.iyi.tt",
+                    "rsa_analytics_http-log_c2_command_control_weighted_rsa_analytics_http-log_c2_whois_validity_score" : 2.50509269165093,
+                    "rsa_analytics_http-log_c2_whois_age_score" : 86.639009496887,
+                    "rsa_analytics_http-log_c2_beaconing_period" : 26600,
+                    "rsa_analytics_http-log_c2_referer_score" : 80.2518797962478,
+                    "rsa_analytics_http-log_c2_ua_num_events" : 282,
+                    "rsa_analytics_http-log_c2_useragent_num_events" : 288,
+                    "rsa_analytics_http-log_c2_whois_scaled_validity" : 10,
+                    "rsa_analytics_http-log_c2_ua_cardinality" : 2,
+                    "rsa_analytics_http-log_c2_normalized_domain" : "iyi.tt"
+                },
+                "file" : "",
+                "detected_by" : "Web Logs-,",
+                "action" : [
+                    "TCP_MISS",
+                    "GET"
+                ],
+                "from" : "",
+                "msg_id" : "GET:04",
+                "bytes_src" : 30871,
+                "user_agent" : "Mozilla/5.0 (Linux) Gecko Iceweasel (Debian) Mnenhy",
+                "timestamp" : "Mon Nov 07 20:41:41 UTC 2016",
+                "event_source_id" : "10.101.217.47:50005:114507",
+                "related_links" : [
+                    {
+                        "type" : "investigate_original_event",
+                        "url" : ""
+                    },
+                    {
+                        "type" : "investigate_destination_domain",
+                        "url" : "/investigation/10.101.217.47:50005/navigate/query/alias.host%3D%27%27%2Fdate%2F2016-11-07T20%3A31%3A27.190Z%2F2016-11-07T20%3A51%3A27.190Z"
+                    }
+                ],
+                "fqdn" : "mail.iyi.tt",
+                "level" : 6,
+                "policy_name" : "DEFAULT_CASE_11-TestPolicy-DefaultGroup-DefaultGroup-NONE-NONE-DefaultGroup",
+                "ip_dst" : "192.168.66.60",
+                "device_ip" : "127.0.0.1",
+                "filter" : "Advertisements",
+                "size" : 643,
+                "domain" : "",
+                "device_class" : "Web Logs",
+                "result_code" : "200",
+                "time" : NumberLong(1478551301000),
+                "to" : ":80",
+                "category" : "-",
+                "detector" : {
+                    "device_class" : "Web Logs",
+                    "ip_address" : "127.0.0.1",
+                    "product_name" : "ciscoiportwsa"
+                },
+                "user" : "",
+                "event_time" : 1464696015,
+                "did" : "logd11-114-42"
+            }
+        ],
+        "timestamp" : ISODate("2016-11-07T20:42:32.000Z")
+    },
+    "partOfIncident" : false
+}

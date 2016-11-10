@@ -116,4 +116,6 @@ source /Users/bakhra/src/dotfiles/aliases.zsh
 # docker things
 export DOCKER_HOST=tcp://sandbox:2375
 export COMPOSE_API_VERSION=auto
-alias nosetests='nosetests --tc-file=/Users/bakhra/services.json --tc-file=/Users/bakhra/test_config.json'
+alias nosetests='nosetests --tc-file=/Users/bakhra/services.json --tc-file=/Users/bakhra/test_config.json --tc-file=/Users/bakhra/default.json'
+alias gall="cd ~/src; find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull origin master \;"
+alias pipall="for i in `pip list -o --format legacy|awk '{print $1}'` ; do pip install -U $i; done"

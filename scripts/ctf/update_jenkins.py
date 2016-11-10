@@ -89,7 +89,7 @@ class UpdateJenkins(object):
         # self.Put(src_file='Python-3.5.1.tgz', dest_file='/Python-3.5.1.tgz')
         # stop all puppets and firewall
         # self.RunCommand('for i in puppetmaster puppet iptables ip6tables ; do service $i stop; chkconfig $i off; done')
-        self.RunCommand('rpm -qa|grep mongodb')
+        self.RunCommand('df -h /')
         # self.RunCommand('service ntpd stop; service ntpdate start; service ntpd start')
         # self.RunCommand("source /opt/rh/python35/enable; python -V; pip list|grep psycopg2")
         self.Close()
@@ -169,7 +169,8 @@ if __name__ == '__main__':
 
     start_time = timeit.default_timer()
     # Make the Pool of workers
-    pool = ThreadPool(8)
+    # pool = ThreadPool(len(JENKIN_SLAVES))
+    pool = ThreadPool(20)
     # Open the urls in their own threads and return the results
     # pool.map(UpdateJenkins, PSR_SLAVES)
     # pool.map(UpdateJenkins, REF_SLAVES)
