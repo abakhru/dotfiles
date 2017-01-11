@@ -27,9 +27,12 @@ multi_f_then_s_partition = ("module GHmoduleId%d;@Name('GHmoduleName%d') "
                             "partition by user_dst measures F as f_array, "
                             "S as s pattern (F F F F F+ S+) define F as F.ec_outcome= "
                             "'Failure', S as S.ec_outcome= 'Success');" % (a, a, a))
-
+for i in `pip list -o|awk '{print $1}'` ; do pip install -U $i; done
 # On SA system:
-cd /etc/init.d; for i in `\ls rsa-*` ; do echo "==== $i ===="; service $i status; done; cd -
+# cd /etc/init.d; for i in `\ls rsa-*` ; do echo "==== $i ===="; service $i status; done; cd -
+
+for i in rsa-security-server rsa-admin-server rsa-cms-server rsa-config-server rsa-investigate rsa-response nginx; do echo "==== $i ===="; service $i status; done
+
 for i in tokumx rabbitmq-server mcollective collectd rsa-sms logstash ; do service $i status; done
 for i in rsa-security-server nginx rsa-investigate rsa-admin-server ; do service $i restart; done
 for i in nwipdbextractor nwappliance rsasoc_re rsaMalwareDevice jettysrv; do status $i; done

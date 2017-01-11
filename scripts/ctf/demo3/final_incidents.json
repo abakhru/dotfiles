@@ -1,0 +1,348 @@
+{
+	"_id": "INC-101",
+	"_class": "com.rsa.asoc.im.commons.domain.Incident",
+	"name": "Suspected C\u0026C with g00gle.com",
+	"summary": "Security Analytics detected communications with g00gle.com that may be command and control malware.\n\n1. Evaluate if the domain is legitimate (online radio, news feed, partner, automated testing, etc.).\n2. Review the domain registration for suspect information (Registrant country, registrar, no registration data found, etc).\n3. If the domain is suspect, go to the Investigation module to locate other activity to or from it.",
+	"priority": "CRITICAL",
+	"prioritySort": 3,
+	"riskScore": 90,
+	"status": "NEW",
+	"statusSort": 0,
+	"alertCount": 1,
+	"averageAlertRiskScore": 90,
+	"sealed": false,
+	"totalRemediationTaskCount": {
+		"$numberLong": "0"
+	},
+	"openRemediationTaskCount": {
+		"$numberLong": "0"
+	},
+	"hasRemediationTasks": false,
+	"created": {
+		"$date": "2017-01-06T22:14:22.823Z"
+	},
+	"lastUpdated": {
+		"$date": "2017-01-06T22:14:22.823Z"
+	},
+	"sources": [
+		"Event Stream Analysis"
+	],
+	"ruleId": "586fed8d2aea66372e6f53bf",
+	"firstAlertTime": {
+		"$date": "2017-01-05T10:03:27.482Z"
+	},
+	"timeWindowExpiration": {
+		"$date": "2017-01-12T10:03:27.482Z"
+	},
+	"groupByValues": [
+		"g00gle.com"
+	],
+	"categories": [],
+	"createdBy": "Suspected Command \u0026 Control Communication By Domain",
+	"relationships": [
+		[
+			"",
+			"",
+			"g00gle.com",
+			"10.64.188.48",
+			"3.3.3.3",
+			""
+		]
+	],
+	"catalystRelationships": [
+		[
+			"",
+			"",
+			"g00gle.com",
+			"10.64.188.48",
+			"3.3.3.3",
+			""
+		]
+	],
+	"relatedIndicators": {
+		"1": [
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "587016fe2aea66119d68b929"
+				},
+				"matched": [
+					"",
+					"",
+					"",
+					"10.64.188.48",
+					"",
+					""
+				]
+			},
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "587017252aea66119d68b92a"
+				},
+				"matched": [
+					"",
+					"",
+					"",
+					"10.64.188.48",
+					"",
+					""
+				]
+			},
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "58701beb2aea66119d68b92b"
+				},
+				"matched": [
+					"",
+					"",
+					"",
+					"10.64.188.48",
+					"",
+					""
+				]
+			},
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "58701d3f2aea66119d68b92d"
+				},
+				"matched": [
+					"",
+					"",
+					"g00gle.com",
+					"",
+					"",
+					""
+				]
+			},
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "58701d3f2aea66119d68b930"
+				},
+				"matched": [
+					"",
+					"",
+					"g00gle.com",
+					"",
+					"",
+					""
+				]
+			},
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "5873de3f2aea66119d68b934"
+				},
+				"matched": [
+					"",
+					"",
+					"",
+					"10.64.188.48",
+					"",
+					""
+				]
+			}
+		],
+		"3": [
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "587016bd2aea66119d68b928"
+				},
+				"matched": [
+					"",
+					"",
+					"g00gle.com",
+					"10.64.188.48",
+					"3.3.3.3",
+					""
+				]
+			}
+		]
+	},
+	"dateLastRelationship": {
+		"$date": "2017-01-06T22:14:22.846Z"
+	},
+	"dateIndicatorAggregationStart": {
+		"$date": "2016-12-26T10:03:27.482Z"
+	},
+	"breachExportStatus": "NONE",
+	"hasDeletedAlerts": false,
+	"deletedAlertCount": 0,
+	"eventCount": 1,
+	"groupBySourceIp": [
+		"10.64.188.48"
+	],
+	"groupByDestinationIp": [
+		"3.3.3.3"
+	],
+	"statushistory": [
+		{
+			"date_changed": {
+				"$date": "2017-01-06T22:14:22.946Z"
+			},
+			"status": "NEW"
+		}
+	]
+}
+{
+	"_id": "INC-102",
+	"_class": "com.rsa.asoc.im.commons.domain.Incident",
+	"name": "High Risk Alerts: ECAT for 90",
+	"summary": "",
+	"priority": "CRITICAL",
+	"prioritySort": 3,
+	"riskScore": 90,
+	"status": "NEW",
+	"statusSort": 0,
+	"alertCount": 2,
+	"averageAlertRiskScore": 90,
+	"sealed": false,
+	"totalRemediationTaskCount": {
+		"$numberLong": "0"
+	},
+	"openRemediationTaskCount": {
+		"$numberLong": "0"
+	},
+	"hasRemediationTasks": false,
+	"created": {
+		"$date": "2017-01-06T22:23:08.703Z"
+	},
+	"lastUpdated": {
+		"$date": "2017-01-06T22:23:08.703Z"
+	},
+	"sources": [
+		"ECAT"
+	],
+	"ruleId": "586fed8d2aea66372e6f53c1",
+	"firstAlertTime": {
+		"$date": "2017-01-05T10:03:27.482Z"
+	},
+	"timeWindowExpiration": {
+		"$date": "2017-01-12T10:03:27.482Z"
+	},
+	"groupByValues": [
+		90
+	],
+	"categories": [],
+	"createdBy": "High Risk Alerts: ECAT",
+	"relationships": [
+		[
+			"",
+			"WINDOWS7MACHINE",
+			"",
+			"10.64.188.48",
+			"",
+			"de9f2c7fd25e1b3a fad3e85a 0bd17d9b 100db4b3"
+		]
+	],
+	"catalystRelationships": [
+		[
+			"",
+			"WINDOWS7MACHINE",
+			"",
+			"10.64.188.48",
+			"",
+			"de9f2c7fd25e1b3a fad3e85a 0bd17d9b 100db4b3"
+		]
+	],
+	"relatedIndicators": {
+		"1": [
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "587016bd2aea66119d68b928"
+				},
+				"matched": [
+					"",
+					"",
+					"",
+					"10.64.188.48",
+					"",
+					""
+				]
+			},
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "58701beb2aea66119d68b92b"
+				},
+				"matched": [
+					"",
+					"",
+					"",
+					"10.64.188.48",
+					"",
+					""
+				]
+			},
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "5873de3f2aea66119d68b934"
+				},
+				"matched": [
+					"",
+					"",
+					"",
+					"10.64.188.48",
+					"",
+					""
+				]
+			}
+		],
+		"3": [
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "587016fe2aea66119d68b929"
+				},
+				"matched": [
+					"",
+					"windows7machine",
+					"",
+					"10.64.188.48",
+					"",
+					"de9f2c7fd25e1b3a fad3e85a 0bd17d9b 100db4b3"
+				]
+			},
+			{
+				"_class": "com.rsa.asoc.im.commons.domain.mapreduce.RelatedIndicatorInfo",
+				"_id": {
+					"$oid": "587017252aea66119d68b92a"
+				},
+				"matched": [
+					"",
+					"windows7machine",
+					"",
+					"10.64.188.48",
+					"",
+					"de9f2c7fd25e1b3a fad3e85a 0bd17d9b 100db4b3"
+				]
+			}
+		]
+	},
+	"dateLastRelationship": {
+		"$date": "2017-01-06T22:23:08.705Z"
+	},
+	"dateIndicatorAggregationStart": {
+		"$date": "2016-12-26T10:03:27.482Z"
+	},
+	"breachExportStatus": "NONE",
+	"hasDeletedAlerts": false,
+	"deletedAlertCount": 0,
+	"eventCount": 2,
+	"groupBySourceIp": [],
+	"groupByDestinationIp": [],
+	"statushistory": [
+		{
+			"date_changed": {
+				"$date": "2017-01-06T22:23:08.709Z"
+			},
+			"status": "NEW"
+		}
+	]
+}

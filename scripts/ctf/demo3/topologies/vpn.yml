@@ -1,0 +1,413 @@
+
+rsa:
+  geoip:
+    database-directory: /opt/rsa/esa-analytics-server/geoip
+    load-organizations: true
+
+  records:
+    sources:
+      nw: nw://admin:netwitness@10.101.217.47:50005?compression=0
+    streams:
+      Event: Event?timeOrdered=false&linkedSources=nw
+
+  security:
+    pki:
+      verify-certificates: false
+
+  transport:
+    bus:
+      virtual-host: "/rsa/system"
+      enabled: true
+      shutdown-timeout: 5ms
+    client:
+      protocol: http
+    http:
+      enabled: true
+
+  data:
+    enabled: true
+    database: analytics
+
+  analytics:
+    auto-start: true
+
+    manager:
+
+      topology-configs:
+       -
+        name: UbaCisco
+        enabled: true
+        num-threads: 10
+        root-flow: vpn
+        max-worker-queue-size: 409600000
+        subflow-max-size: 10
+        stream-id: Event
+
+      flow-configs:
+      -
+        name: vpn
+        event-type: Event
+        enabled: true
+        time-source: enrichment.rsa.analytics.uba-cisco.vpn.normalized.timestamp
+        filter: "(#event[device_type] != ciscoasa)"
+        activities:
+         - geoip
+         - normalized
+         - loginfailures
+         - rarehost
+         - rareisp
+         - rarelocation
+         - newisp
+         - loginfailuresscore
+         - rarehostscore
+         - rareispscore
+         - rarelocationscore
+         - newispscore
+         - smoothloginfailuresscore
+         - smoothrarehostscore
+         - smoothrareispscore
+         - smoothrarelocationscore
+         - smoothnewispscore
+         - aggregation
+         - alert
+
+      activity-configs:
+      -
+        name: geoip
+        type: com.rsa.asoc.esa.analytics.topology.framework.activity.enrichment.GeoIpEnrichment
+        shard-key: ip_addr
+        enabled: true
+        precondition: "#event['msg_id'].startsWith('722051')" # and #event['alias_host'] != null"
+         # Handle Internal IP message.
+        properties:
+          include-org: true
+      -
+        name: normalized
+        shard-key: ip_addr
+        enabled: true
+        type: com.rsa.asoc.esa.analytics.topology.framework.activity.enrichment.TransformEvent
+        properties:
+          transforms:
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.TimeConvert
+              outputType: java.lang.Long
+              conversion: "SecondsSinceEpoch"
+              srcKey: time
+              dstKey: timestamp
+              returnAsArray: false
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.FieldConcat
+              outputType: java.lang.String
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.geoip.region|enrichment.rsa.analytics.uba-cisco.vpn.geoip.country_code
+              dstKey: location
+              returnAsArray: false
+      -
+        name: loginfailures
+        type: com.rsa.asoc.esa.analytics.topology.analytics.score.EventCountScore
+        shard-key: user_dst
+        enabled: true
+        precondition: "#event['ec_outcome'] == 'Failure'" # Add failure msgid
+        properties:
+          session-key: user_dst
+          session-config:
+            inactivity-timeout: 0 # 30 days
+            max-event-count: 0
+            max-duration: 0
+      -
+        name: rarehost
+        type: com.rsa.asoc.esa.analytics.topology.analytics.score.SlidingWindowCardinalityScore
+        shard-key: user_dst
+        enabled: true
+        precondition: "#event['msg_id'].startsWith('734003')" # and #event['alias_host'] != null" # Handle Hostname Message
+        properties:
+          session-key: user_dst
+          primary-key: alias_host
+          min-event-threshold: 0
+          count-null: false
+          session-config:
+            inactivity-timeout: 0
+            max-event-count: 0
+            max-duration: 0
+      -
+        name: rarelocation
+        type: com.rsa.asoc.esa.analytics.topology.analytics.score.SlidingWindowCardinalityScore
+        shard-key: user_dst
+        enabled: true
+        precondition: "#event[enrichment]['rsa.analytics.uba-cisco.vpn.normalized.location'] != null"
+        properties:
+          session-key: user_dst
+          primary-key: enrichment.rsa.analytics.uba-cisco.vpn.normalized.location
+          min-event-threshold: 0
+          count-null: false
+          session-config:
+            inactivity-timeout: 0
+            max-event-count: 0
+            max-duration: 0
+      -
+        name: rareisp
+        type: com.rsa.asoc.esa.analytics.topology.analytics.score.SlidingWindowCardinalityScore
+        shard-key: user_dst
+        enabled: true
+        precondition: "#event[enrichment]['rsa.analytics.uba-cisco.vpn.geoip.organization'] != null"
+        properties:
+          session-key: user_dst
+          primary-key: enrichment.rsa.analytics.uba-cisco.vpn.geoip.organization
+          min-event-threshold: 0
+          count-null: false
+          session-config:
+            inactivity-timeout: 0
+            max-event-count: 0
+            max-duration: 0
+      -
+        name: newisp
+        type: com.rsa.asoc.esa.analytics.topology.analytics.score.NewElementScore
+        shard-key: user_dst
+        enabled: true
+        properties:
+          session-key: user_dst
+          primary-key: enrichment.rsa.analytics.uba-cisco.vpn.geoip.organization
+          min-event-threshold: 0
+          session-config:
+            inactivity-timeout: 0
+            max-event-count: 0
+            max-duration: 0
+      -
+        name: alert
+        enabled: true
+        type: com.rsa.asoc.esa.analytics.topology.framework.activity.AlertRuleEvaluation
+        properties:
+          version: 11.0.FIXME
+          vendor: RSA
+          product: Event Stream Analysis
+          moduleId: Suspected UBA VPN
+          eventIdFieldName: event_source_id
+          moduleSeverity: 8
+          alerterProperties:
+            queueSize: 0
+            virtualHost: "/rsa/system"
+            username: "guest"
+            password: "guest"
+            exchangeName: "carlos.alerts"
+            exchangeType: headers
+            durable: true
+            autoDelete: false
+      -
+        name: loginfailuresscore
+        shard-key: user_dst
+        enabled: true
+        type: com.rsa.asoc.esa.analytics.topology.framework.activity.enrichment.TransformEvent
+        properties:
+          transforms:
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Ratio
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.loginfailures.count|enrichment.rsa.analytics.uba-cisco.vpn.loginfailures.average
+              dstKey: ratio
+              returnAsArray: false
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Exponential
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.loginfailuresscore.ratio
+              dstKey: score
+              exponentMultiplier: 0.3
+              complement: true
+              scalar: 100.0
+              range: 100.0
+              returnAsArray: false
+      -
+        name: rareispscore
+        shard-key: user_dst
+        enabled: true
+        type: com.rsa.asoc.esa.analytics.topology.framework.activity.enrichment.TransformEvent
+        properties:
+          transforms:
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Ratio
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.rareisp.total_access|enrichment.rsa.analytics.uba-cisco.vpn.rareisp.cardinality
+              dstKey: ratio
+              returnAsArray: false
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Ratio
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.rareispscore.ratio|enrichment.rsa.analytics.uba-cisco.vpn.rareisp.element_access_count
+              dstKey: ratio
+              returnAsArray: false
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Exponential
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.rareispscore.ratio
+              dstKey: score
+              exponentMultiplier: 0.3
+              complement: true
+              scalar: 100.0
+              range: 100.0
+              returnAsArray: false
+
+      -
+        name: rarelocationscore
+        shard-key: user_dst
+        enabled: true
+        type: com.rsa.asoc.esa.analytics.topology.framework.activity.enrichment.TransformEvent
+        properties:
+          transforms:
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Ratio
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.rarelocation.total_access|enrichment.rsa.analytics.uba-cisco.vpn.rarelocation.cardinality
+              dstKey: ratio
+              returnAsArray: false
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Ratio
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.rarelocationscore.ratio|enrichment.rsa.analytics.uba-cisco.vpn.rarelocation.element_access_count
+              dstKey: ratio
+              returnAsArray: false
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Exponential
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.rarelocationscore.ratio
+              dstKey: score
+              exponentMultiplier: 0.3
+              complement: true
+              scalar: 100.0
+              range: 100.0
+              returnAsArray: false
+      -
+        name: newispscore
+        shard-key: user_dst
+        enabled: true
+        type: com.rsa.asoc.esa.analytics.topology.framework.activity.enrichment.TransformEvent
+        properties:
+          transforms:
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Ratio
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.newisp.cardinality|enrichment.rsa.analytics.uba-cisco.vpn.newisp.average_cardinality
+              dstKey: ratio
+              returnAsArray: false
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Exponential
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.newispscore.ratio
+              dstKey: score
+              exponentMultiplier: 0.3
+              complement: true
+              scalar: 100.0
+              range: 100.0
+              returnAsArray: false
+      -
+        name: rarehostscore
+        shard-key: user_dst
+        enabled: true
+        type: com.rsa.asoc.esa.analytics.topology.framework.activity.enrichment.TransformEvent
+        properties:
+          transforms:
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Ratio
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.rarehost.total_access|enrichment.rsa.analytics.uba-cisco.vpn.rarehost.cardinality
+              dstKey: ratio
+              returnAsArray: false
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Ratio
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.rarehostscore.ratio|enrichment.rsa.analytics.uba-cisco.vpn.rarehost.element_access_count
+              dstKey: ratio
+              returnAsArray: false
+            -
+              transform: com.rsa.asoc.esa.analytics.topology.framework.transform.instance.Exponential
+              outputType: java.lang.Double
+              srcKey: enrichment.rsa.analytics.uba-cisco.vpn.rarehostscore.ratio
+              dstKey: score
+              exponentMultiplier: 0.3
+              complement: true
+              scalar: 100.0
+              range: 100.0
+              returnAsArray: false
+      -
+        name: smoothloginfailuresscore
+        type: com.rsa.asoc.esa.analytics.topology.analytics.score.Rectifier1Score
+        shard-key: user_dst
+        enabled: true
+        properties:
+          session-key: user_dst
+          primary-key: enrichment.rsa.analytics.uba-cisco.vpn.loginfailuresscore.score
+          mean-life: 604800000
+          session-config:
+            inactivity-timeout: 604800000
+            max-event-count: 0
+            max-duration: 0
+      -
+        name: smoothrarehostscore
+        type: com.rsa.asoc.esa.analytics.topology.analytics.score.Rectifier1Score
+        shard-key: user_dst
+        enabled: true
+        properties:
+          session-key: user_dst
+          primary-key: enrichment.rsa.analytics.uba-cisco.vpn.rarehostscore.score
+          mean-life: 604800000
+          session-config:
+            inactivity-timeout: 604800000
+            max-event-count: 0
+            max-duration: 0
+      -
+        name: smoothrareispscore
+        type: com.rsa.asoc.esa.analytics.topology.analytics.score.Rectifier1Score
+        shard-key: user_dst
+        enabled: true
+        properties:
+          session-key: user_dst
+          primary-key: enrichment.rsa.analytics.uba-cisco.vpn.rareispscore.score
+          mean-life: 604800000
+          session-config:
+            inactivity-timeout: 604800000
+            max-event-count: 0
+            max-duration: 0
+      -
+        name: smoothrarelocationscore
+        type: com.rsa.asoc.esa.analytics.topology.analytics.score.Rectifier1Score
+        shard-key: user_dst
+        enabled: true
+        properties:
+          session-key: user_dst
+          primary-key: enrichment.rsa.analytics.uba-cisco.vpn.rarelocationscore.score
+          mean-life: 604800000
+          session-config:
+            inactivity-timeout: 604800000
+            max-event-count: 0
+            max-duration: 0
+      -
+        name: smoothnewispscore
+        type: com.rsa.asoc.esa.analytics.topology.analytics.score.Rectifier1Score
+        shard-key: user_dst
+        enabled: true
+        properties:
+          session-key: user_dst
+          primary-key: enrichment.rsa.analytics.uba-cisco.vpn.newispscore.score
+          mean-life: 604800000
+          session-config:
+            inactivity-timeout: 604800000
+            max-event-count: 0
+            max-duration: 0
+      -
+        name: aggregation
+        enabled: true
+        type: com.rsa.asoc.esa.analytics.topology.framework.activity.enrichment.AggregationEnrichment
+        properties:
+          optional-fields:
+          -
+            score-name: enrichment.rsa.analytics.uba-cisco.vpn.smoothloginfailuresscore.score
+            weight: 0.2
+          -
+            score-name: enrichment.rsa.analytics.uba-cisco.vpn.smoothrarehostscore.score
+            weight: 0.2
+          -
+            score-name: enrichment.rsa.analytics.uba-cisco.vpn.smoothrareispscore.score
+            weight: 0.2
+          -
+            score-name: enrichment.rsa.analytics.uba-cisco.vpn.smoothrarelocationscore.score
+            weight: 0.2
+          -
+            score-name: enrichment.rsa.analytics.uba-cisco.vpn.smoothnewispscore.score
+            weight: 0.2

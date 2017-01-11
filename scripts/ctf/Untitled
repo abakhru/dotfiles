@@ -2,7 +2,7 @@ curl https://localhost:7002/oauth/token -d grant_type=password -d client_id=nw_u
 curl https://localhost:7002/rsa/security/authenticate -d grant_type=password -d client_id=nw_ui -d username=anny -d password=netwitness -k -v
 3139  curl https://localhost:7002/oauth/token -d grant_type=refresh_token -d client_id=nw_ui -d refresh_token=... -k -v
 3140  curl https://localhost:7002/oauth/token -d grant_type=password -d client_id=nw_ui -d username=anny -d password=netwitness -k -v
-3141  curl https://localhost:7002/oauth/token -d grant_type=password -d client_id=nw_ui -d username=admin -d password=netwitness -k -v
+curl https://localhost:7002/oauth/token -d grant_type=password -d client_id=nw_ui -d username=admin -d password=netwitness -k -v
 3142  curl https://localhost:7002/rsa/security/role/set -k -H "content-type:application/json" -d '{"name":"admin","description":"Analysts Role"}'
 3143  curl https://localhost:7002/rsa/security/user/set -k -H "content-type:application/json" -d '{"login":"admin","password":"netwitness","name":"Anny Lyst","roles":[{"id":"57be128af280d5115ccd10f6"}]}'
 3144  curl https://localhost:7002/rsa/security/user/set -k -H "content-type:application/json" -d '{"login":"amit","password":"netwitness","name":"Anny Lyst","roles":[{"id":"57be128af280d5115ccd10f6"}]}'
@@ -26,3 +26,33 @@ curl -k https://localhost:7002/rsa/security/authenticate
 
 
 10.253.48.13  autodiscover.emc.com
+
+http://10.101.217.47:50105/sdk?msg=query&query=select * where event.time = 1470355200 -1470355260
+http://10.101.217.47:50105/sdk?msg=query&query=select * where sessionid = 136184
+
+juniper:
+testdata: /sts/eng/testdata/vpn/v20_junipervpn_verify.dev
+session id: 137444 - 137983
+raw sdk query: http://10.101.217.47:50105/sdk?msg=query&query=select * where sessionid = 136184
+logs metas: http://10.101.217.47:50105/sdk?msg=query&query=select%20*%20where%20sessionid%20=%20137978
+              http://10.101.217.47:50105/sdk?msg=query&query=select%20*%20where%20sessionid%20=%20137976
+
+ciscoasa:
+- testdata: /sts/eng/testdata/vpn/v20_ciscoasa_verify.dev
+- sesssioids: 136186 - 137443
+- raw sdk query: http://10.101.217.47:50105/sdk?msg=query&query=select * where sessionid = 137443
+- logs metas:
+  -- http://10.101.217.47:50105/sdk?msg=query&query=select%20*%20where%20sessionid%20=%20137443
+  -- http://10.101.217.47:50105/sdk?msg=query&query=select%20*%20where%20sessionid%20=%20137437
+
+http://10.101.217.47:50105/sdk?msg=query&query=select * where device.class = "Vpn" and medium = 32
+
+
+basic_test.py
+- test_ecat_alert_normalization
+basic_incidents_test.py
+- test_ecat_incident_creation
+incident_response_test.py
+- test_get_single_incident_detail
+reference_data_test.py
+response_chunk_test.py

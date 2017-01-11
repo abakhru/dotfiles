@@ -19,11 +19,11 @@ import time
 logging.basicConfig()
 
 # EVENT_TEMPLATE  = """{"event_source_id":"%d", "ec_activity": "Logon", "user_dst": "%s",  "ec_outcome": "Failure", "esa_time": %d }"""
-EVENT_TEMPLATE  = """{"ip_src": "%s", "ip_dst": "%s", "id":"%d", "ec_activity": "Logon", "user_dst":                         "%s",  "ec_outcome": "Failure", "esa_time": %d }"""
+EVENT_TEMPLATE  = """{"ip_src": "%s", "ip_dst": "%s", "id":"%d", "ec_activity": "Logon", "user_dst": "%s",  "ec_outcome": "Failure", "esa_time": %d }"""
 NORMAL_USER     = "normal"
 TRIGGER_USER    = "Slaarty Baardfast"
 HEADERS         = {'esa.event.type':'Event'}
-GLOBAL_EXCHANGE = {'virtualhost': '/rsa/esa', 'durable': True, 'type': 'direct'}
+GLOBAL_EXCHANGE = {'virtualhost': '/', 'durable': True, 'type': 'direct'}
 LOCAL_EXCHANGE  = {'virtualhost': '/rsa/sa', 'durable': True, 'type': 'headers'}
 
 logging.getLogger('pika').setLevel(logging.DEBUG)
@@ -82,6 +82,7 @@ def loadArgs():
 def events(firstId, eventCount, triggerCount, triggerrate):
 
     val = {"tc": triggerCount}
+    i = 1
     def event(eventId):
         user = NORMAL_USER
         if val["tc"] <= i * triggerrate:
@@ -110,6 +111,7 @@ def main():
         get the user periodicity information and output it
     """
 
+    logging.getLogger('pika').setLevel(logging.INFO)
     options = loadArgs()[0]
     triggerRate = options.triggerpercent / 100.0
     exchange = GLOBAL_EXCHANGE if options.globalengine else LOCAL_EXCHANGE
@@ -124,8 +126,8 @@ def main():
     credentials = pika.PlainCredentials('guest', 'guest')
     parameters  = pika.ConnectionParameters(host=options.remotehost
                                             , virtual_host=exchange['virtualhost'] , credentials=credentials
-                                            , ssl=True, port=5671
-                                            , ssl_options=get_ssl_options(options.remotehost))
+                                            , ssl=False, port=5672)
+                                            #, ssl_options=get_ssl_options(options.remotehost))
 
     connection  = pika.BlockingConnection(parameters)
     channel     = connection.channel()
@@ -136,29 +138,29 @@ def main():
     start = time.time()
     triggerCount = 0
     sentCount = 0
-    try:
-        for i in range(0, options.number, options.batchsize):
-            if i%1000 == 0:
-                sys.stdout.write("           %s: %d\r" %(time.strftime("%H:%M:%S"), i))
-                sys.stdout.flush()
+    # try:
+    for j in range(0, options.number, options.batchsize):
+        if j%1000 == 0:
+            sys.stdout.write("           %s: %d\r" %(time.strftime("%H:%M:%S"), j))
+            sys.stdout.flush()
 
-            triggerCount, message = events(i, options.batchsize, triggerCount, triggerRate)
-            if options.printonly:
-                print(message)
-            else:
-                channel.basic_publish(exchange=options.exchange, routing_key='', body=message, properties=properties)
-            sentCount = i+options.batchsize
+        triggerCount, message = events(j, options.batchsize, triggerCount, triggerRate)
+        if options.printonly:
+            print(message)
+        else:
+            channel.basic_publish(exchange=options.exchange, routing_key='', body=message, properties=properties)
+        sentCount = j+options.batchsize
 
-            if options.sleeptime > 0:
-                time.sleep(options.sleeptime)
+        if options.sleeptime > 0:
+            time.sleep(options.sleeptime)
 
-    except KeyboardInterrupt:
-        pass
-    except Exception as inst:
-        print("\nException\n  type:", type(inst))
-        print(" args:", inst.args)
-        print(inst)
-        print()
+    # except KeyboardInterrupt:
+    #     pass
+    # except Exception as inst:
+    #     print("\nException\n  type:", type(inst))
+    #     print(" args:", inst.args)
+    #     print(inst)
+    #     print()
 
     timetaken = time.time() - start
     stats     = (options.number, triggerCount, timetaken, options.number/timetaken)

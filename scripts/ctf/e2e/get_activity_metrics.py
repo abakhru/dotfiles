@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import optparse
 from pprint import pprint
 
 from productlib.component.analytics.handler.rest_activity import ActivityRestHandler
@@ -16,9 +17,9 @@ from framework.common.logger import LOGGER
 class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
                    , FlowRestHandler, StreamRestHandler, TopologyRestHandler, WhoisRestHandler):
 
-    def __init__(self):
-        self.ana_server_host = '10.101.217.120'
-        self.rest_port = 7007
+    def __init__(self, host='localhost', port=7007):
+        self.ana_server_host = host
+        self.rest_port = port
         self.ana_server_url = 'https://{}:{}'.format(self.ana_server_host
                                                      , self.rest_port)
         self.topologyname = 'HttpPacket'
@@ -38,8 +39,31 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
         WhoisRestHandler.__init__(self, server=self.ana_server_url)
 
 
+def loadArgs():
+    """ get command line arguments """
+
+    defaults = {'server': 'localhost',
+                'port': 7007}
+
+    usage = ('%prog [options] \n\n{}'.format(__doc__))
+    parser = optparse.OptionParser(usage=usage)
+    parser.add_option('-s', '--server',
+                      type='str', action='store', dest='server',
+                      default=defaults['server'],
+                      help='hostname to get activity counts from')
+    parser.add_option('-p', '--port',
+                      type='int', action='store', dest='port',
+                      default=defaults['port'],
+                      help='launch service HTTP port')
+    # LOGGER.debug('args: {}'.format(parser.parse_args))
+    return parser.parse_args()
+
+
 if __name__ == '__main__':
-  p = RestHandlers()
-  pprint(p.GetAllMeters())
+  options = loadArgs()[0]
+  host = options.server
+  port = options.port
+  p = RestHandlers(host=host, port=port)
+  #pprint(p.GetAllMeters())
   pprint(p.GetAllCounts())
-  pprint(p.GetAllTimers())
+  #pprint(p.GetAllTimers())

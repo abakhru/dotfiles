@@ -11,21 +11,20 @@ from productlib.component.analytics.handler.rest_flow import FlowRestHandler
 from productlib.component.analytics.handler.rest_stream import StreamRestHandler
 from productlib.component.analytics.handler.rest_topology import TopologyRestHandler
 from productlib.component.analytics.handler.rest_whois import WhoisRestHandler
+from productlib.component.analytics.handler.rest_sharedtable import SharedTableRestHandler
 from framework.common.logger import LOGGER
 LOGGER.setLevel('DEBUG')
 
 class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
-                   , FlowRestHandler, StreamRestHandler, TopologyRestHandler, WhoisRestHandler):
+                   , FlowRestHandler, StreamRestHandler, TopologyRestHandler, WhoisRestHandler
+                   , SharedTableRestHandler):
 
-    def __init__(self):
-#        self.ana_server_host = 'localhost'
-        # self.ana_server_host = '10.101.217.56'
-        # self.ana_server_host = '10.101.217.122'
-        self.ana_server_host = 'localhost'
-        self.rest_port = 7007
+    def __init__(self, host='localhost', topology_name='HttpPacket', port=7007):
+        self.ana_server_host = host
+        self.rest_port = port
         self.ana_server_url = 'https://{}:{}'.format(self.ana_server_host
                                                      , self.rest_port)
-        self.topologyname = 'HttpPacket'
+        self.topologyname = topology_name
         self.InitRestHandlers()
         self.flow_name = 'c2'
         self.conc_ip = '10.101.217.47'
@@ -34,12 +33,14 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
         """ Init all Rest API Handlers"""
 
         ActivityRestHandler.__init__(self, server=self.ana_server_url)
-        MetricsRestHandler.__init__(self, server=self.ana_server_url)
-        AnalyticsRestHandler.__init__(self, server=self.ana_server_url)
-        FlowRestHandler.__init__(self, server=self.ana_server_url)
-        StreamRestHandler.__init__(self, server=self.ana_server_url)
-        TopologyRestHandler.__init__(self, server=self.ana_server_url)
-        WhoisRestHandler.__init__(self, server=self.ana_server_url)
+        # MetricsRestHandler.__init__(self, server=self.ana_server_url)
+        # AnalyticsRestHandler.__init__(self, server=self.ana_server_url)
+        # FlowRestHandler.__init__(self, server=self.ana_server_url)
+        # StreamRestHandler.__init__(self, server=self.ana_server_url)
+        # TopologyRestHandler.__init__(self, server=self.ana_server_url)
+        # WhoisRestHandler.__init__(self, server=self.ana_server_url)
+        # SharedTableRestHandler.__init__(self, server=self.ana_server_url)
+        LOGGER.debug('All Inits done')
 
     def SetupConf_test_all_ueba_scores(self, averaging_window=5184000000
                                        , analysis_window=86400000
@@ -142,20 +143,16 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
 
     def DefaultConfig(self):
         # define activities
+
         self.SetWhoisclient(insecureConnection=True
                             , waitForHttpRequest=True
                            , whoisUserId='rsaWhoisESAUser'
                            , refreshIntervalSeconds=1000000
                            , whoisHttpsProxy='http://emc-proxy1.rsa.lab.emc.com:82'
                            , whoisPassword='netwitness!!!whois')
-        self.SetFlow(activities=['normalized',
-                                 'newdomain',
-                                 'rare',
-                                 'ua',
-                                 'beaconing',
-                                 'whois',
-                                 'alert']
-                     , name=self.flow_name)
+        self.SetTopology(name=self.topologyname, rootFlow=self.flow_name)
+        self.SetActivity(activity='normalized', **{'flowName': self.flow_name})
+        self.SetActivity(activity='alert', **{'flowName': self.flow_name})
 
         self.SetSource(id='nw', host='10.101.216.247', port=50005, password='netwitness')
         self.SetStream(id='Event', linkedSources='{[id:"nw"]}')
@@ -164,6 +161,9 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
                              , refreshIntervalSeconds=1000000
                              , whoisHttpsProxy='http://emc-proxy1.rsa.lab.emc.com:82'
                              , whoisPassword='netwitness!!!whois')
+        self.SetFlow(activities=['normalized',
+                                 'alert']
+                     , name=self.flow_name)
         self.SetTopology(name=self.topologyname, rootFlow=self.flow_name)
         # set topology
         self.RestartTopology(topology_id=self.topologyname)
@@ -202,7 +202,9 @@ class RestHandlers(ActivityRestHandler, MetricsRestHandler, AnalyticsRestHandler
 def loadArgs():
     """ get command line arguments """
 
-    defaults = {'topology': 'HttpPacket'}
+    defaults = {'topology': 'HttpPacket',
+                'server': 'localhost',
+                'port': 7007}
 
     usage = ('%prog [options] \n\n{}'.format(__doc__))
     parser = optparse.OptionParser(usage=usage)
@@ -210,26 +212,45 @@ def loadArgs():
                       type='str', action='store', dest='topology',
                       default=defaults['topology'],
                       help='Name of the Topology to Restart')
+    parser.add_option('-s', '--server',
+                      type='str', action='store', dest='server',
+                      default=defaults['server'],
+                      help='Ana hostname to use')
+    parser.add_option('-p', '--port',
+                      type='str', action='store', dest='port',
+                      default=defaults['port'],
+                      help='Ana port number to use')
     return parser.parse_args()
 
 
 if __name__ == '__main__':
   options = loadArgs()[0]
-  topology_name = options.topology
-
-  p = RestHandlers()
+  p = RestHandlers(host=options.server, topology_name=options.topology
+                   , port=options.port)
+  # p.GetAuthToken()
+  # p.Post(approute='/rsa/security/pki/set-trusted-certificates')
+  #p.DefaultConfig()
+  #p.GetActivity()
   # p.SetStream(stream_config=qba_stream_config)
-  p.RestartTopology(topology_id=topology_name)
+  # p.RestartTopology(topology_id=topology_name)
+  pprint(p.GetAllStreamRecords())
+  # pprint(p.GetAllMeters())
+  # pprint(p.GetAllTimers())
+  # pprint(p.GetAllJVMMetrics())
+
+  # pprint(p.GetAllCounts(_var='http-log/event-count'))
+  # print('total session: {}'.format(list(p.GetAllCounts(_var='http-log/event-count').values())[0]))
   # p.RestartTopology(topology_id='HttpLog')
   # p = MetricsRestHandler(server)
   # p.RemoveSource(['nw', 'temp'])
   # p.SetSource(id='nw', host='10.101.59.233', port=50004)
   # p.RestartTopology(topology_id='HttpPacket')
   # p.GetSource()
+  # p.GetSharedTable()
  # p.SetUeba()
-  # p.GetFlow()
+  #p.GetFlow()
   #p.GetActivity(name='aggregation')
-  # p.DefaultConfig()
+
 
   # p.SetupConf_test_all_ueba_scores()
   # p.DeleteAllConfigs()

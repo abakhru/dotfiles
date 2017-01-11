@@ -1,2 +1,9 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =0
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/Users/bakhra/src/automation/unite/tests/backend/response/testdata/incident_response_test.py/IncidentResponseTests/test_get_single_incident_detail/knowngood'
+let g:netrw_dirhist_2='/Users/bakhra/src/automation/devops/deployment_tools/config'
+let g:netrw_dirhist_3='/Users/bakhra/src/automation/devops/deployment_tools'
+let g:netrw_dirhist_4='/Users/bakhra/src/automation/devops/deployment_tools/python'
+let g:netrw_dirhist_5='/Users/bakhra/src/automation/unite/tests/backend/esa/testdata/basic_test.py/BasicESATest/test_single_alert_generation'
+let g:netrw_dirhist_6='/Users/bakhra/src/automation/unite/tests/backend/analytics/testdata/basic_test.py/BasicAnalyticsTest/test_uba_with_yml'
+let g:netrw_dirhist_7='/Users/bakhra/src/forks/guptat/esa/.git'
