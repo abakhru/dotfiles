@@ -2,11 +2,12 @@
 
 import unittest
 
-class Palindrome(object):
 
+class Palindrome(object):
     def check_palindrome(self, word=None):
         if word is None:
-            print 'Please provide a word to check for palindrome.'
+            print
+            'Please provide a word to check for palindrome.'
             return False
 
         word_list = list(word)
@@ -23,7 +24,6 @@ class Palindrome(object):
 
 
 class PalindromeTest(unittest.TestCase):
-
     def setUp(self):
         self.palindrome = Palindrome()
 
@@ -50,6 +50,7 @@ class PalindromeTest(unittest.TestCase):
 
     def test_9(self):
         self.assertFalse(self.palindrome.check_palindrome())
+
 
 if __name__ == '__main__':
     unittest.mainse()

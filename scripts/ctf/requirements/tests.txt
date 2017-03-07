@@ -1,0 +1,8 @@
+pytest>=2.6.4
+psycopg2>=2.5.4
+scrapy>=0.24
+msgpack-python
+kafka-python>=1.0.0
+pytest-cov
+mock
+msgpack-python

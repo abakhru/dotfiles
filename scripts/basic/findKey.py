@@ -40,7 +40,8 @@ json_txt = """
 
 data = json.loads(json_txt)
 if 'NumEvents' in data:
-    print data['NumEvents']
+    print
+    data['NumEvents']
 """"
 def findKey(json_data, search):
     DictOut = {}
@@ -69,6 +70,7 @@ print b
 
 """
 
+
 def JSONtoDict(json_data, Dictout):
     for key, value in json_data.iteritems():
         if isinstance(value, dict):
@@ -79,17 +81,23 @@ def JSONtoDict(json_data, Dictout):
         else:
             Dictout[key] = value
 
+
 b = {}
+
 
 def findKey(json_data, key):
     a = {}
     JSONtoDict(json_data, a)
-    print a[k]
+    print
+    a[k]
     for k, v in a.iteritems():
         if k == key:
             b[k] = v
-            print k, ":", v
+            print
+            k, ":", v
 
-#findKey(data, 'IP Changed')
+
+# findKey(data, 'IP Changed')
 findKey(data, u'NumEvents')
-print b
+print
+b

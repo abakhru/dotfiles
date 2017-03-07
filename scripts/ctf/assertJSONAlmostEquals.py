@@ -1,17 +1,16 @@
 #!/usr/bin/env python
 
-from ctf.framework import ctf_unittest
-from collections import OrderedDict
 import os
+import simplejson as json
 
+from ctf.framework import ctf_unittest
 from ctf.framework.logger import LOGGER
-from thirdparty import simplejson as json
-from pprint import pprint
+
 
 LOGGER.setLevel('DEBUG')
 
-class AssertJSON(ctf_unittest.TestCase):
 
+class AssertJSON(ctf_unittest.TestCase):
     """def setUp(self):
         LOGGER.debug('==== Inside setUp function ===')
         self.mongo_ignorefields = ['module_id', 'statement', '_id'
@@ -30,8 +29,10 @@ class AssertJSON(ctf_unittest.TestCase):
                            , 'carlos.event.timestamp']
     mongo_file = 'test_single_alert_generation_mongo.json'
     rabbit_file = 'test_single_alert_generation_rabbit.json'
-    out_dir = '/Users/bakhra/source/server-ready/python/ctf/esa/o/basic_test.py/BasicESATest/test_single_alert_generation'
-    kg_dir = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/basic_test.py/BasicESATest/test_single_alert_generation/knowngood/'
+    out_dir = '/Users/bakhra/source/server-ready/python/ctf/esa/o/basic_test.py/' \
+              'BasicESATest/test_single_alert_generation'
+    kg_dir = '/Users/bakhra/source/server-ready/python/ctf/esa/testdata/' \
+             'basic_test.py/BasicESATest/test_single_alert_generation/knowngood/'
     mongo_knowngoodfile = os.path.join(kg_dir, mongo_file)
     mongo_outfile = os.path.join(out_dir, mongo_file)
     rabbit_knowngoodfile = os.path.join(kg_dir, rabbit_file)
@@ -46,7 +47,7 @@ class AssertJSON(ctf_unittest.TestCase):
     def tearDownClass(cls):
         LOGGER.debug('=== Inside tearDownClass')
 
-    #def tearDown(self):
+    # def tearDown(self):
     #    LOGGER.debug('=== Inside tearDown')
 
     def assertJSONFileAlmostEqualsKnownGood(self, knowngoodfile, outfile, ignorefields=None
@@ -76,7 +77,7 @@ class AssertJSON(ctf_unittest.TestCase):
             elif sort_field == 'engineUri':
                 _data = sorted(data[0], key=lambda k: k['engineUri'])
                 messages_ordered = sorted(_data, key=lambda k: k['events'][0]['event_source_id'])
-                #pprint(messages_ordered)
+                # pprint(messages_ordered)
             json_comparison_list.append(messages_ordered)
 
         knowngood_final_list = []

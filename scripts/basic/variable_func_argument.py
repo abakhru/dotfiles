@@ -1,9 +1,12 @@
 # Example
 import re
-pattern = re.compile(r"\[(on|off)\]") # Slight optimization
-re.search(pattern, "Mono: Playback 65 [75%] [-16.50dB] [on]") 
+
+pattern = re.compile(r"\[(on|off)\]")  # Slight optimization
+re.search(pattern, "Mono: Playback 65 [75%] [-16.50dB] [on]")
 # Returns a Match object!
 re.search(pattern, "Nada...:-(")
+
+
 # Doesn't return anything.
 # End Example
 
@@ -13,10 +16,15 @@ def test_email(your_pattern):
     emails = ["john@example.com", "python-list@python.org", '"wha.t.`1an?ug{}ly@email.com"']
     for email in emails:
         if not re.match(pattern, email):
-            print "You failed to match %s" % (email)
+            print
+            "You failed to match %s" % (email)
         elif not your_pattern:
-            print "Forgot to enter a pattern!"
+            print
+            "Forgot to enter a pattern!"
         else:
-            print "Pass"
-pattern = r"" # Your pattern here!
+            print
+            "Pass"
+
+
+pattern = r""  # Your pattern here!
 test_email(pattern)

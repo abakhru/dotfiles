@@ -1,1 +1,0 @@
-/Users/bakhra/src/automation/unite/framework/driver/amqp/amqp_driver.py

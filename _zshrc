@@ -58,11 +58,7 @@ alias reload='. ~/.zshrc'
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-<<<<<<< Updated upstream
-plugins=(git tmux osx brew ssh-agent python screen sudo docker)
-=======
-plugins=(git brew osx tmux ssh-agent python screen sudo docker)
->>>>>>> Stashed changes
+plugins=(git tmux brew osx tmux ssh-agent python screen sudo docker)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -79,7 +75,7 @@ PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(g
 
 # User configuration
 
-export PATH='/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/bakhra/src/capthook/bin'
+export PATH='/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/amit1/src/capthook/bin'
 # export MANPATH='/usr/local/man:$MANPATH'
 
 # You may need to manually set your language environment
@@ -98,8 +94,8 @@ export PATH='/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bi
 # ssh
 export SSH_KEY_PATH='~/.ssh/id_rsa'
 #export SSH_AUTH_SOCK=$(find /tmp/ssh-* -user `whoami` -name agent\* -printf '%T@ %p\n' 2>/dev/null | sort -k 1nr | sed 's/^[^ ]* //' | head -n 1)
-export REPO_PATH=/Users/bakhra/src/launch-esa
-export PYTHONPATH=/Users/bakhra/src/automation/unite
+export REPO_PATH=/Users/amit1/src/
+export PYTHONPATH=/Users/amit1/src/automation/unite
 export JAVA_HOME=$(/usr/libexec/java_home)
 export JDK_HOME=$JAVA_HOME
 # pip should only run if there is a virtualenv currently activated
@@ -121,7 +117,7 @@ source /Users/amit1/src/dotfiles/aliases.zsh
 # docker things
 export DOCKER_HOST=tcp://sandbox:2375
 export COMPOSE_API_VERSION=auto
-alias nosetests='nosetests --tc-file=/Users/bakhra/services.json --tc-file=/Users/bakhra/test_config.json --tc-file=/Users/bakhra/default.json --tc-file=/Users/bakhra/nodes.json --tc-file=/Users/bakhra/database.json'
+alias nosetests='nosetests --tc-file=/Users/amit1/services.json --tc-file=/Users/amit1/test_config.json --tc-file=/Users/amit1/default.json --tc-file=/Users/amit1/nodes.json --tc-file=/Users/amit1/database.json'
 alias gall="cd ~/src; find . -type d -depth 1 -exec git --git-dir={}/.git --work-tree=$PWD/{} pull origin master \;"
 #alias pipall="for i in `pip list -o --format legacy|awk '{print $1}'` ; do pip install -U $i; done"
 export EDITOR="vim"

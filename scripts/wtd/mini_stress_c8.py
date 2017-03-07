@@ -6,8 +6,8 @@ from cassandra.query import SimpleStatement
 
 KEYSPACE = "testkeyspace"
 
-def main():
 
+def main():
     cluster = Cluster(['127.0.0.1'])
     session = cluster.connect()
     rows = session.execute("SELECT keyspace_name FROM system.schema_keyspaces")
@@ -50,20 +50,21 @@ def main():
         session.execute(prepared.bind(("key%d" % i, 'b', 'b')))
 
     future = session.execute_async("SELECT * FROM mytable")
-    #print("key\tcol1\tcol2")
-    #print("---\t----\t----")
+    # print("key\tcol1\tcol2")
+    # print("---\t----\t----")
 
     try:
         rows = future.result()
     except Exception:
         log.exeception()
 
-    #for row in rows:
+    # for row in rows:
     #    print('\t'.join(row))
 
     session.execute("DROP KEYSPACE " + KEYSPACE)
     session.shutdown()
     cluster.shutdown()
+
 
 if __name__ == "__main__":
     for i in range(0, 1000):

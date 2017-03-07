@@ -1,17 +1,17 @@
 #!/usr/bin/env python
 
-import threading
-import time
-import timeit
 import logging
+import threading
+import timeit
 
-logging.basicConfig(level=logging.DEBUG,
-                    format='(%(threadName)-10s) %(message)s',)
+import time
+
+logging.basicConfig(level=logging.DEBUG, format='(%(threadName)-10s) %(message)s', )
+
 
 class MyThreadWithArgs(threading.Thread):
-
-    def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs=None, verbose=None):
+    def __init__(self, group=None, target=None, name=None
+                 , args=(), kwargs=None, verbose=None):
         threading.Thread.__init__(self, group=group, target=target, name=name)
         self.args = args
         self.kwargs = kwargs
@@ -21,7 +21,7 @@ class MyThreadWithArgs(threading.Thread):
 
     def run(self):
         logging.debug('running with %s and %s', self.args, self.kwargs)
-        while ((timeit.default_timer() - self.start_time) < self.timeout):
+        while (timeit.default_timer() - self.start_time) < self.timeout:
             current_time = timeit.default_timer()
             logging.debug('[{}] Executing run with args: {} & kwargs: {}'
                           .format(timeit.default_timer()
@@ -39,7 +39,7 @@ class MyThreadWithArgs(threading.Thread):
 
 threads_list = list()
 for i in range(10):
-    t = MyThreadWithArgs(args=(i,), kwargs={'a':'A', 'b':'B'})
+    t = MyThreadWithArgs(args=(i,), kwargs={'a': 'A', 'b': 'B'})
     t.setDaemon(True)
     t.start()
     threads_list.append(t)

@@ -1,19 +1,14 @@
 #!/usr/bin/env python
 
-import os
+import json
 import pexpect
 import re
-import sys
-import time
-from pprint import pprint
-import json
 import unittest as testcase
-#from ctf.framework import testcase
-from ctf.framework.logger import LOGGER
-#from thirdparty import simplejson as json
 from bson import json_util
+from ctf.framework.logger import LOGGER
 
 LOGGER.setLevel('DEBUG')
+
 
 class ESAClientHarness(object):
     """Harness for the ESA Client interactive command-line shell.
@@ -31,7 +26,7 @@ class ESAClientHarness(object):
 
     PROGRAM = 'ESAClient'
     PROMPT_PATTERN = r'carlos.*jmx.*>'
-    #PROMPT_PATTERN = '>'
+    # PROMPT_PATTERN = '>'
     PEXPECT_TIMEOUT = 5
 
     def __init__(p, binary_path=None):
@@ -39,7 +34,7 @@ class ESAClientHarness(object):
         cmd = binary_path + ' --profiles carlos'
 
         p.__pexpect = pexpect.spawn(cmd)
-        p.__fout = open('esaclient.log','wb')
+        p.__fout = open('esaclient.log', 'wb')
         p.__pexpect.logfile = p.__fout
         p.__pexpect.expect(p.PROMPT_PATTERN, 25)
 
@@ -68,10 +63,10 @@ class ESAClientHarness(object):
 
             if 'script' in cmd:
                 if 'carlos-connect' in cmd:
-                    data = output[output.index('Remote') : ]
+                    data = output[output.index('Remote'):]
 
             if 'carlos-connect' in cmd:
-                data = output[output.index('Remote') : ]
+                data = output[output.index('Remote'):]
             elif 'epl-module-get' in cmd or 'query' in cmd:
                 # constructing JSON objects
                 r = re.compile("\r{")
@@ -115,7 +110,7 @@ class ESAClientHarness(object):
             value: list of amqp url or urls.
         """
         if value is None:
-            value = [ "amqp://esa.events?EventType=Event&Source=Test&IdField=id" ]
+            value = ["amqp://esa.events?EventType=Event&Source=Test&IdField=id"]
 
         if not isinstance(value, list):
             value = list(value)
@@ -145,7 +140,7 @@ class ESAClientHarness(object):
         return
 
     def verify_module_exists(p, module_name, output):
-        for k,v in output.iteritems():
+        for k, v in output.iteritems():
             print 'k: ', k
             print 'v: ', v
             if item['module']['identifier'] is module_name:
@@ -155,53 +150,53 @@ class ESAClientHarness(object):
 
 if __name__ == '__main__':
     p = ESAClientHarness()
-    #p.Exec('script /Users/bakhra/source/esa/python/ctf/esa/testdata/multi_esper_engines_test.py/MultiEsperEnginesTest/test_global_epl_module_rm/setup.cmds')
-    #output = p.Exec('epl-module-get')
-    #print '===='
-    #print output
-    #print '====='
-    #print p.verify_module_exists('test_global_epl_module_rm', output)
-    #output = p.Exec('epl-module-rm test_global_epl_module_rm')
-    #output = p.Exec('epl-module-get')
-    #print '===='
-    #print output
-    #print '====='
-    #print p.verify_module_exists('test_global_epl_module_rm', output)
+    # p.Exec('script /Users/bakhra/source/esa/python/ctf/esa/testdata/multi_esper_engines_test.py/MultiEsperEnginesTest/test_global_epl_module_rm/setup.cmds')
+    # output = p.Exec('epl-module-get')
+    # print '===='
+    # print output
+    # print '====='
+    # print p.verify_module_exists('test_global_epl_module_rm', output)
+    # output = p.Exec('epl-module-rm test_global_epl_module_rm')
+    # output = p.Exec('epl-module-get')
+    # print '===='
+    # print output
+    # print '====='
+    # print p.verify_module_exists('test_global_epl_module_rm', output)
     p.Exec('carlos-connect')
-    #p.Exec('cd source/mess')
-    #p.Exec('get .')
-    #p.Exec('epl-module-set --eplFile %s --debug true'
+    # p.Exec('cd source/mess')
+    # p.Exec('get .')
+    # p.Exec('epl-module-set --eplFile %s --debug true'
     #        % '/Users/bakhra/source/server-ready/python/ctf/corelation/testdata/forward_notification_test.py/ForwardNotificationCarlosTest/test_leaf_five_failures_forward/test.epl')
-    #p.Exec('epl-module-get')
-    #p.Exec('cd pipeline/mess')
-    #p.Exec('set Enabled --value true')
-    #p.Exec('invoke start')
-    #p.Exec('get .')
-    #p.Exec('cd ../../../alert/notifica')
-    #p.Exec('get .')
-    #p.Exec('notification-provider-set-forward distribution --exchange esa.csc --defaultHeaders \"esa.event.type=Event\" --type HEADERS --vhost \"/rsa/sa\"')
-    #p.Exec('notification-instance-set-forward forwardInstance')
-    #p.Exec('notification-provider-get')
-    #p.Exec('notification-instance-get')
+    # p.Exec('epl-module-get')
+    # p.Exec('cd pipeline/mess')
+    # p.Exec('set Enabled --value true')
+    # p.Exec('invoke start')
+    # p.Exec('get .')
+    # p.Exec('cd ../../../alert/notifica')
+    # p.Exec('get .')
+    # p.Exec('notification-provider-set-forward distribution --exchange esa.csc --defaultHeaders \"esa.event.type=Event\" --type HEADERS --vhost \"/rsa/sa\"')
+    # p.Exec('notification-instance-set-forward forwardInstance')
+    # p.Exec('notification-provider-get')
+    # p.Exec('notification-instance-get')
 
     output = p.Exec('enrichment-data-query --query \"select * from IPUserMap\" '
                     + 'ip_user_map')
-    #LOGGER.debug('==== output: %s', output[1])
-    #pprint(output[1])
-    #json_output = json.loads(output[1])
+    # LOGGER.debug('==== output: %s', output[1])
+    # pprint(output[1])
+    # json_output = json.loads(output[1])
     json_formatted_doc = json_util.dumps(output, sort_keys=False, indent=4
                                          , default=json_util.default)
     LOGGER.debug('==== JSON output: %s', json_formatted_doc)
-    #p.assertIn('query_response', json_output.keys())
-    #pprint(json_formatted_doc)
+    # p.assertIn('query_response', json_output.keys())
+    # pprint(json_formatted_doc)
     testcase.assertIn('Fred', json_formatted_doc)
-    #LOGGER.debug('==========\n', json_output[0])
+    # LOGGER.debug('==========\n', json_output[0])
 
-    #LOGGER.info(json_output[0]['query_response'])
-    #print type(json_output[0]['query_response'])
-    #p.assertEqual(expected_cnt, actual_cnt)
+    # LOGGER.info(json_output[0]['query_response'])
+    # print type(json_output[0]['query_response'])
+    # p.assertEqual(expected_cnt, actual_cnt)
 
-    #p.Exec('enrichment-data-reset ip_user_map')
-    #p.Exec('enrichment-data-query --query \"select * from IPUserMap\" ip_user_map')
+    # p.Exec('enrichment-data-reset ip_user_map')
+    # p.Exec('enrichment-data-query --query \"select * from IPUserMap\" ip_user_map')
 
     p.Terminate()
