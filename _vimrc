@@ -161,7 +161,7 @@ set backspace=indent,eol,start
 " Optimize for fast terminal connections
 set ttyfast
 " Show “invisible” characters
-set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
+"set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
 set list
 
 set laststatus=1
