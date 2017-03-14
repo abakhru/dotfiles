@@ -1,9 +1,0 @@
-cd /opt/sun/comms/messaging64/examples/rbac
-cp RtSJSMessagingServer.html /usr/lib/help/profiles/locale/C/
-cp /etc/security/prof_attr /etc/security/prof_attr.bk
-cp /etc/security/exec_attr /etc/security/exec_attr.bk
-more prof_attr.example >> /etc/security/prof_attr
-more exec_attr.example >> /etc/security/exec_attr
-/opt/sun/comms/messaging64/sbin/configutil -o local.rbac -v 1
-
-usermod -P 'Sun Java System Messaging Server' `/opt/sun/comms/messaging64/sbin/configutil -o local.serveruid`

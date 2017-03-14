@@ -1,7 +1,0 @@
-# Set up conversion mapping
-if exists_mapping("PORT_ACCESS") {
-  m = get_mapping("PORT_ACCESS");
-  write "=== previous mapping:" . m;
-}
-replace_mapping("PORT_ACCESS", ["*|*|*|*|*",
-				"$C$:A$[/opt/sun/comms/messaging64/lib/check_metermaid.so,throttle,default,$3]$N421$ Connection$ declined$ at$ this$ time$E" . m]);

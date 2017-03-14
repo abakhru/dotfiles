@@ -1,7 +1,0 @@
-smfi_chgheader
-X-Milter-QA1 header shall be deleted
-X-Milter-QA2 header shall be deleted
-X-Milter-QA3 header shall be deleted
-X-Milter-QA4 header shall be deleted
-X-Milter-QA5 header shall be deleted
-X-Milter-QA6 header shall be deleted

@@ -1,3 +1,0 @@
-requests==2.5.0
--r graphs.txt
--r logging.txt

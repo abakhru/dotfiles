@@ -1,7 +1,0 @@
-/usr/dist         -ro,intr        mf-sfbay-03.sfbay,mf-sfbay-04.sfbay,mf-sfbay-02.sfbay:/usr/dist
-/h              -ro,intr        nsshare:/space/h
-/tools/ns  -ro,intr        nsshare:/tools/ns
-/tools/ns-arch  -ro,intr        jesbuild.us.oracle.com:/export/nstools/ns-arch
-/share/builds/components   -ro,intr        nsshare:/share/builds/components
-/share/builds/integration  -ro,intr        jesbuild.us.oracle.com:/export/builds/integration
-/share/builds/products   -ro,intr          jesbuild.us.oracle.com:/export/builds/products
