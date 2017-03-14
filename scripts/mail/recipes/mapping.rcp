@@ -1,9 +1,0 @@
-# Set up mapping
-if exists_mapping("MAPPING_NAME") {
-  m = get_mapping("MAPPING_NAME");
-}
-else {
-  m = [];
-}
-
-replace_mapping("MAPPING_NAME",[m . "MAPPING_RULE"]);

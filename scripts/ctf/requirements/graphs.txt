@@ -1,2 +1,0 @@
-#pyparsing==1.5.7
-#pydot==1.0.28

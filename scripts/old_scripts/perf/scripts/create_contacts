@@ -1,7 +1,0 @@
-#!/bin/sh
-# create contacts
-
-CLIENTJARS=/export/home/stress/client
-classpath=$CLIENTJARS/collab-service.jar:$CLIENTJARS/jso.jar:$CLIENTJARS/log4j.jar:$CLIENTJARS/jaxen-core.jar:$CLIENTJARS/saxpath.jar:$CLIENTJARS/xp.jar
-jargs="-Xmx256m"
-/usr/jdk/latest/bin/java -cp $classpath org.netbeans.lib.collab.tools.Populate $1

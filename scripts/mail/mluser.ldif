@@ -1,6 +1,0 @@
-dn: o=mlusers
-changetype: modify
-add: aci
-aci: (target="ldap:///o=mlusers")
-  (targetattr="*")
-  (version 3.0; acl "Messaging Server End User Adminstrator Write Access Rights - product=ms7u4,class=installer,num=102,version=1"; allow (all) groupdn="ldap:///cn=Messaging End User Administrators Group, ou=Groups,o=usergroup";) 
