@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# cd ..; git clone https://github.com/robbyrussell/oh-my-zsh.git; cd -
+cd ..; git clone https://github.com/robbyrussell/oh-my-zsh.git; cd -
 
 function link_file {
     source="${PWD}/$1"

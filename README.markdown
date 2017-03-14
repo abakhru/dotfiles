@@ -3,6 +3,7 @@
     my screen configuration
 
 ## Instructions
+
 ### Creating source files
 Any file which matches the shell glob `_*` will be linked into `$HOME` as a symlink with the first `_`  replaced with a `.`
 
@@ -31,4 +32,4 @@ Note that if there was not an original version, the installed links will not be 
 
 ## Requirements
 ### Shell
-* bash
+* zsh
