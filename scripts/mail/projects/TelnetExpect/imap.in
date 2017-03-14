@@ -1,6 +1,0 @@
-a login neo3 neo3
-b list "" *
-c select inbox
-d create folder1
-e list "" *
-f logout

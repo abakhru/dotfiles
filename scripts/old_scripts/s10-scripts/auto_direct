@@ -1,7 +1,0 @@
-# mountpoint		mount options	remote filesystem
-#
-/usr/local/packages     -ro stnfsrr1.us.oracle.com:/vol/local/x86/solaris/110/packages
-/usr/local/writeable    -rw stafas12.us.oracle.com:/vol/local/writeable
-/OracleProd             -ro stnfsrr1.us.oracle.com:/vol/local/x86/solaris/OracleProd
-/opt/SunProd            -ro stnfsrr1.us.oracle.com:/vol/local/x86/solaris/SunProd
-/pdp                    -rw stnfsrr1.us.oracle.com:/vol/local/solaris/pdp_solaris

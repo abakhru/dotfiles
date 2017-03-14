@@ -1,8 +1,0 @@
-for i in `cat ./packagelist`
-do  
-  pkginfo $i 2>/dev/null
-  if [ $? -eq 0 ] 
-  then 
-    pkgrm -n -a mydefault $i
-  fi 
-done 

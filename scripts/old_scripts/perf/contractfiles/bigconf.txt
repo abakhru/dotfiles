@@ -1,1 +1,0 @@
-im-niag1.india.sun.com:5222 1500001 1000 -bigconferences -noinvite 1500099@india.sun.com -noupdates -log ./logs/big-conf -stats:period 5 -wait 1 10 -occ_thr_mess_fire 20000

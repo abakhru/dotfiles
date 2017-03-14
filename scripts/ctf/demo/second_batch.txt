@@ -1,7 +1,0 @@
-{"event_computer":"Corpncdrmv13.corp.emc.com","id":"4672","event_time":1457715097000,"username":"VWSEHCL15-020$","event_source_id":"28","ip_source":"2.2.2.2","alias_host":"4554mb.ru"}
-{"event_computer":"CORPCASCV8.corp.emc.com","id":"4634","event_time":1457714601000,"username":"guzmad1","event_source_id":"210","ip_source":"2.2.2.2","alias_host":"4554mb.ru"}
-{"event_computer":"CORPCASCV5.corp.emc.com","id":"4662","event_time":1457713356000,"username":"CORPCASCV5$","event_source_id":"211","ip_source":"2.2.2.2","alias_host":"4554mb.ru"}
-{"event_computer":"corpmahov8.corp.emc.com","id":"4624","event_time":1457715147000,"username":"svc_vcdur03","event_source_id":"212","ip_source":"2.2.2.2","alias_host":"4554mb.ru"}
-{"event_computer":"CORPNCAP3.corp.emc.com","id":"4624","event_time":1457715532000,"username":"MX24CL02$","event_source_id":"213","ip_source":"2.2.2.2","alias_host":"4554mb.ru"}
-{"event_computer":"CORPCASCV5.corp.emc.com","id":"4624","event_time":1457713348000,"username":"WCX-MALEDEE$","event_source_id":"214","ip_source":"2.2.2.2","alias_host":"4554mb.ru"}
-{"event_computer":"Corpncdrmv14.corp.emc.com","id":"4662","event_time":1457714844000,"username":"CORPNCDRMV14$","event_source_id":"215","ip_source":"2.2.2.2","alias_host":"4554mb.ru"}

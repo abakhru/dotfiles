@@ -1,4 +1,0 @@
-platform     -ro,intr,timeo=600,actimeo=1200,rsize=32768,wsize=32768    \
-                  strfas04.us.oracle.com:/vol/ade_infra/prod/SOLARIS.X64
-generic     -ro,intr,timeo=600,actimeo=1200,rsize=32768,wsize=32768    \
-                  strfas04.us.oracle.com:/vol/ade_infra/prod/GENERIC

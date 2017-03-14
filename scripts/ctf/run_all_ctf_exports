@@ -1,7 +1,0 @@
-export ANA_CIT_TEST=true
-export CTF_DEBUG=1
-export JACOCO=true
-export JENKINS_HOME=1
-export REPO_PATH=~/src/launch-esa
-export PYTHONPATH=~/src/automation/unite
-export TEST_MODULES_ANA=aggregation_score_test,amqp_test,basic_test,cardinality_score_test,conditional_cardinality_useragent_test,failed_access_test,logon_type_test,new_device_score_test,new_device_service_score_test,new_domain_score_test,new_server_score_test,periodicity_score_test,rectifier1_score_test,rectifier2_score_test,session_snapshots_test,shared_table_test,sliding_window_cardinality_score_test,streams_test,transformations_test,vpn_authentication_test,whois_test
