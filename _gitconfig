@@ -1,6 +1,6 @@
 [user]
-	name = amit
-	email = amit@area1.com
+	name = amit-bakhru
+	email = amit@area1security.com
 [branch]
         autosetuprebase=always
 [push]
@@ -94,3 +94,5 @@
     sslverify = false
 [credential]
 	helper = osxkeychain
+[help]
+	autocorrect = 1

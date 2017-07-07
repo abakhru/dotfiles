@@ -48,3 +48,6 @@
 
 #Send command to all terminals in a screen session
 #<ctrl+a>:at "#" stuff "echo hello world^M"
+
+export NVM_DIR="/Users/amit/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
