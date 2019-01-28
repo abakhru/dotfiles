@@ -120,9 +120,8 @@ export DOCKER_TLS_VERIFY=1
 export COMPOSE_API_VERSION=auto
 export ZPLUG_HOME=/usr/local/opt/zplug
 export GITHUB_USER=amit-bakhru
-export GITHUB_TOKEN=0d52a665e301ed13dafe719fca986c58ed8657f5
 
-# exec zsh
+ #exec zsh
 alias antnn='ant -Dskip.download=true -Divy.has.resolved=true'
 export HOMEBREW_GITHUB_API_TOKEN='e6d02dedc0bce928e7e2c0724a4b16b52e9068b9'
 export GOPATH="/Users/amit/go/pkg"
