@@ -1,6 +1,7 @@
 [user]
 	name = amit-bakhru
 	email = amit@area1security.com
+	signingkey = 68C5595E
 [branch]
         autosetuprebase=always
 [push]
@@ -96,3 +97,10 @@
 	helper = osxkeychain
 [help]
 	autocorrect = 1
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[commit]
+	gpgsign = false
