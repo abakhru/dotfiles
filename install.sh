@@ -39,7 +39,12 @@ else
     done
 fi
 
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-brew install npm zsh tmux git vim screen
-brew cask install chef java
-npm install -g diff-so-fancy
+#/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+#brew install npm zsh tmux git vim screen
+#brew cask install chef java
+#npm install -g diff-so-fancy
+cd ~
+git clone https://github.com/gpakosz/.tmux.git
+ln -s -f .tmux/.tmux.conf
+cp .tmux/.tmux.conf.local .
+cp _tmux.conf.local ~/.tmux.conf.local
