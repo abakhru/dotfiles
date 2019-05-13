@@ -1,13 +1,13 @@
 [user]
-	name = amit-bakhru
-	email = amit@area1security.com
-	signingkey = 68C5595E
+    name = amit-bakhru
+    email = amit@area1security.com
+    signingkey = 68C5595E
 [branch]
         autosetuprebase=always
 [push]
         default = current
-[remote "origin"]
-       fetch = +refs/heads/*:refs/remotes/origin/*
+#[remote "origin"]
+       #fetch = +refs/heads/*:refs/remotes/origin/*
 
 [alias]
         up = pull origin
