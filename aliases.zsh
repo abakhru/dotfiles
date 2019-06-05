@@ -97,6 +97,8 @@ alias launchesa='`find o |grep esaserver/cmd |tail -1 |xargs more`'
 # https://kartar.net/2014/03/useful-docker-bash-functions-and-aliases/
 # ------------------------------------
 
+alias d='docker'
+
 # Get latest container ID
 alias dl="docker ps -l -q"
 
@@ -140,4 +142,6 @@ dbu() { docker build -t=$1 .; }
 dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
 
 # Bash into running container
-dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
+#dbash() { docker exec -it $(docker ps -aqf "name=$1") bash; }
+dbash() { docker exec -it $1 bash; }
+kbash() { kubectl exec -it $1 bash; }
