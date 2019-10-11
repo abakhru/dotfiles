@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd ..; git clone https://github.com/robbyrussell/oh-my-zsh.git; cd -
+curl -L git.io/antigen > antigen.zsh
 
 function link_file {
     source="${PWD}/$1"
@@ -48,3 +48,5 @@ git clone https://github.com/gpakosz/.tmux.git
 ln -s -f .tmux/.tmux.conf
 cp .tmux/.tmux.conf.local .
 cp _tmux.conf.local ~/.tmux.conf.local
+
+#antigen
