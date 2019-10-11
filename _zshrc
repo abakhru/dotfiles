@@ -8,8 +8,7 @@ export ZSH=$HOME/.oh-my-zsh
 #ZSH_THEME='terminalparty'
 #ZSH_THEME='nanotech'
 #ZSH_THEME='afowler'
-ZSH_THEME='jaischeema'
-#ZSH_THEME='spaceship'
+#ZSH_THEME='jaischeema'
 #ZSH_THEME='random'
 #ZSH_THEME='wezm+'
 #ZSH_THEME='pygmalion'
@@ -21,68 +20,15 @@ ZSH_THEME='jaischeema'
 # Example aliases
 alias zconf='vim ~/.zshrc'
 alias reload='. ~/.zshrc'
-# alias ohmyzsh='mate ~/.oh-my-zsh'
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE='true'
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE='true'
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS='true'
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE='true'
-
-# Uncomment the following line to disable command auto-correction.
-# DISABLE_CORRECTION='true'
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS='true'
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY='true'
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: 'mm/dd/yyyy'|'dd.mm.yyyy'|'yyyy-mm-dd'
-# HIST_STAMPS='mm/dd/yyyy'
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git tmux brew osx tmux ssh-agent python sudo docker docker-aliases kubectl common-aliases aws zsh-syntax-highlighting zsh-autosuggestions)
-
-source $ZSH/oh-my-zsh.sh
-
-PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
+#antigen
+source ~/src/dotfiles/antigen.zsh
+antigen reset
+# Load Antigen configurations
+antigen init ~/.antigenrc
 
 # User configuration
-
-export PATH='/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin'
-# export MANPATH='/usr/local/man:$MANPATH'
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS='-arch x86_64'
+PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
 
 # ssh
 export SSH_KEY_PATH='~/.ssh/id_rsa'
@@ -95,17 +41,9 @@ export JDK_HOME=$JAVA_HOME
 #export PIP_REQUIRE_VIRTUALENV=true
 # cache pip-installed packages to avoid re-downloading
 export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
-#export HTTPS_PROXY=http://emc-proxy1.rsa.lab.emc.com:82
-#export HTTP_PROXY=$HTTPS_PROXY
-#export http_proxy=$HTTPS_PROXY
-#export https_proxy=$HTTPS_PROXY
-#export npm_config_https_proxy=$HTTPS_PROXY
-#export npm_config_proxy=$HTTPS_PROXY
-#export no_proxy=$NO_PROXY
 export PEXPECT_START_TIMEOUT=180
 export PYTHONSTARTUP=/Users/amit/.pythonrc.py
 export CALIBER_DEBUG=1
-source /Users/amit/src/dotfiles/aliases.zsh
 
 #alias gall="for i in `find ~/src -type d -depth 5` ; do cd $i; git pull origin master; cd -; done"
 #alias pipall="for i in `pip list -o --format legacy|awk '{print $1}'` ; do pip install -U $i; done"
@@ -114,18 +52,14 @@ export NVM_DIR="$HOME/.nvm"
 source "/usr/local/opt/nvm/nvm.sh"
 
 # docker things
-export DOCKER_HOST=tcp://192.168.99.100:2376
-export DOCKER_CERT_PATH=/Users/amit/.docker/machine/machines/default
-export DOCKER_TLS_VERIFY=1
 export COMPOSE_API_VERSION=auto
-export ZPLUG_HOME=/usr/local/opt/zplug
-export GITHUB_USER=amit-bakhru
 
- #exec zsh
+# exec zsh
 alias antnn='ant -Dskip.download=true -Divy.has.resolved=true'
 export HOMEBREW_GITHUB_API_TOKEN='e6d02dedc0bce928e7e2c0724a4b16b52e9068b9'
-export GOPATH="/Users/amit/go/pkg"
-export GOROOT="/Users/amit/go"
+export GOPATH="/Users/amit/go"
+#export GOROOT="/Users/amit/go"
+export PATH="$HOME/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:$GOPATH/bin"
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/amit/src/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/amit/src/google-cloud-sdk/path.zsh.inc'; fi
@@ -137,16 +71,25 @@ alias ping='prettyping --nolegend'
 alias cat='bat'
 alias preview="fzf --preview 'bat --color \"always\" {}'"
 # add support for ctrl+o to open selected file in VS Code
-export FZF_DEFAULT_OPTS="--bind='ctrl-o:execute(code {})+abort'"
 alias top='htop'
 alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
 alias l='exa --long --header --git -a -s modified'
 alias top='glances'
 
 function jlog() {
-  less +F $@ |jq . -r
+  less +F -r $@ |jq . -r
 }
+eval "$(lua ~/src/z.lua/z.lua --init zsh enhanced)"
+eval "$(rbenv init -)"
+alias zc='z -c'      # restrict matches to subdirs of $PWD
+alias zz='z -i'      # cd with interactive selection
+alias zf='z -I'      # use fzf to select in multiple matches
+alias zb='z -b'      # quickly cd to the parent directory
 
-# Set Spaceship ZSH as a prompt
-autoload -U promptinit; promptinit
-prompt spaceship
+#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+#unset -f d
+source /Users/amit/src/dotfiles/aliases.zsh
+source $HOME/.cargo/env
+
+. ~/.poetry/env
+alias poetry_shell='source "$(dirname $(poetry run which python))/activate"'
