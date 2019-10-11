@@ -23,7 +23,6 @@ alias reload='. ~/.zshrc'
 
 #antigen
 source ~/src/dotfiles/antigen.zsh
-#rm ~/.antigen/.lock
 antigen reset
 # Load Antigen configurations
 antigen init ~/.antigenrc
@@ -54,8 +53,6 @@ source "/usr/local/opt/nvm/nvm.sh"
 
 # docker things
 export COMPOSE_API_VERSION=auto
-export GITHUB_USER=amit-bakhru
-export GITHUB_TOKEN=0d52a665e301ed13dafe719fca986c58ed8657f5
 
 # exec zsh
 alias antnn='ant -Dskip.download=true -Divy.has.resolved=true'
@@ -94,7 +91,5 @@ alias zb='z -b'      # quickly cd to the parent directory
 source /Users/amit/src/dotfiles/aliases.zsh
 source $HOME/.cargo/env
 
-#alias poetry_activate='zsh --rcfile <(echo ". \"$HOME/.zshrc\"; . $(dirname $(poetry run which python))/activate")'
-#alias poetry_shell=". \$(dirname \$(poetry run which python))/activate"
 . ~/.poetry/env
 alias poetry_shell='source "$(dirname $(poetry run which python))/activate"'
