@@ -45,8 +45,8 @@ export PEXPECT_START_TIMEOUT=180
 export PYTHONSTARTUP=/Users/amit/.pythonrc.py
 export CALIBER_DEBUG=1
 
-#alias gall="for i in `find ~/src -type d -depth 5` ; do cd $i; git pull origin master; cd -; done"
-#alias pipall="for i in `pip list -o --format legacy|awk '{print $1}'` ; do pip install -U $i; done"
+alias gall='for i in \$(find ~/src -type d -depth 1); do (echo "==== Updating \$i ===="; cd \$i; git stash && g p && gfa &&  g stash pop; cd -); done'
+alias pipall="for i in \$(pip list -o --format columns|awk '{print \$1}') ; do pip install -U \$i; done"
 export EDITOR="vim"
 export NVM_DIR="$HOME/.nvm"
 source "/usr/local/opt/nvm/nvm.sh"
@@ -58,7 +58,7 @@ export COMPOSE_API_VERSION=auto
 alias antnn='ant -Dskip.download=true -Divy.has.resolved=true'
 export HOMEBREW_GITHUB_API_TOKEN='e6d02dedc0bce928e7e2c0724a4b16b52e9068b9'
 export GOPATH="/Users/amit/go"
-#export GOROOT="/Users/amit/go"
+export GOROOT="/Users/amit/go"
 export PATH="$HOME/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:$GOPATH/bin"
 
 # The next line updates PATH for the Google Cloud SDK.
@@ -92,4 +92,12 @@ source /Users/amit/src/dotfiles/aliases.zsh
 source $HOME/.cargo/env
 
 . ~/.poetry/env
-alias poetry_shell='source "$(dirname $(poetry run which python))/activate"'
+
+#export GITHUB_USER=amit-bakhru
+#export GITHUB_TOKEN=0d52a665e301ed13dafe719fca986c58ed8657f5
+export PATH="/usr/local/opt/python@3.8/bin:$PATH"
+#export LDFLAGS="-L/usr/local/opt/python@3.8/lib"
+#export PKG_CONFIG_PATH="/usr/local/opt/python@3.8/lib/pkgconfig"
+
+source $(brew --prefix)/share/zsh/site-functions/_poetry
+source "/Users/amit/.local/share/dephell/_dephell_zsh_autocomplete"
