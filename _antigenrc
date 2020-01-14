@@ -7,6 +7,7 @@ antigen theme jaischeema
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-history-substring-search
 # Load bundles from the default repo (oh-my-zsh).
 antigen bundle git
 antigen bundle docker
@@ -17,10 +18,9 @@ antigen bundle tmux
 antigen bundle ssh-agent
 antigen bundle python
 antigen bundle sudo
-#antigen bundle docker-aliases
+antigen bundle akarzim/zsh-docker-aliases
 antigen bundle kubectl
 antigen bundle common-aliases
 antigen bundle aws
-#antigen bundle poetry
 # Tell Antigen that you're done.
 antigen apply

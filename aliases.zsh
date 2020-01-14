@@ -127,7 +127,7 @@ alias dex="docker exec -i -t"
 dstop() { docker stop $(docker ps -a -q); }
 
 # Remove all containers
-drm() { docker rm $(docker ps -a -q); }
+#drm() { docker rm $(docker ps -a -q); }
 
 # Stop and Remove all containers
 alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
@@ -136,7 +136,7 @@ alias drmf='docker stop $(docker ps -a -q) && docker rm $(docker ps -a -q)'
 dri() { docker rmi $(docker images -q); }
 
 # Dockerfile build, e.g., $dbu tcnksm/test 
-dbu() { docker build -t=$1 .; }
+#dbu() { docker build -t=$1 .; }
 
 # Show all alias related docker
 dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/['|\']//g" | sort; }
@@ -240,4 +240,14 @@ function start-caliber-docker() {
 function pyclean() {
     for i in "*.py[co]" "[.]*cache" "*.egg*" "build" "dist*" "*test-reports" "[.]coverage*" "coverage*" "o" "__pycache__";
     do find . -name "${i}" -exec rm -rv {} + ; done
+}
+
+function listening() {
+    if [ $# -eq 0 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P
+    elif [ $# -eq 1 ]; then
+        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color $1
+    else
+        echo "Usage: listening [pattern]"
+    fi
 }
