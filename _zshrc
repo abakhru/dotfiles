@@ -89,7 +89,7 @@ alias zb='z -b'      # quickly cd to the parent directory
 #[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 #unset -f d
 source /Users/amit/src/dotfiles/aliases.zsh
-source $HOME/.cargo/env
+#source $HOME/.cargo/env
 
 . ~/.poetry/env
 
@@ -101,3 +101,10 @@ export PATH="/usr/local/opt/python@3.8/bin:$PATH"
 
 source $(brew --prefix)/share/zsh/site-functions/_poetry
 source "/Users/amit/.local/share/dephell/_dephell_zsh_autocomplete"
+function sleep-in() {
+  local minutes=$1
+  local datetime=`date -v+${minutes}M +"%m/%d/%y %H:%M:%S"`
+  sudo pmset schedule sleep "$datetime"
+}
+export PATH="/usr/local/opt/python@3.8/bin:$PATH"
+ssh-add ~/.ssh/kognos-systest_id_rsa
