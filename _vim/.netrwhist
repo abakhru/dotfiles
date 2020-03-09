@@ -1,7 +1,8 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_cnt =6
 let g:netrw_dirhist_1='/Users/amit/src/blackbox/build/lib/blackbox'
 let g:netrw_dirhist_2='/Users/amit/src/blackbox/build/lib/blackbox/apps'
 let g:netrw_dirhist_3='/Users/amit/src/remediation/.git'
 let g:netrw_dirhist_4='/Users/amit/src/a1sqa/productlib/microservice/respond'
-let g:netrw_dirhist_5='/Users/amit/.antigen'
+let g:netrw_dirhist_5='/Users/amit/src/playground/caliber'
+let g:netrw_dirhist_6='/Users/amit/src/github.com/scratch/trials'
