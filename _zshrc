@@ -1,111 +1,142 @@
 # Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+export ZSH=${HOME}/.oh-my-zsh
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to 'random', it'll load a random theme each
-# time that oh-my-zsh is loaded.
-#ZSH_THEME='terminalparty'
-#ZSH_THEME='nanotech'
-#ZSH_THEME='afowler'
-#ZSH_THEME='jaischeema'
-#ZSH_THEME='random'
-#ZSH_THEME='wezm+'
-#ZSH_THEME='pygmalion'
-#ZSH_THEME='sporty_256'
-#ZSH_THEME='wedisagree'
-#ZSH_THEME='dracula'
-#ZSH_THEME='honukai'
-
-# Example aliases
-alias zconf='vim ~/.zshrc'
-alias reload='. ~/.zshrc'
-
-#antigen
-source ~/src/dotfiles/antigen.zsh
-antigen reset
-# Load Antigen configurations
-antigen init ~/.antigenrc
-
-# User configuration
-PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
-
-# ssh
-export SSH_KEY_PATH='~/.ssh/id_rsa'
-#export SSH_AUTH_SOCK=$(find /tmp/ssh-* -user `whoami` -name agent\* -printf '%T@ %p\n' 2>/dev/null | sort -k 1nr | sed 's/^[^ ]* //' | head -n 1)
-export REPO_PATH=~/src/
-export PYTHONPATH=~/src/caliber
-export JAVA_HOME=$(/usr/libexec/java_home)
-export JDK_HOME=$JAVA_HOME
-# pip should only run if there is a virtualenv currently activated
-#export PIP_REQUIRE_VIRTUALENV=true
-# cache pip-installed packages to avoid re-downloading
-export PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
-export PEXPECT_START_TIMEOUT=180
-export PYTHONSTARTUP=~/.pythonrc.py
-export CALIBER_DEBUG=1
-
-alias gall='for i in \$(find ~/src -type d -depth 1); do (echo "==== Updating \$i ===="; cd \$i; git stash && g p && gfa &&  g stash pop; cd -); done'
-alias pipall="for i in \$(pip list -o --format columns|awk '{print \$1}') ; do pip install -U \$i; done"
-export EDITOR="vim"
-export NVM_DIR="$HOME/.nvm"
-source "/usr/local/opt/nvm/nvm.sh"
-
-# docker things
-export COMPOSE_API_VERSION=auto
-
-# exec zsh
-alias antnn='ant -Dskip.download=true -Divy.has.resolved=true'
-export HOMEBREW_GITHUB_API_TOKEN='e6d02dedc0bce928e7e2c0724a4b16b52e9068b9'
-export GOPATH=~/go
-export GOROOT=~/go
-export PATH="$HOME/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:$GOPATH/bin"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '~/src/google-cloud-sdk/path.zsh.inc' ]; then source '~/src/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '~/src/google-cloud-sdk/completion.zsh.inc' ]; then source '~/src/google-cloud-sdk/completion.zsh.inc'; fi
-export TF_CPP_MIN_LOG_LEVEL=2
-alias ping='prettyping --nolegend'
-alias cat='bat'
-alias preview="fzf --preview 'bat --color \"always\" {}'"
-# add support for ctrl+o to open selected file in VS Code
-alias top='htop'
-alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
-alias l='exa --long --header --git -a -s modified'
-alias top='glances'
-
-function jlog() {
-  less +F -r $@ |jq . -r
+function custom_exports() {
+  # User configuration
+  export PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
+  export REPO_PATH=${HOME}/src/
+  export PYTHONPATH=${HOME}/src/caliber
+  export PIP_DOWNLOAD_CACHE=${HOME}/.pip/cache
+  export PEXPECT_START_TIMEOUT=180
+  export PYTHONSTARTUP=${HOME}/.pythonrc.py
+  export CALIBER_DEBUG=1
+  export EDITOR="vim"
+  export TF_CPP_MIN_LOG_LEVEL=2
+  # docker things
+  export COMPOSE_API_VERSION=auto
+  export HOMEBREW_GITHUB_API_TOKEN='e6d02dedc0bce928e7e2c0724a4b16b52e9068b9'
+  export GOPATH=${HOME}/go
+  export GOROOT=${HOME}/go
+  if [ "$(uname)" == "Darwin" ]; then
+    export JAVA_HOME=$(/usr/libexec/java_home)
+    export JDK_HOME=${JAVA_HOME}
+    export PATH="${HOME}/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/usr/local/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:${GOPATH}/bin"
+  fi
+  if [ "$(uname)" == "Linux" ]; then
+    export PATH="/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin"
+  fi
+  if [ -d "/usr/local/opt/python@3.8/" ]; then export PATH="/usr/local/opt/python@3.8/bin:${PATH}"; fi
 }
-eval "$(lua ~/src/z.lua/z.lua --init zsh enhanced)"
-eval "$(rbenv init -)"
-alias zc='z -c'      # restrict matches to subdirs of $PWD
-alias zz='z -i'      # cd with interactive selection
-alias zf='z -I'      # use fzf to select in multiple matches
-alias zb='z -b'      # quickly cd to the parent directory
 
-#[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-#unset -f d
-#source $HOME/.cargo/env
+function custom_aliases() {
+  alias gall='for i in \$(find ${HOME}/src -type d -depth 1); do (echo "==== Updating \$i ===="; cd \$i; git stash && g p && gfa &&  g stash pop; cd -); done'
+  alias pipall="for i in \$(pip list -o --format columns|awk '{print \$1}') ; do pip install -U \$i; done"
+  alias zconf='vim ${HOME}/.zshrc'
+  alias reload='. ${HOME}/.zshrc'
+  alias antnn='ant -Dskip.download=true -Divy.has.resolved=true'
+  alias ping='prettyping --nolegend'
+  alias cat='bat'
+  alias preview="fzf --preview 'bat --color \"always\" {}'"
+  alias top='htop'
+  alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
+  alias l='exa --long --header --git -a -s modified'
+  alias top='glances'
+  alias zc='z -c'      # restrict matches to subdirs of $PWD
+  alias zz='z -i'      # cd with interactive selection
+  alias zf='z -I'      # use fzf to select in multiple matches
+  alias zb='z -b'      # quickly cd to the parent directory
+  alias idea='open -a "$(\ls -dt /Applications/IntelliJ\ IDEA*|head -1)"'
+  . ${HOME}/src/dotfiles/aliases.zsh
+}
 
-source ~/src/dotfiles/aliases.zsh
-source $HOME/.cargo/env
+function enable_node() {
+  export NVM_DIR="$HOME/.nvm" && . "/usr/local/opt/nvm/nvm.sh"
+}
 
-. ~/.poetry/env
-alias poetry_shell='source "$(dirname $(poetry run which python))/activate"'
+function jlog() { less +F -r $@ |jq . -r }
 
-export PATH="/usr/local/opt/python@3.8/bin:$PATH"
-source $(brew --prefix)/share/zsh/site-functions/_poetry
-source "~/.local/share/dephell/_dephell_zsh_autocomplete"
-source ~/.zfunc/_poetry
-source ~/.local/share/dephell/_dephell_zsh_autocomplete
 function sleep-in() {
   local minutes=$1
   local datetime=`date -v+${minutes}M +"%m/%d/%y %H:%M:%S"`
   sudo pmset schedule sleep "$datetime"
 }
-export PATH="/usr/local/opt/python@3.8/bin:$PATH"
-for i in $(find ~/.ssh -type f -name '*_rsa'); do ssh-add $i; done
-alias idea='open -a "$(\ls -dt /Applications/IntelliJ\ IDEA*|head -1)"'
+
+function ssh_agent() {
+  export SSH_KEY_PATH='${HOME}/.ssh/id_rsa'
+  # export SSH_AUTH_SOCK=$(find /tmp/ssh-* -user `whoami` -name agent\* -printf '%T@ %p\n' 2>/dev/null | sort -k 1nr | sed 's/^[^ ]* //' | head -n 1)
+  for i in $(find ${HOME}/.ssh -type f -name '*_rsa'); do ssh-add $i; done
+}
+
+function antigen() {
+  if [ -f "${HOME}/src/dotfiles/antigen.zsh" ]; then
+  . ${HOME}/src/dotfiles/antigen.zsh
+  antigen use oh-my-zsh
+  # Load bundles from external repos.
+  antigen bundle zsh-users/zsh-completions
+  antigen bundle zsh-users/zsh-autosuggestions
+  antigen bundle zsh-users/zsh-syntax-highlighting
+  antigen bundle zsh-users/zsh-history-substring-search
+  # Load bundles from the default repo (oh-my-zsh).
+  antigen bundle git
+  antigen bundle docker
+  antigen bundle tmux
+  antigen bundle brew
+  antigen bundle osx
+  antigen bundle tmux
+  antigen bundle ssh-agent
+  antigen bundle python
+  antigen bundle sudo
+  antigen bundle pip
+  antigen bundle akarzim/zsh-docker-aliases
+  antigen bundle kubectl
+  antigen bundle common-aliases
+  antigen bundle aws
+  # Tell Antigen that you're done.
+  antigen apply
+  fi
+}
+
+function choose_theme() {
+  #ZSH_THEME='terminalparty'
+  #ZSH_THEME='nanotech'
+  #ZSH_THEME='afowler'
+  #ZSH_THEME='jaischeema'
+  # ZSH_THEME='random'
+  #ZSH_THEME='wezm+'
+  #ZSH_THEME='pygmalion'
+  #ZSH_THEME='sporty_256'
+  #ZSH_THEME='wedisagree'
+  #ZSH_THEME='dracula'
+  #ZSH_THEME='honukai'
+  antigen theme jaischeema
+  #antigen theme candy
+}
+
+function define_path() {
+  export PATH="/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin"
+  if [ "$(uname)" == "Darwin" ]; then
+    export PATH="${PATH}:/usr/local/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin"
+  fi
+  # if [ "$(uname)" == "Linux" ]; then ; fi
+  if [ -d "/usr/local/opt/python@3.8/" ]; then export PATH="/usr/local/opt/python@3.8/bin:${PATH}"; fi
+  if [ -d "${GOPATH}" ]; then export PATH="${PATH}:${GOPATH}/bin"; fi
+
+  # The next line updates PATH for the Google Cloud SDK.
+  if [ -f '${HOME}/google-cloud-sdk/path.zsh.inc' ]; then . '${HOME}/google-cloud-sdk/path.zsh.inc'; fi
+  # The next line enables shell command completion for gcloud.
+  if [ -f '${HOME}/google-cloud-sdk/completion.zsh.inc' ]; then . '${HOME}/google-cloud-sdk/completion.zsh.inc'; fi
+  if [ -f "${HOME}/.poetry/env" ]; then . ${HOME}/.poetry/env; fi
+  if [ -f "${HOME}/src/z.lua/z.lua" ]; then
+    eval "$(lua ${HOME}/src/z.lua/z.lua --init zsh enhanced)"
+  fi
+  eval "$(rbenv init -)"
+  if [ -f "${HOME}/.cargo/env" ]; then . ${HOME}/.cargo/env; fi
+}
+
+antigen
+choose_theme
+custom_exports
+custom_aliases
+ssh_agent
+enable_node
+define_path
