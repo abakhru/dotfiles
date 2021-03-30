@@ -81,7 +81,6 @@ alias tcpdump='tcpdump -qns 0 -X -r'
 alias ngrep='ngrep -q -I'
 alias fdgrep='find . -type f |xargs grep'
 alias pygrep="find . -type f -name '*.py'|xargs grep"
-alias ssh='ssh -AXYp 22 -l amit'
 alias s='screen -X screen'
 alias vncport='ps ww $(vncserver -list |tail -n +5 | sed -e s/^\\S\\+\\s\\+//) | tail -n +2 | sed -e s/^.*-rfbport\ // -e s/\\s.*$//'
 alias clean_pycs='find . -name "*.pyc" -exec rm {} \;'

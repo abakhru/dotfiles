@@ -156,11 +156,16 @@ function antigen() {
   fi
 }
 
-# init
+function a1saliases() {
+    alias kitchen-docker=’DOCKER_BUILDKIT=0 COOK_IN_DOCKER=1 kitchen’
+}
+
+init
 custom_exports
 choose_theme
-# antigen
+antigen
 ssh_agent
 enable_node
 custom_aliases
-# eval "$(starship init zsh)"
+eval "$(starship init zsh)"
+a1saliases
