@@ -33,22 +33,24 @@ function os_packages_install() {
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew install npm zsh tmux git vim htop ruby node
     brew cask install chef java
-  elif [ "$(uname -s)" = "Linux" ]; then
-    sudo -- sh -c "apt update && apt full-upgrade -y &&
-     apt install -y htop  vim tmux zsh node ruby git npm curl net-tools "
+  elif [ "$(awk -F= '/^NAME/{print $2}' /etc/os-release)" = "\"Ubuntu\"" ]; then
+    sudo -- sh -c "apt update && \
+    apt full-upgrade -y && \
+    apt install -y htop vim tmux zsh ruby git npm curl net-tools openssl pkg-config rbenv"
   fi
   (mkdir -p "${HOME}"/src || true)
-  if [ ! -d "${HOME}/src/ohmyzsh" ]; then
-    (cd ~/src && git clone https://github.com/ohmyzsh/ohmyzsh.git)
+  if [ ! -d "${HOME}/src/ohmyzsh" ]; then 
+    (cd "${HOME}"/src && git clone https://github.com/ohmyzsh/ohmyzsh.git)
   fi
-  ln -sf ~/src/ohmyzsh "${PWD}"/_oh-my-zsh
-  ln -sf ~/src/ohmyzsh "${HOME}"/.oh-my-zsh
-  npm install -g diff-so-fancy dockly
+  ln -sf "${HOME}"/src/ohmyzsh "${PWD}"/_oh-my-zsh
+  ln -sf "${HOME}"/src/ohmyzsh "${HOME}"/.oh-my-zsh
+  sudo npm install -g diff-so-fancy dockly
 }
 
 function rust_install() {
-  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-  (cargo install starship rustup bat ripgrep fzf prettyping bat ncdu exa procs fd-find topgrade grex cargo-update)
+  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  source "${HOME}"/.cargo/env
+  (cargo install starship bat ripgrep bat exa procs fd-find topgrade grex cargo-update)
 }
 
 function tmux_install() {
@@ -63,14 +65,14 @@ function sudo_access() {
 }
 
 function setup_git_repo() {
-    cd "${HOME}" && mkdir -p src && cd "${HOME}"/src
-    git clone git@github.com:abakhru/dotfiles.git
-    cd "${HOME}"/src/dotfiles
+  cd "${HOME}" && mkdir -p src && cd "${HOME}"/src
+  git clone https://github.com/abakhru/dotfiles.git
+  cd "${HOME}"/src/dotfiles
 }
 
-setup_git_repo
 os_packages_install
+setup_git_repo
 rust_install
 tmux_install
 setup_home_files
-antigen
+zsh
