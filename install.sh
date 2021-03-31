@@ -29,6 +29,9 @@ function setup_home_files() {
 }
 
 function os_packages_install() {
+  (mkdir -p "${HOME}"/src "${HOME}"/.ssh || true)
+  ssh-keyscan github.com >>"${HOME}"/.ssh/known_hosts
+
   if [ "$(uname -s)" = "Darwin" ]; then
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     brew install npm zsh tmux git vim htop ruby node
@@ -36,13 +39,13 @@ function os_packages_install() {
   elif [ "$(awk -F= '/^NAME/{print $2}' /etc/os-release)" = "\"Ubuntu\"" ]; then
     sudo -- sh -c "apt update && \
     apt full-upgrade -y && \
-    apt install -y htop vim tmux zsh ruby git npm curl net-tools openssl pkg-config rbenv"
+    apt install -y htop vim tmux zsh ruby git npm curl net-tools openssl pkg-config rbenv \
+    python3 python3-venv"
   fi
-  (mkdir -p "${HOME}"/src || true)
-  if [ ! -d "${HOME}/src/ohmyzsh" ]; then 
+  if [ ! -d "${HOME}/src/ohmyzsh" ]; then
     (cd "${HOME}"/src && git clone https://github.com/ohmyzsh/ohmyzsh.git)
   fi
-  ln -sf "${HOME}"/src/ohmyzsh "${PWD}"/_oh-my-zsh
+#  ln -sf "${HOME}"/src/ohmyzsh "${PWD}"/_oh-my-zsh
   ln -sf "${HOME}"/src/ohmyzsh "${HOME}"/.oh-my-zsh
   sudo npm install -g diff-so-fancy dockly
 }
@@ -56,8 +59,9 @@ function rust_install() {
 function tmux_install() {
   (cd "${HOME}" && git clone https://github.com/gpakosz/.tmux.git)
   gem install tmuxinator
-  ln -sf _tmux.conf "${HOME}"/.tmux/.tmux.conf
-  ln -sf _tmux.conf.local "${HOME}"/.tmux/.tmux.conf.local
+  rm -rf "${HOME}"/.tmux/.tmux.conf*
+  ln -s "${HOME}"/src/dotfiles/_tmux.conf "${HOME}"/.tmux/.tmux.conf
+  ln -s "${HOME}"/src/dotfiles/_tmux.conf.local "${HOME}"/.tmux/.tmux.conf.local
 }
 
 function sudo_access() {
@@ -70,9 +74,32 @@ function setup_git_repo() {
   cd "${HOME}"/src/dotfiles
 }
 
-os_packages_install
-setup_git_repo
-rust_install
-tmux_install
-setup_home_files
-zsh
+function install_docker() {
+  sudo apt-get remove docker docker-engine docker.io containerd runc
+  sudo apt-get update
+  sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+  echo \
+    "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+  sudo apt-get update
+  sudo apt-get install docker-ce docker-ce-cli containerd.io
+  sudo adduser "${USER}" docker
+}
+
+function init() {
+  os_packages_install
+  install_docker
+  setup_git_repo
+  rust_install
+  tmux_install
+  setup_home_files
+  zsh
+}
+
+"${*}"
