@@ -22,7 +22,8 @@ function choose_theme() {
   #antigen theme jaischeema
   #antigen theme candy
   # antigen theme miloshadzic
-  ZSH_THEME='miloshadzic'
+  #ZSH_THEME='miloshadzic'
+  ZSH_THEME='nanotech'
   if [ "$(uname)" = "Darwin" ]; then
     plugins=(git tmux brew osx tmux ssh-agent python screen sudo docker cargo docker-compose fd gitfast kubectl mvn ripgrep rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
   else
@@ -158,6 +159,10 @@ function antigen() {
 
 function a1saliases() {
     alias kitchen-docker=’DOCKER_BUILDKIT=0 COOK_IN_DOCKER=1 kitchen’
+}
+
+function gpx() {
+    export KUBECONFIG=$HOME/.kube/gpx-kube-config
 }
 
 init

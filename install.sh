@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-curl -L git.io/antigen >antigen.zsh
 
 function link_file() {
   source="${PWD}/$1"
@@ -45,8 +44,9 @@ function os_packages_install() {
   if [ ! -d "${HOME}/src/ohmyzsh" ]; then
     (cd "${HOME}"/src && git clone https://github.com/ohmyzsh/ohmyzsh.git)
   fi
-#  ln -sf "${HOME}"/src/ohmyzsh "${PWD}"/_oh-my-zsh
+  #  ln -sf "${HOME}"/src/ohmyzsh "${PWD}"/_oh-my-zsh
   ln -sf "${HOME}"/src/ohmyzsh "${HOME}"/.oh-my-zsh
+  curl -L git.io/antigen >antigen.zsh
   sudo npm install -g diff-so-fancy dockly
 }
 
@@ -72,12 +72,13 @@ function setup_git_repo() {
   cd "${HOME}" && mkdir -p src && cd "${HOME}"/src
   git clone https://github.com/abakhru/dotfiles.git
   cd "${HOME}"/src/dotfiles
+  setup_home_files
 }
 
 function install_docker() {
-  sudo apt-get remove docker docker-engine docker.io containerd runc
+  sudo apt-get remove -y docker docker-engine docker.io containerd runc
   sudo apt-get update
-  sudo apt-get install \
+  sudo apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
@@ -88,18 +89,25 @@ function install_docker() {
     "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
   sudo apt-get update
-  sudo apt-get install docker-ce docker-ce-cli containerd.io
+  sudo apt-get install -y docker-ce docker-ce-cli containerd.io
   sudo adduser "${USER}" docker
 }
 
-function init() {
+function all() {
   os_packages_install
   install_docker
-  setup_git_repo
   rust_install
   tmux_install
-  setup_home_files
+  setup_git_repo
   zsh
 }
 
-"${*}"
+function help() {
+  typeset -f | awk '/ \(\) $/ && !/^main / {print $1}'
+}
+
+if [ "_$1" = "_" ]; then
+  help
+else
+  "$@"
+fi
