@@ -6,4 +6,4 @@ wget https://raw.githubusercontent.com/abakhru/dotfiles/update/install.sh -O ins
 ```
 
 ## Requirements
-- `zsh`, `git`, `wget`,`curl`
+- `zsh` `git` `wget` `curl`
