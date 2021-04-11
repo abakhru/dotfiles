@@ -152,10 +152,6 @@ function a1saliases() {
     alias kitchen-docker=’DOCKER_BUILDKIT=0 COOK_IN_DOCKER=1 kitchen’
 }
 
-function gpx() {
-    export KUBECONFIG=$HOME/.kube/gpx-kube-config
-}
-
 init
 custom_exports
 plugins
