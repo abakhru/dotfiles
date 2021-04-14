@@ -50,8 +50,9 @@ function custom_exports() {
   export TF_CPP_MIN_LOG_LEVEL=2
   export COMPOSE_API_VERSION=auto
   export HOMEBREW_GITHUB_API_TOKEN='e6d02dedc0bce928e7e2c0724a4b16b52e9068b9'
-  export GOPATH=${HOME}/go
   export GOROOT=${HOME}/go
+  export GOPATH=${HOME}/go/pkg
+  export PATH=$PATH:$GOROOT/bin
   if [ "$(uname)" = "Darwin" ]; then
     export JAVA_HOME=$(/usr/libexec/java_home)
   else
@@ -109,17 +110,10 @@ function sleep-in() {
 }
 
 function ssh_agent() {
-  export SSH_KEY_PATH="${HOME}/.ssh/id_rsa"
-  # attempt to connect to a running agent - cache SSH_AUTH_SOCK in ~/.ssh/
-  [ ! -S "$SSH_AUTH_SOCK" ] || export SSH_AUTH_SOCK="$(< ~/.ssh/ssh-agent.env)"
-
-  # if cached agent socket is invalid, start a new one
-  [ -S "$SSH_AUTH_SOCK" ] || {
-      eval "$(ssh-agent)"
-      # ssh-add -t 25920000 -K ~/.ssh/id_rsa
-      for i in $(find ${HOME}/.ssh -type f -name '*_rsa'); do ssh-add -t 25920000 -K $i; done
-      echo "$SSH_AUTH_SOCK" > ~/.ssh/ssh-agent.env
-  }
+  if [ "x$SSH_AUTH_SOCK" = "x" ]; then
+    eval "$(ssh-agent)"
+    for i in $(find ${HOME}/.ssh -type f -name '*_rsa'); do ssh-add $i; done
+  fi
 }
 
 function antigen() {
