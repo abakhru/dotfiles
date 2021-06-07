@@ -166,3 +166,5 @@ if [ ! "$ZSH_THEME" = ""  ]; then
     source "$ZSH/themes/$ZSH_THEME.zsh-theme"
   fi
 fi
+
+export PATH="$HOME/.poetry/bin:$PATH"

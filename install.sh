@@ -47,13 +47,13 @@ function os_packages_install() {
   #  ln -sf "${HOME}"/src/ohmyzsh "${PWD}"/_oh-my-zsh
   ln -sf "${HOME}"/src/ohmyzsh "${HOME}"/.oh-my-zsh
   curl -L git.io/antigen >antigen.zsh
-  sudo npm install -g diff-so-fancy dockly
+  sudo npm install -g dockly
 }
 
 function rust_install() {
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
   source "${HOME}"/.cargo/env
-  (cargo install starship bat ripgrep bat exa procs fd-find topgrade grex cargo-update)
+  (cargo install starship bat ripgrep bat exa procs fd-find topgrade grex cargo-update git-delta)
 }
 
 function tmux_install() {
