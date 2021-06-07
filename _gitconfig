@@ -70,7 +70,6 @@
 	excludesfile = /Users/amit/.gitignore_global
 	# Treat spaces before tabs, lines that are indented with 8 or more spaces, and all kinds of trailing whitespace as an error
 	whitespace = space-before-tab,indent-with-non-tab,trailing-space
-	pager = diff-so-fancy | less --tabs=4 -RFX
 	attributesfile = /Users/amit/.gitattributes
 [color]
 	# Use colors in Git commands that are capable of colored output when outputting to the terminal
@@ -108,3 +107,18 @@
 	template = /Users/amit/.stCommitMsg
 [gpg]
 	program = gpg
+[pager]
+	diff = delta
+	log = delta
+	reflog = delta
+	show = delta
+[delta]
+	line-numbers = true
+	plus-style = "syntax #012800"
+	minus-style = "syntax #340001"
+	syntax-theme = Monokai Extended
+	navigate = true
+	side-by-side = true
+
+[interactive]
+	diffFilter = delta --color-only
