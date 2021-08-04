@@ -56,8 +56,7 @@ alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 
 # Shortcuts to my Code folder in my home directory
-alias code='cd ~/source'
-alias sites='cd ~/Code/sites'
+alias src='cd ~/source'
 
 # Colored up cat!
 # You must install Pygments first - 'sudo easy_install Pygments'
