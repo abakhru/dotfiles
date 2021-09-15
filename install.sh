@@ -62,6 +62,7 @@ function tmux_install() {
   rm -rf "${HOME}"/.tmux/.tmux.conf*
   ln -s "${HOME}"/src/dotfiles/_tmux.conf "${HOME}"/.tmux/.tmux.conf
   ln -s "${HOME}"/src/dotfiles/_tmux.conf.local "${HOME}"/.tmux/.tmux.conf.local
+  (cd "${HOME}/.tmux" && git clone https://github.com/jonmosco/kube-tmux)
 }
 
 function sudo_access() {
