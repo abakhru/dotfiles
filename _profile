@@ -24,3 +24,4 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 . "$HOME/.zshrc"
+. "$HOME/.cargo/env"

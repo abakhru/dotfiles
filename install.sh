@@ -33,8 +33,8 @@ function os_packages_install() {
 
   if [ "$(uname -s)" = "Darwin" ]; then
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    brew install npm zsh tmux git vim htop ruby node
-    brew cask install chef java
+    /opt/homebrew/bin/brew install npm zsh tmux git vim htop ruby node
+    /opt/homebrew/bin/brew install --cask java
   elif [ "$(awk -F= '/^NAME/{print $2}' /etc/os-release)" = "\"Ubuntu\"" ]; then
     sudo -- sh -c "apt update && \
     apt full-upgrade -y && \

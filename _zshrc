@@ -10,9 +10,9 @@ function init() {
 
 function plugins() {
   if [ "$(uname)" = "Darwin" ]; then
-    plugins=(git tmux brew macos tmux python screen sudo docker cargo docker-compose fd gitfast kubectl mvn ripgrep rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
+    plugins=(git tmux brew macos tmux python screen sudo docker rust docker-compose fd gitfast kubectl mvn ripgrep rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
   else
-    plugins=(git tmux tmux python screen sudo docker cargo docker-compose fd gitfast kubectl mvn ripgrep rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
+    plugins=(git tmux tmux python screen sudo docker rust docker-compose fd gitfast kubectl mvn ripgrep rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
   fi
   source $ZSH/oh-my-zsh.sh
 }
@@ -21,7 +21,7 @@ function define_path() {
   export PATH="/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin"
   # mac specific things
   if [ "$(uname)" = "Darwin" ]; then
-    export PATH="${PATH}:/usr/local/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin"
+    export PATH="${PATH}:/opt/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin"
     if [ -f "${HOME}/src/z.lua/z.lua" ]; then
       eval "$(lua ${HOME}/src/z.lua/z.lua --init zsh enhanced)"
     fi
@@ -128,7 +128,7 @@ function antigen() {
     antigen bundle docker
     antigen bundle tmux
     antigen bundle brew
-    antigen bundle osx
+    antigen bundle macos
     antigen bundle tmux
     antigen bundle python
     antigen bundle sudo

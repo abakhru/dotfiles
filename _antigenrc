@@ -13,7 +13,7 @@ antigen bundle git
 antigen bundle docker
 antigen bundle tmux
 antigen bundle brew
-antigen bundle osx
+antigen bundle macos
 antigen bundle tmux
 antigen bundle ssh-agent
 antigen bundle python
