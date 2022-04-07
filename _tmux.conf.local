@@ -228,7 +228,6 @@ tmux_conf_theme_right_separator_sub="|"
 #     - #{username_ssh}
 tmux_conf_theme_status_left=" ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} "
 #tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} "
-
 tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} #(/bin/bash $HOME/.tmux/kube-tmux/kube.tmux 250 red cyan),  | #{username}#{root} | #{hostname} "
 
 # status left style
@@ -349,6 +348,7 @@ set -g renumber-windows off    # renumber windows when a window is closed
 # move status line to top
 #set -g status-position top
 
+
 # -- tpm -----------------------------------------------------------------------
 
 # while I don't use tpm myself, many people requested official support so here
@@ -361,12 +361,23 @@ set -g renumber-windows off    # renumber windows when a window is closed
 # by default, launching tmux will update tpm and all plugins
 #   - true (default)
 #   - false
-tmux_conf_update_plugins_on_launch=false
+tmux_conf_update_plugins_on_launch=true
 
 # by default, reloading the configuration will update tpm and all plugins
 #   - true (default)
 #   - false
-tmux_conf_update_plugins_on_reload=false
+tmux_conf_update_plugins_on_reload=true
+
+# by default, reloading the configuration will uninstall tpm and plugins when no
+# plugins are enabled
+#   - true (default)
+#   - false
+tmux_conf_uninstall_plugins_on_reload=true
+
+# /!\ the tpm bindings differ slightly from upstream:
+#   - installing plugins: <prefix> + I
+#   - uninstalling plugins: <prefix> + Alt + u
+#   - updating plugins: <prefix> + u
 
 # /!\ do not add set -g @plugin 'tmux-plugins/tpm'
 # /!\ do not add run '~/.tmux/plugins/tpm/tpm'
