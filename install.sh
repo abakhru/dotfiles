@@ -92,6 +92,7 @@ function install_docker() {
   sudo apt-get update
   sudo apt-get install -y docker-ce docker-ce-cli containerd.io
   sudo adduser "${USER}" docker
+  sudo wget https://github.com/bcicen/ctop/releases/download/v0.7.5/ctop-0.7.5-linux-amd64 -O /usr/local/bin/ctop && sudo chmod +x /usr/local/bin/ctop
 }
 
 function all() {

@@ -55,9 +55,6 @@ alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ......='cd ../../../../..'
 
-# Shortcuts to my Code folder in my home directory
-alias src='cd ~/source'
-
 # Colored up cat!
 # You must install Pygments first - 'sudo easy_install Pygments'
 alias c='pygmentize -O style=monokai -f console256 -g'
@@ -84,7 +81,7 @@ alias s='screen -X screen'
 alias vncport='ps ww $(vncserver -list |tail -n +5 | sed -e s/^\\S\\+\\s\\+//) | tail -n +2 | sed -e s/^.*-rfbport\ // -e s/\\s.*$//'
 alias clean_pycs='find . -name "*.pyc" -exec rm {} \;'
 alias bld='make -r -j$CORES -f all.make'
-alias rabbitlog='less +F ~/source/rabbitmq_server-3.3.4/var/log/rabbitmq/rabbit@usxxbakhram1.log'
+alias rabbitlog='less +F ~/src/rabbitmq_server-3.3.4/var/log/rabbitmq/rabbit@usxxbakhram1.log'
 alias mongolog='less +F /usr/local/var/log/mongodb/mongo.log'
 alias knose="ps -ef|grep nosetests|grep -v grep|awk '{print \$2}'|xargs kill -9"
 alias krabbit="ps -ef|grep rabbit|grep -v grep|awk '{print \$2}'|xargs kill -9"
