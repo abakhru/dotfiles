@@ -10,9 +10,9 @@ function init() {
 
 function plugins() {
   if [ "$(uname)" = "Darwin" ]; then
-    plugins=(git tmux brew macos tmux python screen sudo docker rust docker-compose fd gitfast kubectl mvn ripgrep rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
+    plugins=(git tmux brew macos tmux python sudo docker rust docker-compose fd gitfast kubectl mvn ripgrep rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
   else
-    plugins=(git tmux tmux python screen sudo docker rust docker-compose fd gitfast kubectl mvn ripgrep rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
+    plugins=(git tmux tmux python sudo docker rust docker-compose fd gitfast kubectl mvn ripgrep rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
   fi
   source $ZSH/oh-my-zsh.sh
 }
@@ -73,31 +73,30 @@ function custom_exports() {
 }
 
 function custom_aliases() {
-  # cargo install starship rustup bat fzf prettyping bat ncdu exa procs fd topgrade
+  # cargo install starship bat bat eza procs topgrade bottom ripgrep bun gitui git-delta fd-find cargo-update cargo-cache mise
   . "${HOME}/src/dotfiles/aliases.zsh"
   alias gall="for i in \$(find \${HOME}/src -type d -depth 1); do (echo \"==== Updating \$i ====\"; cd \$i; git stash && g p && gfa && git stash pop; cd -); done"
   alias pipall="for i in \$(pip list -o --format columns|awk '{print \$1}') ; do pip install -U \$i; done"
   alias zconf="vim ${HOME}/.zshrc"
   alias reload=". ${HOME}/.zshrc"
-  alias antnn='ant -Dskip.download=true -Divy.has.resolved=true'
   alias ping='prettyping --nolegend'
   alias cat='bat'
   alias preview="fzf --preview 'bat --color \"always\" {}'"
   alias top='htop'
   alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
-  alias l='exa --long --git -g -a -s modified'
+  alias l='eza --long --git -g -a -s modified'
   alias top='glances'
   alias zc='z -c'      # restrict matches to subdirs of $PWD
   alias zz='z -i'      # cd with interactive selection
-  alias zf='z -I'      # use fzf to select in multiple matches
+  alias zf='z -I'      # use to select in multiple matches
   alias zb='z -b'      # quickly cd to the parent directory
   alias idea='open -a "$(\ls -dt /Applications/IntelliJ\ IDEA*|head -1)"'
   alias dall="docker images --format \"{{.Repository}}:{{.Tag}}\" | grep ':latest' | xargs -L1 docker pull"
 }
 
 function enable_node() {
-  if [ -f "/usr/local/opt/nvm/nvm.sh" ]; then
-    export NVM_DIR="${HOME}/.nvm" && . "/usr/local/opt/nvm/nvm.sh"
+  if [ -f "${HOME}/.nvm/nvm.sh" ]; then
+    export NVM_DIR="${HOME}/.nvm" && . "${HOME}/.nvm/nvm.sh"
   fi
 }
 
@@ -110,13 +109,13 @@ function sleep-in() {
 }
 
 function ssh_agent() {
-  if [ "x$SSH_AUTH_SOCK" = "x" ]; then
-    eval "$(ssh-agent)"
-    for i in $(find ${HOME}/.ssh -type f -name '*_rsa'); do ssh-add $i; done
+  ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+  if [ -S "$SSH_AUTH_SOCK" ]; then
+    ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock
   fi
 }
 
-function antigen() {
+function antigen_enable() {
   if [ -f "${HOME}/src/dotfiles/antigen.zsh" ]; then
     . ${HOME}/src/dotfiles/antigen.zsh
     antigen use oh-my-zsh
@@ -136,25 +135,19 @@ function antigen() {
     antigen bundle akarzim/zsh-docker-aliases
     antigen bundle kubectl
     antigen bundle aws
-    #ZSH_THEME='nanotech'
     antigen theme miloshadzic
     antigen apply
   fi
 }
 
-function a1saliases() {
-    alias kitchen-docker=’DOCKER_BUILDKIT=0 COOK_IN_DOCKER=1 kitchen’
-}
-
-init
+#init
 custom_exports
-plugins
-ssh_agent
-antigen
+#plugins
+#ssh_agent
+antigen_enable
 enable_node
 custom_aliases
 eval "$(starship init zsh)"
-a1saliases
 
 # Load the theme
 if [ ! "$ZSH_THEME" = ""  ]; then
@@ -169,3 +162,19 @@ fi
 
 export PATH="$HOME/.poetry/bin:$PATH"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+export SNYK_DISABLE_ANALYTICS=1
+export COLORLOG=1
+export LUNA_DEBUG=1
+
+# bun completions
+[ -s "/Users/amit.bakhru/.bun/_bun" ] && source "/Users/amit.bakhru/.bun/_bun"
+
+alias k='kubecolor'
+alias kubectl="kubecolor"
+
+#eval "$(fzf --zsh)"

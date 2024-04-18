@@ -33,7 +33,7 @@ function os_packages_install() {
 
   if [ "$(uname -s)" = "Darwin" ]; then
     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-    /opt/homebrew/bin/brew install npm zsh tmux git vim htop ruby node wget maven openjdk awscli docker-compose go lazydocker cloudflared k9s docker-credential-helper docker-credential-helper-ecr
+    /opt/homebrew/bin/brew install npm zsh tmux git vim htop ruby node wget fzf maven openjdk awscli docker-compose go lazydocker cloudflared k9s docker-credential-helper docker-credential-helper-ecr kubecolor
     /opt/homebrew/bin/brew install --cask aerial notion
   elif [ "$(awk -F= '/^NAME/{print $2}' /etc/os-release)" = "\"Ubuntu\"" ]; then
     sudo -- sh -c "apt update && \

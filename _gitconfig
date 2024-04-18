@@ -1,7 +1,6 @@
 [user]
-	name = amit
-	email = bakhru@me.com
-    signingkey = 68C5595E
+	name = Amit Bakhru
+	email = amit.bakhru@devo.com
 [branch]
         autosetuprebase=always
 [push]

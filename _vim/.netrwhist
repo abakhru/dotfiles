@@ -1,5 +1,8 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =4
+let g:netrw_dirhistcnt =7
+let g:netrw_dirhist_7='/Users/amit.bakhru/.tmux'
+let g:netrw_dirhist_6='/Users/amit.bakhru/src/luna/luna/config'
+let g:netrw_dirhist_5='/Users/amit.bakhru/src/luna/luna/framework/common'
 let g:netrw_dirhist_4='/Users/amit/src/breadsticks/tests/locust_tests/data'
 let g:netrw_dirhist_3='/Users/amit/src/github.com/FARM-Intro/backend/apps/todo'
 let g:netrw_dirhist_2='/Users/amit/src/github.com/FARM-Intro/backend/apps'
