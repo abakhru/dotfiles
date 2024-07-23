@@ -118,7 +118,7 @@ function ssh_agent() {
 function antigen_enable() {
   if [ -f "${HOME}/src/dotfiles/antigen.zsh" ]; then
     . ${HOME}/src/dotfiles/antigen.zsh
-    antigen use oh-my-zsh
+    #antigen use oh-my-zsh
     antigen bundle zsh-users/zsh-completions
     antigen bundle zsh-users/zsh-autosuggestions
     antigen bundle zsh-users/zsh-syntax-highlighting
@@ -140,13 +140,30 @@ function antigen_enable() {
   fi
 }
 
+function setup_ssh_agent {
+  if ssh-add -l; then
+    echo "Your SSH Agent is already working."
+    return 0
+  fi
+  for sock in `ls /tmp/ssh-*/agent.*`; do
+    export SSH_AUTH_SOCK=$sock
+    if ssh-add -l; then
+      echo "Your SSH Agent is fixed. New socket=$sock."
+      return 0
+    fi
+  done
+  echo "Could not find any working SSH Agent sockets."
+  return 1
+}
+
 #init
 custom_exports
-#plugins
+plugins
 #ssh_agent
-antigen_enable
+#antigen_enable
 enable_node
 custom_aliases
+setup_ssh_agent
 eval "$(starship init zsh)"
 
 # Load the theme
@@ -172,9 +189,20 @@ export COLORLOG=1
 export LUNA_DEBUG=1
 
 # bun completions
-[ -s "/Users/amit.bakhru/.bun/_bun" ] && source "/Users/amit.bakhru/.bun/_bun"
+[ -s "${HOME}/.bun/_bun" ] && source "${HOME}/.bun/_bun"
 
 alias k='kubecolor'
 alias kubectl="kubecolor"
 
 #eval "$(fzf --zsh)"
+source "$HOME/.rye/env"
+
+autoload -Uz compinit
+zstyle ':completion:*' menu select
+fpath+=~/.zfunc
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+. ${HOME}/.ssh/secrets.env
+eval $(aws-sso-creds export -p kognos)
+
+export GROOVY_HOME=/opt/homebrew/opt/groovy/libexec
