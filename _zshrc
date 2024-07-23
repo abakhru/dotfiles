@@ -75,7 +75,7 @@ function custom_exports() {
 function custom_aliases() {
   # cargo install starship bat bat eza procs topgrade bottom ripgrep bun gitui git-delta fd-find cargo-update cargo-cache mise
   . "${HOME}/src/dotfiles/aliases.zsh"
-  alias gall="for i in \$(find \${HOME}/src -type d -depth 1); do (echo \"==== Updating \$i ====\"; cd \$i; git stash && g p && gfa && git stash pop; cd -); done"
+  alias gall="for i in \$(find ${HOME}/src -type d -execdir test -d {}/.git \\; -prune -print); do (echo \"==== Updating \$i ====\"; cd \$i; git stash && g p && gfa && git stash pop; cd -); done"
   alias pipall="for i in \$(pip list -o --format columns|awk '{print \$1}') ; do pip install -U \$i; done"
   alias zconf="vim ${HOME}/.zshrc"
   alias reload=". ${HOME}/.zshrc"
