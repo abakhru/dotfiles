@@ -10,9 +10,9 @@ function init() {
 
 function plugins() {
   if [ "$(uname)" = "Darwin" ]; then
-    plugins=(git tmux brew macos tmux python sudo docker rust docker-compose fd gitfast kubectl mvn ripgrep rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
+    plugins=(git tmux brew macos tmux python sudo docker rust docker-compose gitfast kubectl mvn rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
   else
-    plugins=(git tmux tmux python sudo docker rust docker-compose fd gitfast kubectl mvn ripgrep rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
+    plugins=(git tmux tmux python sudo docker rust docker-compose gitfast kubectl mvn rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
   fi
   source $ZSH/oh-my-zsh.sh
 }
