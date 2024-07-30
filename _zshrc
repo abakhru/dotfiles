@@ -12,7 +12,7 @@ function plugins() {
   if [ "$(uname)" = "Darwin" ]; then
     plugins=(git tmux brew macos tmux python sudo docker rust docker-compose gitfast kubectl mvn rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
   else
-    plugins=(git tmux tmux python sudo docker rust docker-compose gitfast kubectl mvn rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
+    plugins=(git tmux python sudo docker rust docker-compose gitfast kubectl mvn rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
   fi
   source $ZSH/oh-my-zsh.sh
 }
@@ -39,7 +39,7 @@ function define_path() {
 
 function custom_exports() {
   define_path
-  export PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
+  #export PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
   export REPO_PATH=${HOME}/src/
   export PYTHONPATH=${HOME}/src/caliber
   export PIP_DOWNLOAD_CACHE=${HOME}/.pip/cache
@@ -165,8 +165,6 @@ enable_node
 custom_aliases
 setup_ssh_agent
 
-eval "$(starship init zsh)"
-
 # Load the theme
 if [ ! "$ZSH_THEME" = ""  ]; then
   if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
@@ -199,3 +197,5 @@ export GROOVY_HOME=/opt/homebrew/opt/groovy/libexec
 [ -f "${HOME}/.ssh/secrets.env" ] && source "${HOME}"/.ssh/secrets.env
 [ -d "$HOME/.rye" ] && source "$HOME/.rye/env"
 [ -s "${HOME}/.bun/_bun" ] && source "${HOME}/.bun/_bun"
+
+eval "$(starship init zsh)"
