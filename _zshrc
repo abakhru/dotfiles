@@ -109,9 +109,12 @@ function sleep-in() {
 }
 
 function ssh_agent() {
-  if [ -f "${HOME}/.ssh/bakhru_me_id_rsa"]; then \
+  if [ -f "${HOME}/.ssh/bakhru_me_id_rsa" ]; then \
     ssh-add --apple-use-keychain ~/.ssh/bakhru_me_id_rsa
-  fi
+  fi;
+  if [ -f "${HOME}/.ssh/id_ed25519" ]; then \
+    ssh-add --apple-use-keychain ~/.ssh/id_ed25519
+  fi;
   if [ -S "$SSH_AUTH_SOCK" ]; then ln -sf $SSH_AUTH_SOCK ~/.ssh/ssh_auth_sock; fi
 }
 
@@ -163,7 +166,11 @@ plugins
 #antigen_enable
 enable_node
 custom_aliases
-setup_ssh_agent
+if [ "$(uname)" = "Darwin" ]; then
+  ssh_agent;
+else
+  setup_ssh_agent;
+fi
 
 # Load the theme
 if [ ! "$ZSH_THEME" = ""  ]; then
