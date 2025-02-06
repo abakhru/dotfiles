@@ -1,96 +1,134 @@
+#!/usr/bin/env zsh
+
+# Force switch to zsh if not already running in it
+if [ -z "${ZSH_VERSION:-}" ]; then
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] Switching to zsh..."
+    export SHELL=$(command -v zsh)
+    exec zsh -l "$0" "$@"
+fi
+echo "[$(date +'%Y-%m-%d %H:%M:%S')] Running in zsh version: $ZSH_VERSION"
 
 export ZSH="${HOME}/.oh-my-zsh"
 export ZSH_THEME='miloshadzic'
 
+# Consolidated plugin list to avoid duplication
+function get_plugins() {
+  local common_plugins=(
+    git tmux python sudo docker rust docker-compose gitfast kubectl 
+    mvn rust tmuxinator zsh-completions zsh-autosuggestions 
+    zsh-syntax-highlighting zsh-history-substring-search
+  )
+  
+  if [ "$(uname)" = "Darwin" ]; then
+    echo "${common_plugins[@]} brew macos"
+  else
+    echo "${common_plugins[@]}"
+  fi
+}
+
 function init() {
-    for _plugin in zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search; do
-      if [ ! -d "${ZSH}/plugins/${_plugin}" ]; then (cd "${ZSH}/plugins" && git clone "https://github.com/zsh-users/${_plugin}.git"); fi
-    done
+  local zsh_plugins=(zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
+  for plugin in "${zsh_plugins[@]}"; do
+    local plugin_dir="${ZSH}/plugins/${plugin}"
+    if [ ! -d "${plugin_dir}" ]; then
+      (cd "${ZSH}/plugins" && git clone "https://github.com/zsh-users/${plugin}.git")
+    fi
+  done
 }
 
 function plugins() {
-  if [ "$(uname)" = "Darwin" ]; then
-    plugins=(git tmux brew macos tmux python sudo docker rust docker-compose gitfast kubectl mvn rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
-  else
-    plugins=(git tmux python sudo docker rust docker-compose gitfast kubectl mvn rust tmuxinator zsh-completions zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search)
-  fi
-  source $ZSH/oh-my-zsh.sh
+  plugins=($(get_plugins))
+  source "${ZSH}/oh-my-zsh.sh"
 }
 
 function define_path() {
-  export PATH="/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin"
-  # mac specific things
+  local base_path="/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin"
+  export PATH="${base_path}"
+
   if [ "$(uname)" = "Darwin" ]; then
     export PATH="${PATH}:/opt/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin"
-    if [ -f "${HOME}/src/z.lua/z.lua" ]; then
-      eval "$(lua ${HOME}/src/z.lua/z.lua --init zsh enhanced)"
-    fi
-    if [ -d "/usr/local/opt/python@3.8/" ]; then export PATH="/usr/local/opt/python@3.8/bin:${PATH}"; fi
+    [ -f "${HOME}/src/z.lua/z.lua" ] && eval "$(lua ${HOME}/src/z.lua/z.lua --init zsh enhanced)"
+    [ -d "/usr/local/opt/python@3.8/" ] && export PATH="/usr/local/opt/python@3.8/bin:${PATH}"
+  elif [ "$(uname)" = "Linux" ]; then
+    [ -f "/usr/bin/lua" ] && eval "$(lua ${HOME}/src/z.lua/z.lua --init zsh enhanced)"
   fi
-
-  # linux specific things
-  if [ "$(uname)" = "Linux" ]; then
-    if [ -f "/usr/bin/lua" ]; then
-      eval "$(lua ${HOME}/src/z.lua/z.lua --init zsh enhanced)"
-    fi
-  fi
-  if [ -d "${GOPATH}" ]; then export PATH="${PATH}:${GOPATH}/bin"; fi
+  
+  [ -d "${GOPATH}" ] && export PATH="${PATH}:${GOPATH}/bin"
 }
 
 function custom_exports() {
   define_path
-  #export PROMPT='${ret_status}%{$fg_bold[green]%}%p %{$fg[cyan]%}%c %{$fg_bold[blue]%}$(git_prompt_info)%{$fg_bold[blue]%} % %{$reset_color%}'
-  export REPO_PATH=${HOME}/src/
-  export PYTHONPATH=${HOME}/src/caliber
-  export PIP_DOWNLOAD_CACHE=${HOME}/.pip/cache
-  export PEXPECT_START_TIMEOUT=180
-  export PYTHONSTARTUP=${HOME}/.pythonrc.py
-  export CALIBER_DEBUG=1
+  
+  # Core exports
   export EDITOR="vim"
+  export REPO_PATH="${HOME}/src/"
+  export PYTHONPATH="${HOME}/src/caliber"
+  export PIP_DOWNLOAD_CACHE="${HOME}/.pip/cache"
+  export PYTHONSTARTUP="${HOME}/.pythonrc.py"
+  export GOROOT="${HOME}/go"
+  export GOPATH="${HOME}/go/pkg"
+  export PATH="${PATH}:${GOROOT}/bin"
+  
+  # Development related
+  export PEXPECT_START_TIMEOUT=180
+  export CALIBER_DEBUG=1
   export TF_CPP_MIN_LOG_LEVEL=2
   export COMPOSE_API_VERSION=auto
-  export HOMEBREW_GITHUB_API_TOKEN='e6d02dedc0bce928e7e2c0724a4b16b52e9068b9'
-  export GOROOT=${HOME}/go
-  export GOPATH=${HOME}/go/pkg
-  export PATH=$PATH:$GOROOT/bin
+  export SNYK_DISABLE_ANALYTICS=1
+  export COLORLOG=1
+  export SHELL=/bin/zsh
+  export LUNA_DEBUG=1
+  export BUILDKIT_COLORS="run=123,20,245:error=yellow:cancel=blue:warning=white"
+  
+  # Java setup
   if [ "$(uname)" = "Darwin" ]; then
     export JAVA_HOME=$(/usr/libexec/java_home)
   else
     export JAVA_HOME="/usr/lib/jvm/java-1.11.0-openjdk-amd64"
   fi
-
-  export JDK_HOME=${JAVA_HOME}
-  for _file in "${HOME}/google-cloud-sdk/path.zsh.inc" \
-  "${HOME}/google-cloud-sdk/completion.zsh.inc" \
-  "${HOME}/.cargo/env" \
-  "${HOME}/.ssh/kub_detection_db.properties" \
-  "${HOME}/env/export.properties" \
-  "${HOME}/.poetry/env":
-  do
-    if [ -f "${_file}" ]; then echo "[exports] Sourcing ${_file}" && source "${_file}"; fi
+  export JDK_HOME="${JAVA_HOME}"
+  
+  # Source additional config files if they exist
+  local config_files=(
+    "${HOME}/google-cloud-sdk/path.zsh.inc"
+    "${HOME}/google-cloud-sdk/completion.zsh.inc"
+    "${HOME}/.cargo/env"
+    "${HOME}/.ssh/kub_detection_db.properties"
+    "${HOME}/env/export.properties"
+    "${HOME}/.poetry/env"
+    "${HOME}/.ssh/secrets.env"
+  )
+  
+  for file in "${config_files[@]}"; do
+    [ -f "${file}" ] && source "${file}"
   done
-  # if [ -d "${HOME}/.rbenv/libexec" ]; then eval "$(${HOME}/.rbenv/libexec/rbenv init -)"; fi
 }
 
 function custom_aliases() {
-  # cargo install starship bat bat eza procs topgrade bottom ripgrep bun gitui git-delta fd-find cargo-update cargo-cache mise
   . "${HOME}/src/dotfiles/aliases.zsh"
-  alias gall="for i in \$(find ${HOME}/src -type d -execdir test -d {}/.git \\; -prune -print); do (echo \"==== Updating \$i ====\"; cd \$i; git stash && g p && gfa && git stash pop; cd -); done"
-  alias pipall="for i in \$(pip list -o --format columns|awk '{print \$1}') ; do pip install -U \$i; done"
-  alias zconf="vim ${HOME}/.zshrc"
-  alias reload=". ${HOME}/.zshrc"
+  
+  # Modern CLI alternatives
   alias ping='prettyping --nolegend'
   alias cat='bat'
-  alias preview="fzf --preview 'bat --color \"always\" {}'"
-  alias top='htop'
+  alias top='glances'
   alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
   alias l='eza --long --git -g -a -s modified'
-  alias top='glances'
+  alias k='kubecolor'
+  alias kubectl="kubecolor"
+  
+  # Navigation aliases
   alias zc='z -c'      # restrict matches to subdirs of $PWD
   alias zz='z -i'      # cd with interactive selection
   alias zf='z -I'      # use to select in multiple matches
   alias zb='z -b'      # quickly cd to the parent directory
-  alias idea='open -a "$(\ls -dt /Applications/IntelliJ\ IDEA*|head -1)"'
+  
+  # Configuration aliases
+  alias zconf="vim ${HOME}/.zshrc"
+  alias reload=". ${HOME}/.zshrc"
+  
+  # Bulk update aliases
+  alias gall="for i in \$(find ${HOME}/src -type d -execdir test -d {}/.git \; -prune -print); do (echo \"==== Updating \$i ====\"; cd \$i; git stash && g p && gfa && git stash pop; cd -); done"
+  alias pipall="for i in \$(pip list -o --format columns|awk '{print \$1}') ; do pip install -U \$i; done"
   alias dall="docker images --format \"{{.Repository}}:{{.Tag}}\" | grep ':latest' | xargs -L1 docker pull"
 }
 
@@ -100,7 +138,9 @@ function enable_node() {
   fi
 }
 
-function jlog() { less +F -r $@ |jq . -r }
+function jlog() { 
+  less +F -r $@ |jq . -r 
+}
 
 function sleep-in() {
   local minutes=$1
@@ -109,47 +149,24 @@ function sleep-in() {
 }
 
 function ssh_agent() {
-  if [ -f "${HOME}/.ssh/bakhru_me_id_rsa" ]; then \
+  if [ -f "${HOME}/.ssh/bakhru_me_id_rsa" ]; then
     ssh-add --apple-use-keychain ~/.ssh/bakhru_me_id_rsa
-  fi;
-  if [ -f "${HOME}/.ssh/id_ed25519" ]; then \
+  fi
+  if [ -f "${HOME}/.ssh/id_ed25519" ]; then
     ssh-add --apple-use-keychain ~/.ssh/id_ed25519
-  fi;
-  if [ "${SSH_AUTH_SOCK}" != "${HOME}/.ssh/ssh_auth_sock" ]; then ln -sf ${SSH_AUTH_SOCK} ~/.ssh/ssh_auth_sock; fi
+  fi
+  if [ "${SSH_AUTH_SOCK}" != "${HOME}/.ssh/ssh_auth_sock" ]; then 
+    ln -sf "${SSH_AUTH_SOCK}" ~/.ssh/ssh_auth_sock
+  fi
   ls -larth ~/.ssh/ssh_auth_sock
 }
 
-function antigen_enable() {
-  if [ -f "${HOME}/src/dotfiles/antigen.zsh" ]; then
-    . ${HOME}/src/dotfiles/antigen.zsh
-    #antigen use oh-my-zsh
-    antigen bundle zsh-users/zsh-completions
-    antigen bundle zsh-users/zsh-autosuggestions
-    antigen bundle zsh-users/zsh-syntax-highlighting
-    antigen bundle zsh-users/zsh-history-substring-search
-    antigen bundle git
-    antigen bundle docker
-    antigen bundle tmux
-    antigen bundle brew
-    antigen bundle macos
-    antigen bundle tmux
-    antigen bundle python
-    antigen bundle sudo
-    antigen bundle pip
-    antigen bundle akarzim/zsh-docker-aliases
-    antigen bundle kubectl
-    antigen bundle aws
-    antigen theme miloshadzic
-    antigen apply
-  fi
-}
-
-function setup_ssh_agent {
+function setup_ssh_agent() {
   if ssh-add -l; then
     echo "Your SSH Agent is already working."
     return 0
   fi
-  for sock in `ls /tmp/ssh-*/agent.*`; do
+  for sock in $(ls /tmp/ssh-*/agent.*); do
     export SSH_AUTH_SOCK=$sock
     if ssh-add -l; then
       echo "Your SSH Agent is fixed. New socket=$sock."
@@ -160,57 +177,51 @@ function setup_ssh_agent {
   return 1
 }
 
-function ueba_env {
-    export CLUSTER_NAME=$@;
-    export AWS_PROFILE=kognos;
-    export KUBECONFIG=~/.kube/$@-eks.yaml;
-    export NAMESPACE=luna;
-    export LUNA_CONFIG=${PWD}/luna/config.json;
+function ueba_env() {
+    export CLUSTER_NAME=$@
+    export AWS_PROFILE=kognos
+    export KUBECONFIG=~/.kube/$@-eks.yaml
+    export NAMESPACE=luna
+    export LUNA_CONFIG=${PWD}/luna/config.json
     eval $(aws-sso-creds export -p da)
 }
 
-#init
+# Initialize everything
 custom_exports
 plugins
-#ssh_agent
-#antigen_enable
 enable_node
 custom_aliases
+
+# Platform specific setup
 if [ "$(uname)" = "Darwin" ]; then
-  ssh_agent;
+  ssh_agent
 else
-  setup_ssh_agent;
+  setup_ssh_agent
 fi
 
-# Load the theme
-if [ ! "$ZSH_THEME" = ""  ]; then
-  if [ -f "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" ]; then
-    source "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme"
-  elif [ -f "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" ]; then
-    source "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme"
-  else
-    source "$ZSH/themes/$ZSH_THEME.zsh-theme"
-  fi
+# Theme loading
+if [ -n "${ZSH_THEME}" ]; then
+  for theme_path in "$ZSH_CUSTOM/$ZSH_THEME.zsh-theme" \
+                    "$ZSH_CUSTOM/themes/$ZSH_THEME.zsh-theme" \
+                    "$ZSH/themes/$ZSH_THEME.zsh-theme"; do
+    [ -f "${theme_path}" ] && source "${theme_path}" && break
+  done
 fi
 
-export PATH="$HOME/.poetry/bin:$PATH"
-[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
-
-export SNYK_DISABLE_ANALYTICS=1
-export COLORLOG=1
-export LUNA_DEBUG=1
-alias k='kubecolor'
-alias kubectl="kubecolor"
-autoload -Uz compinit
-zstyle ':completion:*' menu select
-fpath+=~/.zfunc
+# Final PATH adjustments and completions
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+export PATH="$HOME/.poetry/bin:$PATH"
 export GROOVY_HOME=/opt/homebrew/opt/groovy/libexec
 
-[ -f "${HOME}/.ssh/secrets.env" ] && source "${HOME}"/.ssh/secrets.env
+# ZSH completion setup
+# autoload -Uz compinit
+# zstyle ':completion:*' menu select
+# fpath+=~/.zfunc
+
+# Load additional environments if they exist
 [ -d "$HOME/.rye" ] && source "$HOME/.rye/env"
 [ -s "${HOME}/.bun/_bun" ] && source "${HOME}/.bun/_bun"
+# [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
 
+# Initialize starship prompt
 eval "$(starship init zsh)"
-
-. "$HOME/.cargo/env"
