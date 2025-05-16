@@ -115,7 +115,24 @@
 	line-numbers = true
 	side-by-side = true
 	features = villsau
+	decorations = true
+	whitespace-error-style = 22 reverse
 [interactive]
 	diffFilter = delta --color-only
 [include]
 	path = ~/src/dotfiles/themes.gitconfig
+[delta "decorations"]
+	commit-decoration-style = bold yellow box ul
+	file-style = bold yellow ul
+	file-decoration-style = none
+# difftastic (`git dft`)
+[diff]
+	tool = difftastic
+[difftool]
+	prompt = false
+[difftool "difftastic"]
+	cmd = difft "$LOCAL" "$REMOTE"
+[pager]
+	difftool = true
+[alias]
+	dft = difftool

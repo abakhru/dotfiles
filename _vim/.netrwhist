@@ -1,12 +1,12 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =1
+let g:netrw_dirhistcnt =5
+let g:netrw_dirhist_5='/Users/amit.bakhru/.ssh'
+let g:netrw_dirhist_4='/Users/amit.bakhru/src/ueba/ueba-backend/.gitlab'
+let g:netrw_dirhist_3='/Users/amit.bakhru/src/ueba/ueba-backend/config'
+let g:netrw_dirhist_2='/Users/amit.bakhru/src/cm/devo-argo-cd/UEBA/clusters/stagegovwest1-ueba/ueba'
 let g:netrw_dirhist_1='/Users/amit.bakhru/src/soar/backend/runner'
 let g:netrw_dirhist_0='/Users/amit.bakhru/src/ueba/ueba-backend/config'
 let g:netrw_dirhist_9='/Users/amit.bakhru/src/ueba/ueba-data-generator/container/config.yaml'
 let g:netrw_dirhist_8='/Users/amit.bakhru/temp/ueba-backend/.git'
 let g:netrw_dirhist_7='/Users/amit.bakhru/.tmux'
 let g:netrw_dirhist_6='/Users/amit.bakhru/src/luna/luna/config'
-let g:netrw_dirhist_5='/Users/amit.bakhru/src/luna/luna/framework/common'
-let g:netrw_dirhist_4='/Users/amit/src/breadsticks/tests/locust_tests/data'
-let g:netrw_dirhist_3='/Users/amit/src/github.com/FARM-Intro/backend/apps/todo'
-let g:netrw_dirhist_2='/Users/amit/src/github.com/FARM-Intro/backend/apps'

@@ -31,3 +31,5 @@ export NVM_DIR="$HOME/.nvm"
 
 export PATH="$HOME/.poetry/bin:$PATH"
 . "$HOME/.rye/env"
+
+. "$HOME/.local/bin/env"

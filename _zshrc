@@ -209,8 +209,7 @@ if [ -n "${ZSH_THEME}" ]; then
 fi
 
 # Final PATH adjustments and completions
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-export PATH="$HOME/.poetry/bin:$PATH"
+export PATH="$HOME/.poetry/bin:$PATH:/Applications/IntelliJ IDEA.app/Contents/MacOS/"
 export GROOVY_HOME=/opt/homebrew/opt/groovy/libexec
 
 # ZSH completion setup
@@ -225,3 +224,14 @@ export GROOVY_HOME=/opt/homebrew/opt/groovy/libexec
 
 # Initialize starship prompt
 eval "$(starship init zsh)"
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/amit.bakhru/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
+HOMEBREW_NO_ENV_HINTS=1
+
+. "$HOME/.local/bin/env"
+eval "$(fnm env --use-on-cd --shell zsh)"
+eval `keychain --eval --quiet --agents ssh ~/.ssh/id_ed25519`
+

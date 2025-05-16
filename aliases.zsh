@@ -246,3 +246,14 @@ function listening() {
         echo "Usage: listening [pattern]"
     fi
 }
+# cargo
+alias c='cargo'
+alias cb='cargo build'
+alias cr='cargo run'
+alias cw='cargo watch'
+alias ct='cargo test'
+
+# tokei: count lines of code, fast
+alias cloc="tokei"
+alias calc="insect"
+alias myip="ip -json route get 8.8.8.8 | jq -r '.[].prefsrc'"

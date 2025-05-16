@@ -48,15 +48,15 @@ log "Running in zsh version: $ZSH_VERSION"
 function link_file() {
     local source="${PWD}/$1"
     local target="${HOME}/${1/_/.}"
-    
+
     if [ ! -e "${source}" ]; then
         log "Error: Source file ${source} does not exist"
         return 1
     fi
-    
-    if [ -L "${target}" ]; then 
+
+    if [ -L "${target}" ]; then
         unlink "$target"
-    elif [ -e "${target}" ]; then 
+    elif [ -e "${target}" ]; then
         mv "$target" "$target.df.bak"
     fi
     ln -sf "${source}" "${target}"
@@ -73,7 +73,7 @@ function unlink_file() {
 }
 
 function setup_home_files() {
-    for i in _*; do 
+    for i in _*; do
         link_file "$i"
     done
 }
@@ -81,7 +81,7 @@ function setup_home_files() {
 function os_packages_install() {
     log "Starting package installation"
     mkdir -p "${HOME}"/{src,.ssh}
-    
+
     if [ ! -f "${HOME}/.ssh/known_hosts" ]; then
         ssh-keyscan github.com >> "${HOME}"/.ssh/known_hosts
     fi
@@ -91,14 +91,15 @@ function os_packages_install() {
             log "Installing Homebrew"
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         fi
-        
+
         local brew_packages=(
-            npm zsh tmux git vim htop ruby node wget fzf maven openjdk 
-            awscli docker-compose go lazydocker cloudflared k9s 
+            npm zsh tmux git vim htop ruby node wget fzf maven openjdk
+            awscli docker-compose go lazydocker cloudflared k9s stern helm
             docker-credential-helper docker-credential-helper-ecr kubecolor sniffnet
+            numi lens spotify firefox beekeeper-studio figma dbeaver-community the-unarchiver appcleaner
         )
         local brew_casks=(aerial notion)
-        
+
         /opt/homebrew/bin/brew install "${brew_packages[@]}"
         /opt/homebrew/bin/brew install --cask "${brew_casks[@]}"
     elif [ "$(awk -F= '/^NAME/{print $2}' /etc/os-release)" = "\"Ubuntu\"" ]; then
@@ -111,13 +112,13 @@ function os_packages_install() {
     if [ ! -d "${HOME}/src/ohmyzsh" ]; then
         git clone https://github.com/ohmyzsh/ohmyzsh.git "${HOME}/src/ohmyzsh"
     fi
-    
+
     ln -sf "${HOME}/src/ohmyzsh" "${HOME}/.oh-my-zsh"
-    
+
     if [ ! -f antigen.zsh ]; then
         curl -L git.io/antigen > antigen.zsh
     fi
-    
+
     if ! command -v dockly &> /dev/null; then
         sudo npm install -g dockly
     fi
@@ -131,7 +132,7 @@ function rust_install() {
 
 function tmux_install() {
     log "Setting up tmux configuration..."
-    
+
     # Install tmux if not present
     if ! command -v tmux >/dev/null 2>&1; then
         if [ "$(uname)" = "Darwin" ]; then
@@ -140,19 +141,19 @@ function tmux_install() {
             sudo apt-get update && sudo apt-get install -y tmux
         fi
     fi
-    
+
     # Setup tmux configuration
     (cd "${HOME}" && git clone https://github.com/gpakosz/.tmux.git)
     gem install tmuxinator
     rm -rf "${HOME}"/.tmux/.tmux.conf*
     ln -sf "${HOME}"/src/dotfiles/_tmux.conf "${HOME}"/.tmux/.tmux.conf
     ln -sf "${HOME}"/src/dotfiles/_tmux.conf.local "${HOME}"/.tmux/.tmux.conf.local
-    
+
     # Ensure tmux is using zsh
     tmux_shell=$(command -v zsh)
     log "Setting tmux default shell to: $tmux_shell"
     tmux set-option -g default-shell "$tmux_shell"
-    
+
     (cd "${HOME}/.tmux" && git clone https://github.com/jonmosco/kube-tmux)
 }
 
