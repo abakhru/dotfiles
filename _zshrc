@@ -178,4 +178,4 @@ compinit
 export HOMEBREW_NO_ENV_HINTS=1
 
 . "$HOME/.local/bin/env"
-eval `keychain --eval --quiet --agents ssh ~/.ssh/id_ed25519`
+#eval `keychain --eval --quiet --agents ssh ~/.ssh/id_ed25519`

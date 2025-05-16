@@ -97,6 +97,7 @@ function os_packages_install() {
             awscli docker-compose go lazydocker cloudflared k9s stern helm
             docker-credential-helper docker-credential-helper-ecr kubecolor sniffnet
             numi lens spotify firefox beekeeper-studio figma dbeaver-community the-unarchiver appcleaner
+            iproute2mac
         )
         local brew_casks=(aerial notion)
 
