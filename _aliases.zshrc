@@ -141,119 +141,45 @@ dalias() { alias | grep 'docker' | sed "s/^\([^=]*\)=\(.*\)/\1 => \2/"| sed "s/[
 dbash() { docker exec -it $1 bash; }
 kbash() { kubectl exec -it $1 bash; }
 
-#!/usr/bin/env zsh
+# Modern CLI alternatives
+alias ping='prettyping --nolegend'
+alias cat='bat'
+alias top='glances'
+alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"
+alias l='eza --long --git -g -a -s modified'
+alias k='kubecolor'
+alias kubectl="kubecolor"
 
-####################
-## blackbox stuff ##
-####################
+# Navigation aliases
+alias zc='z -c'      # restrict matches to subdirs of $PWD
+alias zz='z -i'      # cd with interactive selection
+alias zf='z -I'      # use to select in multiple matches
+alias zb='z -b'      # quickly cd to the parent directory
 
-function blackbox-customer-info() {
-  # Arguments:
-  #   - $1 = Area 1 Blackbox customer name, requires quotes for names with spaces
-  local customer=$1 
-  curl -s https://portalservices.production.area1security.com/customers/ \
-  | jq ".data[] | select(.customer_name | contains(\"$customer\"))"
-}
+# Configuration aliases
+alias zconf="vim ${HOME}/.zshrc"
+alias reload=". ${HOME}/.zshrc"
 
-function blackbox-customer-id() {
-  # Arguments:
-  #   - $1 = Area 1 Blackbox customer name
-  blackbox-customer-info $1 | jq '.customer_id'
-}
+# Bulk update aliases
+alias gall="for i in \$(find ${HOME}/src -type d -execdir test -d {}/.git \; -prune -print); do (echo \"==== Updating \$i ====\"; cd \$i; git stash && g p && gfa && git stash pop; cd -); done"
+alias pipall="for i in \$(pip list -o --format columns|awk '{print \$1}') ; do pip install -U \$i; done"
+alias dall="docker images --format \"{{.Repository}}:{{.Tag}}\" | grep ':latest' | xargs -L1 docker pull"
 
-##################
-## caliber docker stuff ##
-##################
-
-GCR_PROJECT="${GCR_PROJECT:-us.gcr.io/valiant-arcana-573}"
-function a1s-docker-pull() {
-  # Arguments:
-  #   - $1 = shorthand of docker image (without us.gcr.io/...)
-  docker pull "${GCR_PROJECT}/$1"
-}
-
-function start-caliber-docker() {
-  # Arguments:
-  #   - $1 = area 1 project / repo
-  project="$1"
-
-  # associative array of "area 1 project -> caliber docker image name"
-  typeset -A repo2docker
-  # assoc=(key1 value1 key2 value2 ...)
-  repo2docker=(
-    blackbox jenkins-slave-node:caliber-bb
-    indicators jenkins-slave-node:caliber-ims
-    icarus/papillon jenkins-slave-node:caliber-pap
-    icarus/kubrick jenkins-slave-node:caliber-kub
-    shaggy jenkins-slave-node:caliber-shag
-    marshall jenkins-slave-node:caliber-marshall
-    mailsearch jenkins-slave-node:caliber-mailsearch
-  )
-
-  docker_image="${repo2docker[$project]}"
-  if [[ "${docker_image}" == "" ]]; then
-    echo "... no matching docker image for project '${project}'"
-    echo "... if you wanted IMS, use project name 'indicators'"
-    echo "... checking if you meant an icarus subproject"
-    docker_image="${repo2docker[icarus/$project]}"
-    if [[ "${docker_image}" == "" ]]; then
-      echo "... no matching docker image for 'icarus/${project}'"
-      return
-    fi
-    project="icarus/${project}"
-  fi
-
-  #GIT_DIR="${GIT_DIR:-$HOME/git/a1s}"
-  #temp_dir_for_repos="${GIT_DIR}/caliber-temp"
-  #if [[ ! -d "${temp_dir_for_repos}/${project}" ]]; then
-  #  if [[ "${project}" =~ "icarus" ]]; then
-  #    git clone "git@github.area1security.com:engineering/icarus" "${temp_dir_for_repos}/icarus"
-  #  else
-  #    git clone "git@github.area1security.com:engineering/${project}" "${temp_dir_for_repos}/${project}"
-  #  fi
-  #fi
-
- # pushd "${temp_dir_for_repos}/${project}"
- # echo "... you're here right now: $(pwd)"
-
-  echo "... pulling latest caliber docker image: ${docker_image}"
-  a1s-docker-pull "${docker_image}"
-
-  echo "... starting bash in caliber docker container using image: ${docker_image}"
-  docker run -it --rm \
-    -v $HOME/.ssh:/home/jenkins/.ssh \
-    -v $HOME/.aws:/home/jenkins/.aws \
-    -v $(pwd):/data/jenkins/ \
-    -P \
-    -exec -e WORKSPACE=/data/jenkins/ -P "${GCR_PROJECT}/${docker_image}" bash
-
-  popd
-}
-
-# Remove python compiled byte-code and mypy cache in either current directory or in a
-# list of specified directories
-function pyclean() {
-    for i in "*.py[co]" "[.]*cache" "*.egg*" "build" "dist*" "*test-reports" "[.]coverage*" "coverage*" "o" "__pycache__";
-    do find . -name "${i}" -exec rm -rv {} + ; done
-}
-
-function listening() {
-    if [ $# -eq 0 ]; then
-        sudo lsof -iTCP -sTCP:LISTEN -n -P
-    elif [ $# -eq 1 ]; then
-        sudo lsof -iTCP -sTCP:LISTEN -n -P | grep -i --color $1
-    else
-        echo "Usage: listening [pattern]"
-    fi
-}
-# cargo
+# Cargo aliases
 alias c='cargo'
 alias cb='cargo build'
 alias cr='cargo run'
 alias cw='cargo watch'
 alias ct='cargo test'
 
-# tokei: count lines of code, fast
+# Utility aliases
 alias cloc="tokei"
 alias calc="insect"
 alias myip="ip -json route get 8.8.8.8 | jq -r '.[].prefsrc'"
+
+# OSX specific aliases
+if [ "$(uname)" = "Darwin" ]; then
+    # Airport/WiFi control
+    alias wifi='/usr/libexec/airportd'
+    alias vnc='open vnc://billyjack.silvertailsystems.com:5901'
+fi
