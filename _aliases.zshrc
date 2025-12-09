@@ -183,3 +183,6 @@ if [ "$(uname)" = "Darwin" ]; then
     alias wifi='/usr/libexec/airportd'
     alias vnc='open vnc://billyjack.silvertailsystems.com:5901'
 fi
+#alias kcpod='function _kcpod() { if [[ -z $NAMESPACE ]]; then echo "Error: NAMESPACE environment variable is not set"; return 1; fi; local pod=$(kubectl get pods -n $NAMESPACE | grep -m 1 "$1" | awk "{print \$1}"); if [[ -z $pod ]]; then echo "Error: No pod found matching \"$1\" in namespace $NAMESPACE"; return 1; fi; kubectl exec -it $pod -n $NAMESPACE -- /bin/bash; }; _kcpod'
+alias kcpod='function _kcpod() { if [[ -z $NAMESPACE ]]; then echo "Error: NAMESPACE environment variable is not set"; return 1; fi; local pod=$(kubectl get pods -n $NAMESPACE | grep -m 1 "$1" | awk "{print \$1}"); if [[ -z $pod ]]; then echo "Error: No pod found matching \"$1\" in namespace $NAMESPACE"; return 1; fi; if [[ -n $2 ]]; then kubectl exec -it $pod -n $NAMESPACE -c "$2" -- /bin/bash; else kubectl exec -it $pod -n $NAMESPACE -- /bin/bash; fi; }; _kcpod'
+alias j=just

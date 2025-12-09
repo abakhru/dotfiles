@@ -91,18 +91,8 @@ function os_packages_install() {
             log "Installing Homebrew"
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         fi
-
-        local brew_packages=(
-            npm zsh tmux git vim htop ruby node wget fzf maven openjdk
-            awscli docker-compose go lazydocker cloudflared k9s stern helm
-            docker-credential-helper docker-credential-helper-ecr kubecolor sniffnet
-            numi lens spotify firefox beekeeper-studio figma dbeaver-community the-unarchiver appcleaner
-            iproute2mac
-        )
-        local brew_casks=(aerial notion)
-
-        /opt/homebrew/bin/brew install "${brew_packages[@]}"
-        /opt/homebrew/bin/brew install --cask "${brew_casks[@]}"
+        log "Installing Homebrew packages from Brewfile"
+        /opt/homebrew/bin/brew bundle install
     elif [ "$(awk -F= '/^NAME/{print $2}' /etc/os-release)" = "\"Ubuntu\"" ]; then
         log "Installing Ubuntu packages"
         sudo apt-get update && sudo apt-get full-upgrade -y

@@ -33,3 +33,9 @@ export PATH="$HOME/.poetry/bin:$PATH"
 . "$HOME/.rye/env"
 
 . "$HOME/.local/bin/env"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/amit.bakhru/.lmstudio/bin"
+# End of LM Studio CLI section
+
+export PATH="/Users/amit.bakhru/.local/state/fnm_multishells/17759_1748658765501/bin:/Users/amit.bakhru/.local/state/fnm_multishells/17688_1748658765481/bin:/Users/amit.bakhru/.local/state/fnm_multishells/17626_1748658765461/bin:/Users/amit.bakhru/.local/bin:/Users/amit.bakhru/.local/state/fnm_multishells/16531_1748658764281/bin:/Users/amit.bakhru/.cargo/bin:/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/opt/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/Users/amit.bakhru/.lmstudio/bin:/Users/amit.bakhru/.vector/bin"
