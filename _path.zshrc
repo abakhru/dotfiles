@@ -17,3 +17,8 @@ function define_path() {
 
 # Initialize path
 define_path
+  export PATH="${HOME}/.bun/bin:/Applications/IntelliJ IDEA.app/Contents/MacOS/:$PATH"
+}
+
+# Initialize path
+define_path 
