@@ -16,9 +16,12 @@ function define_path() {
 }
 
 # Initialize path
-define_path
+function define_path_krew() {
   export PATH="${HOME}/.bun/bin:/Applications/IntelliJ IDEA.app/Contents/MacOS/:$PATH"
+  export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 }
 
+
 # Initialize path
-define_path 
+define_path
+define_path_krew

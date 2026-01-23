@@ -51,3 +51,4 @@ cask 'visual-studio-code'
 brew "fnm"
 brew "bun"
 brew "witr"
+brew "snitch"

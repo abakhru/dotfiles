@@ -17,11 +17,11 @@ source "${HOME}/src/dotfiles/_path.zshrc"
 # Consolidated plugin list to avoid duplication
 function get_plugins() {
   local common_plugins=(
-    git tmux python sudo docker rust docker-compose gitfast kubectl 
-    mvn rust tmuxinator zsh-completions zsh-autosuggestions 
+    git tmux python sudo docker rust docker-compose gitfast kubectl
+    mvn rust tmuxinator zsh-completions zsh-autosuggestions
     zsh-syntax-highlighting zsh-history-substring-search
   )
-  
+
   if [ "$(uname)" = "Darwin" ]; then
     echo "${common_plugins[@]} brew macos"
   else
@@ -188,22 +188,11 @@ export PATH="$PATH:${HOME}/.lmstudio/bin"
 # End of LM Studio CLI section
 
 eval "$(fnm env --use-on-cd)"
-eval "$(fnm env --use-on-cd)"
-eval "$(fnm env --use-on-cd)"
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
 fpath=(${HOME}/.docker/completions $fpath)
 autoload -Uz compinit
 compinit
 # End of Docker CLI completions
-. "$(brew --prefix asdf)/libexec/asdf.sh"
-eval "$(direnv hook zsh)"
-. "$(brew --prefix asdf)/libexec/asdf.sh"
-eval "$(direnv hook zsh)"
-. "$(brew --prefix asdf)/libexec/asdf.sh"
-eval "$(direnv hook zsh)"
-. "$(brew --prefix asdf)/libexec/asdf.sh"
-eval "$(direnv hook zsh)"
-. "$(brew --prefix asdf)/libexec/asdf.sh"
 eval "$(direnv hook zsh)"
 # The following lines have been added by Docker Desktop to enable Docker CLI completions.
 fpath=(/Users/amit/.docker/completions $fpath)
@@ -213,3 +202,4 @@ compinit
 
 # bun completions
 [ -s "${HOME}/.bun/_bun" ] && source "${HOME}/.bun/_bun"
+. ${HOME}/.envrc
