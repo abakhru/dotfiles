@@ -11,7 +11,7 @@ function log() {
 function ensure_zsh() {
     if ! command -v zsh >/dev/null 2>&1; then
         log "zsh not found. Installing..."
-        if [ "$(uname)" = "Darwin" ]; then
+        if [ "$(uname -s)" = "Darwin" ]; then
             brew install zsh
         else
             sudo apt-get update && sudo apt-get install -y zsh
@@ -21,29 +21,31 @@ function ensure_zsh() {
     ZSH_PATH=$(command -v zsh)
     log "zsh path: $ZSH_PATH"
 
+    # Verify zsh works
+    ZSH_VER=$("$ZSH_PATH" -c 'echo $ZSH_VERSION')
+    log "zsh version: $ZSH_VER"
+
     # Add zsh to valid login shells if not already present
     if ! grep -q "$ZSH_PATH" /etc/shells; then
         log "Adding zsh to /etc/shells..."
         echo "$ZSH_PATH" | sudo tee -a /etc/shells
     fi
 
-    # Change default shell to zsh if not already
-    if [ "$SHELL" != "$ZSH_PATH" ]; then
+    # Change default shell to zsh if not already set (skip if already in zsh)
+    if [ -n "${ZSH_VERSION:-}" ]; then
+        log "Already running zsh, skipping chsh"
+    elif [ "$(basename "$SHELL")" != "zsh" ]; then
         log "Changing default shell to zsh..."
-        chsh -s "$ZSH_PATH"
+        chsh -s "$ZSH_PATH" || log "Warning: Could not change default shell. Run 'chsh -s $ZSH_PATH' manually if needed."
         export SHELL="$ZSH_PATH"
-    fi
-
-    # Switch to zsh for the rest of the script
-    if [ -z "${ZSH_VERSION:-}" ]; then
-        log "Not running in zsh. Current shell: $SHELL. Restarting script with zsh..."
-        exec "$ZSH_PATH" "$0" "$@"
+    else
+        log "zsh is already the default shell"
     fi
 }
 
 # Run zsh setup before anything else
 ensure_zsh
-log "Running in zsh version: $ZSH_VERSION"
+log "Running in zsh version: $ZSH_VER"
 
 function link_file() {
     local source="${PWD}/$1"
@@ -118,7 +120,7 @@ function os_packages_install() {
 function rust_install() {
   curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
   source "${HOME}"/.cargo/env
-  (cargo install starship bat ripgrep bat exa procs fd-find topgrade grex cargo-update git-delta)
+  (cargo install starship bat ripgrep bat exa procs fd-find topgrade btm cargo-cache grex cargo-update git-delta)
 }
 
 function tmux_install() {
@@ -175,7 +177,7 @@ function install_docker() {
   sudo apt-get update
   sudo apt-get install -y docker-ce docker-ce-cli containerd.io
   sudo adduser "${USER}" docker
-  sudo wget https://github.com/bcicen/ctop/releases/download/v0.7.5/ctop-0.7.5-linux-amd64 -O /usr/local/bin/ctop && sudo chmod +x /usr/local/bin/ctop
+  sudo wget https://github.com/bcicen/ctop/releases/download/v0.7.7/ctop-0.7.7-linux-amd64 -O /usr/local/bin/ctop && sudo chmod +x /usr/local/bin/ctop
 }
 
 function setup_zsh() {
