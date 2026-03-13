@@ -25,17 +25,6 @@ fi
 
 . "$HOME/.zshrc"
 . "$HOME/.cargo/env"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-
-export PATH="$HOME/.poetry/bin:$PATH"
 . "$HOME/.rye/env"
-
 . "$HOME/.local/bin/env"
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:${HOME}/.lmstudio/bin"
-# End of LM Studio CLI section
-
-export PATH="${HOME}/.cargo/bin:/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/opt/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:${HOME}/.lmstudio/bin:${HOME}/.vector/bin"
+export PATH="${HOME}/.cargo/bin:/usr/local/sbin:/usr/local/bin:/bin:/usr/sbin:/sbin:/usr/bin:/opt/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:${HOME}/.lmstudio/bin:${HOME}/.vector/bin:${HOME}/.lmstudio/bin"

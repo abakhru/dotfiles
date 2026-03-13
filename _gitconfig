@@ -1,6 +1,6 @@
 [user]
 	name = Amit Bakhru
-	email = amit.bakhru@devo.com
+	email = bakhru@me.com
 [branch]
         autosetuprebase=always
 [push]

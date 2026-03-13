@@ -6,9 +6,6 @@ function define_path() {
 
   if [ "$(uname)" = "Darwin" ]; then
     export PATH="/opt/homebrew/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:${PATH}:${HOME}/.cargo/bin"
-    [ -f "${HOME}/src/z.lua/z.lua" ] && eval "$(lua ${HOME}/src/z.lua/z.lua --init zsh enhanced)"
-  elif [ "$(uname)" = "Linux" ]; then
-    [ -f "/usr/bin/lua" ] && eval "$(lua ${HOME}/src/z.lua/z.lua --init zsh enhanced)"
   fi
 
   [ -d "${GOPATH}" ] && export PATH="${PATH}:${GOPATH}/bin"
